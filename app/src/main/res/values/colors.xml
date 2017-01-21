@@ -2,8 +2,8 @@
 <resources>
     <color name="colorPrimary">@color/md_grey_300</color>
     <color name="colorPrimaryDark">@color/md_grey_400</color>
-    <color name="colorAccent">@color/md_blue_A400</color>
-    <color name="colorAccentLight">@color/md_blue_A200</color>
+    <color name="colorAccent">@color/md_green_A700</color>
+    <color name="colorAccentLight">@color/md_green_A400</color>
 
     <color name="btn_material_text">@android:color/white</color>
 </resources>

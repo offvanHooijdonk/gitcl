@@ -25,4 +25,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:colorPrimary">@color/colorPrimary</item>
     </style>
+    
+    <style name="MaterialButton">
+        <item name="android:backgroundTint">@color/colorAccent</item>
+        <item name="android:textColor">@color/btn_material_text</item>
+    </style>
+
 </resources>

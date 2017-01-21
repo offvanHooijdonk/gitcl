@@ -41,19 +41,18 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btnLogin"
+            style="@style/MaterialButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorAccent"
             android:padding="@dimen/material_button_padding"
-            android:text="@string/btn_login"
-
-            android:textColor="@color/btn_material_text"/>
+            android:text="@string/btn_login"/>
 
         <TextView
-            android:id="@+id/tvSkipLogin"
+            android:id="@+id/txtSkipLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="@string/skip_login"
             android:textSize="16sp"/>
     </LinearLayout>
