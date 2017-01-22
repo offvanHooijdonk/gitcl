@@ -10,4 +10,5 @@
     <string name="hint_password">Password</string>
     <string name="btn_login">Login</string>
     <string name="skip_login">Not this time.</string>
+    <string name="drawer_username_anonymous">Anonymous</string>
 </resources>
