@@ -3,7 +3,6 @@ package com.epam.traing.gitcl.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
@@ -50,11 +49,12 @@ public class CurtainActivity extends AppCompatActivity {
         }, 500);
     }
 
+
     private void startLoginScreen() {
-        ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(this, imgLogo, this.getString(R.string.transition_logo));
-        startActivity(new Intent(this, LoginActivity.class), options.toBundle());
-        getWindow().setExitTransition(null);
+        /*ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, imgLogo, this.getString(R.string.transition_logo));*/
+        startActivity(new Intent(this, LoginActivity.class)/*, options.toBundle()*/);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     private void startMainScreen() {
