@@ -1,11 +1,10 @@
 package com.epam.traing.gitcl.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.epam.traing.gitcl.R;
@@ -55,6 +54,7 @@ public class CurtainActivity extends AppCompatActivity {
         ActivityOptionsCompat options = ActivityOptionsCompat.
                 makeSceneTransitionAnimation(this, imgLogo, this.getString(R.string.transition_logo));
         startActivity(new Intent(this, LoginActivity.class), options.toBundle());
+        getWindow().setExitTransition(null);
     }
 
     private void startMainScreen() {
