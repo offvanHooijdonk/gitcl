@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Git Cl</string>
+    <string name="app_name">GitHub Cl</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -11,4 +11,5 @@
     <string name="btn_login">Login</string>
     <string name="skip_login">Not this time.</string>
     <string name="drawer_username_anonymous">Anonymous</string>
+    <string name="transition_logo">logo</string>
 </resources>
