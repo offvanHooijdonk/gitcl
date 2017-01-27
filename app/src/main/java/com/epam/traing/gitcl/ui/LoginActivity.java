@@ -6,15 +6,23 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.epam.traing.gitcl.R;
+import com.epam.traing.gitcl.app.GitClApplication;
+import com.epam.traing.gitcl.presenter.ILoginPresenter;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements ILoginView {
+
     private enum ENTER_TYPE {
         skip, login_new, logged_in
     }
+
+    @Inject
+    ILoginPresenter loginPresenter;
 
     @Bind(R.id.txtSkipLogin)
     TextView txtSkipLogin;
@@ -23,21 +31,33 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        GitClApplication.getComponent().inject(this);
+        loginPresenter.setView(this);
+
         ButterKnife.bind(this);
     }
 
     @OnClick(R.id.btnLogin)
     void onLoginClick() {
-        startMain(ENTER_TYPE.logged_in);
+        loginPresenter.onLoginSelected();
     }
 
     @OnClick(R.id.txtSkipLogin)
     void onSkipLoginClick() {
+        loginPresenter.onSkipLoginSelected();
+    }
+
+    @Override
+    public void startMainViewAsLogged() {
+        startMain(ENTER_TYPE.logged_in);
+    }
+
+    @Override
+    public void startMainViewAsAnon() {
         startMain(ENTER_TYPE.skip);
     }
 
     private void startMain(ENTER_TYPE enterType) {
-        // TODO remove this activity from backlog
         Intent intent = new Intent(this, MainActivity.class);
         this.startActivity(intent);
         setTransitionToMain(enterType);
