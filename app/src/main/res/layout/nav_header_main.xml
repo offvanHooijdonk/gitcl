@@ -36,6 +36,7 @@
             app:civ_border_width="0dp"/>
 
         <TextView
+            android:id="@+id/txtDrawerAccountUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/nav_header_vertical_spacing"
@@ -43,7 +44,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/txtDrawerAccountName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="noname"/>

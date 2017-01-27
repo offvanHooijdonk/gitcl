@@ -11,5 +11,5 @@ import dagger.Component;
 
 @Component(modules = {PresenterModule.class})
 public interface AppComponent {
-    LoginActivity inject(LoginActivity loginActivity);
+    void inject(LoginActivity loginActivity);
 }

@@ -12,4 +12,6 @@
     <string name="skip_login">Not this time.</string>
     <string name="drawer_username_anonymous">Anonymous</string>
     <string name="transition_logo">logo</string>
+
+    <string name="authentication_progress">Authenticating…</string>
 </resources>

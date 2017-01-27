@@ -1,9 +1,11 @@
 package com.epam.traing.gitcl.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.GitClApplication;
@@ -27,11 +29,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Bind(R.id.txtSkipLogin)
     TextView txtSkipLogin;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        GitClApplication.getComponent().inject(this);
+        GitClApplication.getAppComponent().inject(this);
         loginPresenter.setView(this);
 
         ButterKnife.bind(this);
@@ -45,6 +49,28 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @OnClick(R.id.txtSkipLogin)
     void onSkipLoginClick() {
         loginPresenter.onSkipLoginSelected();
+    }
+
+    @Override
+    public void showLoginProgress(boolean show) {
+        if (show) {
+            if (progressDialog == null) {
+                progressDialog = new ProgressDialog(LoginActivity.this);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage(LoginActivity.this.getString(R.string.authentication_progress));
+            }
+
+            progressDialog.show();
+        } else {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
+    }
+
+    @Override
+    public void showAuthErrorMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
