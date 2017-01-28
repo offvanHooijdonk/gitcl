@@ -5,10 +5,14 @@ import android.preference.PreferenceManager;
 
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.component.AppComponent;
+import com.epam.traing.gitcl.component.AuthenticatorComponent;
 import com.epam.traing.gitcl.component.DaggerAppComponent;
+import com.epam.traing.gitcl.component.DaggerAuthenticatorComponent;
 import com.epam.traing.gitcl.component.DaggerLoginPresenterComponent;
 import com.epam.traing.gitcl.component.LoginPresenterComponent;
-import com.epam.traing.gitcl.model.AccountModel;
+import com.epam.traing.gitcl.db.DBModule;
+import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.presenter.PresenterModule;
 
 /**
  * Created by off on 22.01.2017.
@@ -17,6 +21,7 @@ import com.epam.traing.gitcl.model.AccountModel;
 public class GitClApplication extends Application {
     private static AppComponent appComponent;
     private static LoginPresenterComponent loginPresenterComponent;
+    private static AuthenticatorComponent authenticatorComponent;
 
     private static AccountModel accountModel;
 
@@ -24,7 +29,7 @@ public class GitClApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        appComponent = DaggerAppComponent.create();
+        appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).presenterModule(new PresenterModule()).build();
 
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
     }
@@ -39,6 +44,14 @@ public class GitClApplication extends Application {
         }
 
         return loginPresenterComponent;
+    }
+
+    public static AuthenticatorComponent getAuthenticatorComponent() {
+        if (authenticatorComponent == null) {
+            authenticatorComponent = DaggerAuthenticatorComponent.builder().dBModule(new DBModule()).appComponent(getAppComponent()).build();
+        }
+
+        return authenticatorComponent;
     }
 
     public static void setAccount(AccountModel account) {

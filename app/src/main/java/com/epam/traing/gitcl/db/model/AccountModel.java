@@ -1,14 +1,23 @@
-package com.epam.traing.gitcl.model;
+package com.epam.traing.gitcl.db.model;
+
+import com.epam.traing.gitcl.db.tables.AccountTable;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 /**
  * Created by Yahor_Fralou on 1/25/2017 5:47 PM.
  */
 
+@StorIOSQLiteType(table = AccountTable.TABLE)
 public class AccountModel {
-    private long id;
-    private String firstName;
-    private String lastName;
-    private String accountName;
+    @StorIOSQLiteColumn(name = AccountTable.COLUMN_ID, key = true)
+    long id;
+    @StorIOSQLiteColumn(name = AccountTable.COLUMN_FNAME)
+    String firstName;
+    @StorIOSQLiteColumn(name = AccountTable.COLUMN_LNAME)
+    String lastName;
+    @StorIOSQLiteColumn(name = AccountTable.COLUMN_ACCOUNT_NAME)
+    String accountName;
 
     public long getId() {
         return id;

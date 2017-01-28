@@ -1,5 +1,6 @@
 package com.epam.traing.gitcl.component;
 
+import com.epam.traing.gitcl.app.AppModule;
 import com.epam.traing.gitcl.interactor.AuthenticatorModule;
 import com.epam.traing.gitcl.presenter.LoginPresenter;
 

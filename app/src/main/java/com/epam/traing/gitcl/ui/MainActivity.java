@@ -13,11 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.GitClApplication;
-import com.epam.traing.gitcl.model.AccountModel;
+import com.epam.traing.gitcl.db.model.AccountModel;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -57,8 +56,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        txtDrawerAccountUserName = (TextView) findViewById(R.id.txtDrawerAccountUserName);
-        txtDrawerAccountName = (TextView) findViewById(R.id.txtDrawerAccountName);
+        txtDrawerAccountUserName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtDrawerAccountUserName);
+        txtDrawerAccountName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtDrawerAccountName);
 
         displayAccountInfo();
     }
@@ -123,7 +122,8 @@ public class MainActivity extends AppCompatActivity
     private void displayAccountInfo() {
         AccountModel accountModel = GitClApplication.getAccount();
         if (accountModel != null) {
-            Toast.makeText(this, accountModel.getAccountName(), Toast.LENGTH_LONG).show();
+            txtDrawerAccountUserName.setText(String.format("%s %s", accountModel.getFirstName(), accountModel.getLastName()));
+            txtDrawerAccountName.setText(accountModel.getAccountName());
         }
     }
 }
