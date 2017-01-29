@@ -2,6 +2,7 @@ package com.epam.traing.gitcl.component;
 
 import com.epam.traing.gitcl.app.AppModule;
 import com.epam.traing.gitcl.interactor.AuthenticatorModule;
+import com.epam.traing.gitcl.interactor.LoginScope;
 import com.epam.traing.gitcl.presenter.LoginPresenter;
 
 import dagger.Component;
@@ -11,6 +12,7 @@ import dagger.Component;
  */
 
 @Component(modules = {AuthenticatorModule.class})
+@LoginScope
 public interface LoginPresenterComponent {
     void inject(LoginPresenter loginPresenter);
 }

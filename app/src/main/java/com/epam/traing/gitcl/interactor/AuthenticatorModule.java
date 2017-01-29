@@ -11,6 +11,7 @@ import dagger.Provides;
 public class AuthenticatorModule {
 
     @Provides
+    @LoginScope
     IAuthenticator provideAuthenticator() {
         return new GitAuthenticator();
     }
