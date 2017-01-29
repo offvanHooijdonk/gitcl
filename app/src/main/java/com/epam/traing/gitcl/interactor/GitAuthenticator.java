@@ -40,23 +40,11 @@ public class GitAuthenticator implements IAuthenticator {
                 s.onNext(accountModels.get(0));
                 s.onCompleted();
             } else {
-                //s.onNext(null);
                 loadAccount(s);
             }
         });
 
         return s;
-
-        /*List<AccountModel> models = findAccountLocal();
-        if (!models.isEmpty()) {
-            AccountModel accountModel = models.get(0); // assume single account for now
-            if (listener != null) {
-                listener.onSuccess(accountModel);
-            }
-        } else {
-            loadAccount();
-        }*/
-
     }
 
     private void loadAccount(Observer<AccountModel> o) {
@@ -70,15 +58,18 @@ public class GitAuthenticator implements IAuthenticator {
                 .delay(2, TimeUnit.SECONDS)
                 .subscribe(accountModel1 -> {
                     saveAccount(accountModel);
+                    GitClApplication.setAccount(accountModel);
                     o.onNext(accountModel);
                 });
     }
 
     private Observable<List<AccountModel>> findAccountLocal() {
+        // TODO move to DAO
         return storIOSQLite.get().listOfObjects(AccountModel.class).withQuery(Query.builder().table(AccountTable.TABLE).build()).prepare().asRxObservable();//executeAsBlocking();
     }
 
     private void saveAccount(AccountModel accountModel) {
+        // TODO move to DAO
         storIOSQLite.put().object(accountModel).prepare().executeAsBlocking();
     }
 }

@@ -49,9 +49,6 @@ public class LoginPresenter implements ILoginPresenter {
 
 
     public void onLoginSuccess(AccountModel accountModel) {
-        // TODO move all account saving to Interactor
-        GitClApplication.setAccount(accountModel);
-
         loginView.showLoginProgress(false);
         loginView.startMainViewAsLogged();
     }
