@@ -1,17 +1,21 @@
 package com.epam.traing.gitcl.presenter;
 
 import com.epam.traing.gitcl.app.GitClApplication;
-import com.epam.traing.gitcl.interactor.IAuthenticator;
 import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.interactor.IAuthenticator;
 import com.epam.traing.gitcl.ui.ILoginView;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Yahor_Fralou on 1/25/2017 5:12 PM.
  */
 
-public class LoginPresenter implements ILoginPresenter, IAuthenticator.AuthenticationListener {
+public class LoginPresenter implements ILoginPresenter {
     @Inject
     IAuthenticator authenticator;
 
@@ -19,8 +23,6 @@ public class LoginPresenter implements ILoginPresenter, IAuthenticator.Authentic
 
     public LoginPresenter() {
         GitClApplication.getLoginPresenterComponent().inject(this);
-
-        authenticator.setListener(this);
     }
 
     @Override
@@ -37,20 +39,25 @@ public class LoginPresenter implements ILoginPresenter, IAuthenticator.Authentic
     public void onLoginSelected() {
         loginView.showLoginProgress(true);
 
-        authenticator.authenticate();
+        authenticator.authenticate()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .skipWhile(accountModel -> accountModel == null)
+                .first()
+                .subscribe(this::onLoginSuccess, this::onLoginFail);
     }
 
-    @Override
-    public void onSuccess(AccountModel accountModel) {
+
+    public void onLoginSuccess(AccountModel accountModel) {
+        // TODO move all account saving to Interactor
         GitClApplication.setAccount(accountModel);
 
         loginView.showLoginProgress(false);
         loginView.startMainViewAsLogged();
     }
 
-    @Override
-    public void onFail(String message) {
-        loginView.showLoginProgress(false);
+
+    public void onLoginFail(Throwable th) {
         loginView.showLoginProgress(false);
     }
 }
