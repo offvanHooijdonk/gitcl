@@ -2,6 +2,8 @@ package com.epam.traing.gitcl.app;
 
 import android.content.Context;
 
+import com.epam.traing.gitcl.helper.PrefHelper;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -23,5 +25,11 @@ public class AppModule {
     @Singleton
     Context provideContext() {
         return app;
+    }
+
+    @Provides
+    @Singleton
+    PrefHelper providePreferenceHelper() {
+        return new PrefHelper(app);
     }
 }

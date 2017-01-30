@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.helper.PrefHelper;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,11 +39,7 @@ public class CurtainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (PrefHelper.showLoginScreen(CurtainActivity.this)) {
-                    startLoginScreen();
-                } else {
-                    startMainScreen();
-                }
+                startLoginScreen();
             }
         }, 500);
     }

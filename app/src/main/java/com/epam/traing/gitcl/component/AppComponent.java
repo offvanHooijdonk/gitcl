@@ -17,6 +17,7 @@ import dagger.Component;
 @Component(modules = {AppModule.class, PresenterModule.class})
 @Singleton
 public interface AppComponent {
+    // TODO move activities injection to a single Presenter Component ?
     void inject(LoginActivity loginActivity);
 
     Context getContext();
