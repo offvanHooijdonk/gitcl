@@ -8,8 +8,8 @@ import com.epam.traing.gitcl.component.AppComponent;
 import com.epam.traing.gitcl.component.AuthenticatorComponent;
 import com.epam.traing.gitcl.component.DaggerAppComponent;
 import com.epam.traing.gitcl.component.DaggerAuthenticatorComponent;
-import com.epam.traing.gitcl.component.DaggerLoginPresenterComponent;
-import com.epam.traing.gitcl.component.LoginPresenterComponent;
+import com.epam.traing.gitcl.component.DaggerLoginComponent;
+import com.epam.traing.gitcl.component.LoginComponent;
 import com.epam.traing.gitcl.db.DBModule;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.presenter.PresenterModule;
@@ -20,7 +20,7 @@ import com.epam.traing.gitcl.presenter.PresenterModule;
 
 public class GitClApplication extends Application {
     private static AppComponent appComponent;
-    private static LoginPresenterComponent loginPresenterComponent;
+    private static LoginComponent loginComponent;
     private static AuthenticatorComponent authenticatorComponent;
 
     private static AccountModel accountModel;
@@ -38,12 +38,12 @@ public class GitClApplication extends Application {
         return appComponent;
     }
 
-    public static LoginPresenterComponent getLoginPresenterComponent() {
-        if (loginPresenterComponent == null) {
-            loginPresenterComponent = DaggerLoginPresenterComponent.create();
+    public static LoginComponent getLoginComponent() {
+        if (loginComponent == null) {
+            loginComponent = DaggerLoginComponent.create();
         }
 
-        return loginPresenterComponent;
+        return loginComponent;
     }
 
     public static AuthenticatorComponent getAuthenticatorComponent() {

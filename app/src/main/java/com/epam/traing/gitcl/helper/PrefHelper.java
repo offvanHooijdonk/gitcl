@@ -9,8 +9,6 @@ import android.preference.PreferenceManager;
  */
 
 public class PrefHelper {
-    // TODO make injectable, move to App Module so can be provided to all App Component's dependent components
-
     private static final String FLAG_FIRST_START = "flag_first_start";
     private static final String PREF_LOGGED_IN_ACCOUNT_ID = "pref_logged_in_account_id";
 
@@ -20,7 +18,7 @@ public class PrefHelper {
         this.ctx = context;
     }
 
-    public SharedPreferences getSharedPreference() {
+    private SharedPreferences getSharedPreference() {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 

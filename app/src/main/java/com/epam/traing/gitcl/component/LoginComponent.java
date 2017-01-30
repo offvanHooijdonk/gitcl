@@ -12,7 +12,6 @@ import dagger.Component;
 
 @Component(modules = {AuthenticatorModule.class})
 @LoginScope
-public interface LoginPresenterComponent {
-    // TODO rename to Login Component ?
+public interface LoginComponent {
     void inject(LoginPresenter loginPresenter);
 }

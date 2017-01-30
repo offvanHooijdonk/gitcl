@@ -7,7 +7,6 @@ import com.epam.traing.gitcl.ui.ILoginView;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -22,7 +21,7 @@ public class LoginPresenter implements ILoginPresenter {
     private ILoginView loginView;
 
     public LoginPresenter() {
-        GitClApplication.getLoginPresenterComponent().inject(this);
+        GitClApplication.getLoginComponent().inject(this);
     }
 
     @Override
