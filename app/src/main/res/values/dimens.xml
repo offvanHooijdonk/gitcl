@@ -8,8 +8,12 @@
     <dimen name="nav_header_top_padding">40dp</dimen>
     <dimen name="material_button_padding">12dp</dimen>
 
-    <dimen name="login_logo_vert_margin">48dp</dimen>
+    <dimen name="login_logo_vert_margin">36dp</dimen>
+    <dimen name="login_logo_vert_margin_start">252dp</dimen>
     <dimen name="login_logo_horiz_margin">96dp</dimen>
     <dimen name="login_btn_top_margin">16dp</dimen>
     <dimen name="curtain_logo_horiz_margin">64dp</dimen>
+    <dimen name="login_logo_anim_size">220dp</dimen>
+    <dimen name="login_logo_size">136dp</dimen>
+    <dimen name="login_form_top_margin">240dp</dimen>
 </resources>
