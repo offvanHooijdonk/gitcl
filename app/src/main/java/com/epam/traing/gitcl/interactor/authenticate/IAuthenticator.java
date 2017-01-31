@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.interactor;
+package com.epam.traing.gitcl.interactor.authenticate;
 
 import com.epam.traing.gitcl.db.model.AccountModel;
 

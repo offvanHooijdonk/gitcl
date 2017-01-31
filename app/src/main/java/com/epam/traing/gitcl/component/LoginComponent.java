@@ -1,7 +1,7 @@
 package com.epam.traing.gitcl.component;
 
-import com.epam.traing.gitcl.interactor.AuthenticatorModule;
-import com.epam.traing.gitcl.interactor.LoginScope;
+import com.epam.traing.gitcl.interactor.authenticate.AuthenticatorModule;
+import com.epam.traing.gitcl.interactor.authenticate.LoginScope;
 import com.epam.traing.gitcl.presenter.LoginPresenter;
 
 import dagger.Component;

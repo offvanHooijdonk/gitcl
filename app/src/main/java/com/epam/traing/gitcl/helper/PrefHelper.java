@@ -30,12 +30,11 @@ public class PrefHelper {
         return getSharedPreference().getBoolean(FLAG_FIRST_START, true);
     }
 
-    public Long getLoggedAccountId() {
-        String s = getSharedPreference().getString(PREF_LOGGED_IN_ACCOUNT_ID, null);
-        return s != null ? Long.valueOf(s) : null;
+    public String getLoggedAccountName() {
+        return getSharedPreference().getString(PREF_LOGGED_IN_ACCOUNT_ID, null);
     }
 
-    public void setLoggedAccountId(Long value) {
+    public void setLoggedAccountName(String value) {
         getSharedPreference().edit().putString(PREF_LOGGED_IN_ACCOUNT_ID, String.valueOf(value)).apply();
     }
 }

@@ -2,7 +2,7 @@ package com.epam.traing.gitcl.presenter;
 
 import com.epam.traing.gitcl.app.GitClApplication;
 import com.epam.traing.gitcl.db.model.AccountModel;
-import com.epam.traing.gitcl.interactor.IAuthenticator;
+import com.epam.traing.gitcl.interactor.authenticate.IAuthenticator;
 import com.epam.traing.gitcl.ui.ILoginView;
 
 import javax.inject.Inject;

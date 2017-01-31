@@ -3,6 +3,7 @@ package com.epam.traing.gitcl.component;
 import android.content.Context;
 
 import com.epam.traing.gitcl.app.AppModule;
+import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.presenter.PresenterModule;
 import com.epam.traing.gitcl.ui.LoginActivity;
 
@@ -21,4 +22,5 @@ public interface AppComponent {
     void inject(LoginActivity loginActivity);
 
     Context getContext();
+    PrefHelper getPreferenceHelper();
 }

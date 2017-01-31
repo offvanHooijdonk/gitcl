@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.interactor;
+package com.epam.traing.gitcl.interactor.authenticate;
 
 import dagger.Module;
 import dagger.Provides;
