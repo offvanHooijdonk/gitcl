@@ -14,4 +14,6 @@
     <string name="transition_logo">logo</string>
 
     <string name="authentication_progress">Authenticating…</string>
+    <string name="drawer_item_account">Account</string>
+    <string name="drawer_item_log_out">Log out</string>
 </resources>

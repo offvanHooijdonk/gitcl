@@ -20,16 +20,12 @@
             android:title="Tools"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/drawer_item_account">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share"/>
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send"/>
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_log_out_24dp"
+                android:title="@string/drawer_item_log_out"/>
         </menu>
     </item>
 
