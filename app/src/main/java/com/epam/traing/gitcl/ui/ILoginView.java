@@ -13,4 +13,6 @@ public interface ILoginView {
     void startMainViewAsLogged();
 
     void startMainViewAsAnon();
+
+    void startWebViewForOAuth(String authUrl, String callbackUrl);
 }

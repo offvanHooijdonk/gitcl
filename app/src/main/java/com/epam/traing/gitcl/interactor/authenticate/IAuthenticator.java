@@ -9,5 +9,6 @@ import rx.Observable;
  */
 
 public interface IAuthenticator {
-    Observable<AccountModel> authenticate();
+    Observable<AccountModel> startAuthentication();
+    Observable<AccountModel> getLoggedAccount();
 }

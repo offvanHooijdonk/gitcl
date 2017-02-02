@@ -36,9 +36,21 @@ public class LoginPresenter implements ILoginPresenter {
 
     @Override
     public void onLoginSelected() {
+        // TODO set provided URLs
+        loginView.startWebViewForOAuth(null, null);
+    }
+
+    @Override
+    public void onLoginCallback(String callbackUrl) {
+        loginView.showLoginProgress(true);
+        // TODO pass Url to authenticator for further actions
+    }
+
+    // FIXME should use this code later
+    public void stub() {
         loginView.showLoginProgress(true);
 
-        authenticator.authenticate()
+        authenticator.startAuthentication()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .skipWhile(accountModel -> accountModel == null)

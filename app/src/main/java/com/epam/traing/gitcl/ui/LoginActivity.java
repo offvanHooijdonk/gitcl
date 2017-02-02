@@ -4,9 +4,9 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -32,15 +32,16 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
 
     boolean isNextScreenStarted = false;
+    private String callbackUrl;
 
     @Inject
     ILoginPresenter loginPresenter;
 
 
-    @Bind(R.id.editLayoutLogin)
+    /*@Bind(R.id.editLayoutLogin)
     TextInputLayout editLayoutLogin;
     @Bind(R.id.editLayoutPassword)
-    TextInputLayout editLayoutPassword;
+    TextInputLayout editLayoutPassword;*/
     @Bind(R.id.btnLogin)
     Button btnLogin;
     @Bind(R.id.txtSkipLogin)
@@ -59,8 +60,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
         ButterKnife.bind(this);
 
-        editLayoutLogin.setAlpha(0f);
-        editLayoutPassword.setAlpha(0f);
+        /*editLayoutLogin.setAlpha(0f);
+        editLayoutPassword.setAlpha(0f);*/
         btnLogin.setAlpha(0f);
         txtSkipLogin.setAlpha(0f);
     }
@@ -69,10 +70,14 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     protected void onResume() {
         super.onResume();
 
-        if (!isNextScreenStarted) {
+        Uri uri = getIntent().getData();
+        if (uri != null && uri.toString().startsWith(callbackUrl)) {
+
+        } else if (!isNextScreenStarted) {
             animateRevealLogin();
             isNextScreenStarted = true;
         }
+
     }
 
     private void animateRevealLogin() {
@@ -80,13 +85,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         float marginTopEnd = getResources().getDimensionPixelSize(R.dimen.login_logo_vert_margin);
         float sizeStart = getResources().getDimensionPixelSize(R.dimen.login_logo_anim_size);
         float sizeEnd = getResources().getDimensionPixelSize(R.dimen.login_logo_size);
-        float logoEndScale = sizeEnd/sizeStart;
+        float logoEndScale = sizeEnd / sizeStart;
 
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(imgLogoAnim, View.SCALE_X, 1, logoEndScale);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(imgLogoAnim, View.SCALE_Y, 1, logoEndScale);
         ObjectAnimator moveY = ObjectAnimator.ofFloat(imgLogoAnim, View.Y, marginTopStart, marginTopEnd);
-        ObjectAnimator fadeEditLogin = ObjectAnimator.ofFloat(editLayoutLogin, View.ALPHA, 1f);
-        ObjectAnimator fadeEditPassword = ObjectAnimator.ofFloat(editLayoutPassword, View.ALPHA, 1f);
+        /*ObjectAnimator fadeEditLogin = ObjectAnimator.ofFloat(editLayoutLogin, View.ALPHA, 1f);
+        ObjectAnimator fadeEditPassword = ObjectAnimator.ofFloat(editLayoutPassword, View.ALPHA, 1f);*/
         ObjectAnimator fadeBtnLogin = ObjectAnimator.ofFloat(btnLogin, View.ALPHA, 1f);
         ObjectAnimator fadeTxtSkipLogin = ObjectAnimator.ofFloat(txtSkipLogin, View.ALPHA, 1f);
 
@@ -97,8 +102,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         set.play(scaleX)
                 .with(scaleY)
                 .with(moveY)
-                .before(fadeEditLogin)
-                .before(fadeEditPassword)
+/*                .before(fadeEditLogin)
+                .before(fadeEditPassword)*/
                 .before(fadeBtnLogin)
                 .before(fadeTxtSkipLogin);
 
@@ -145,6 +150,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Override
     public void startMainViewAsAnon() {
         startMain(ENTER_TYPE.skip);
+    }
+
+    @Override
+    public void startWebViewForOAuth(String authUrl, String callbackUrl) {
+        Intent intent = new Intent(
+                Intent.ACTION_VIEW, Uri.parse(authUrl));
+        startActivity(intent);
     }
 
     private void startMain(ENTER_TYPE enterType) {

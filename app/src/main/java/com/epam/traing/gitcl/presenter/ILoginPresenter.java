@@ -12,4 +12,6 @@ public interface ILoginPresenter {
     void onSkipLoginSelected();
 
     void onLoginSelected();
+
+    void onLoginCallback(String callbackUrl);
 }

@@ -8,7 +8,7 @@
     <string name="action_settings">Settings</string>
     <string name="hint_login">Login</string>
     <string name="hint_password">Password</string>
-    <string name="btn_login">Login</string>
+    <string name="btn_login">Sign in with GitHub</string>
     <string name="skip_login">Not this time.</string>
     <string name="drawer_username_anonymous">Anonymous</string>
     <string name="transition_logo">logo</string>

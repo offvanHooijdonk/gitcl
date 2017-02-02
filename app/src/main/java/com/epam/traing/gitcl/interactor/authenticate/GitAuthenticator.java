@@ -4,6 +4,7 @@ import com.epam.traing.gitcl.app.GitClApplication;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.tables.AccountTable;
 import com.epam.traing.gitcl.helper.PrefHelper;
+import com.epam.traing.gitcl.helper.account.GitHubAccountAuthenticator;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -19,18 +20,48 @@ import rx.subjects.ReplaySubject;
  */
 
 public class GitAuthenticator implements IAuthenticator {
+// TODO store in kind of properties
+    private static final String OAUTH_KEY = "";
+    private static final String OAUTH_SECRET = "";
+    private static final String OAUTH_URL = "";
+    private static final String OAUTH_CALLBACK_URL = "";
 
     @Inject
     StorIOSQLite storIOSQLite;
     @Inject
     PrefHelper prefHelper;
+    @Inject
+    GitHubAccountAuthenticator gitHubAuthenticator;
 
     public GitAuthenticator() {
         GitClApplication.getAuthenticatorComponent().inject(this);
     }
 
     @Override
-    public Observable<AccountModel> authenticate() {
+    public Observable<AccountModel> startAuthentication() {
+        ReplaySubject<AccountModel> s = ReplaySubject.create();
+
+        loadAccount().subscribe(accountModel -> {
+            saveAccount(accountModel);
+            prefHelper.setLoggedAccountName(accountModel.getAccountName());
+            GitClApplication.setAccount(accountModel);
+            s.onNext(accountModel);
+            s.onCompleted();
+        });
+        return s;
+    }
+
+    public String getOAuthUrl() {
+        // TODO create OAuth URL here!
+        return null;
+    }
+
+    public String getOAuthCallbackUrl() {
+        return OAUTH_CALLBACK_URL;
+    }
+
+    @Override
+    public Observable<AccountModel> getLoggedAccount() {
         ReplaySubject<AccountModel> s = ReplaySubject.create();
 
         String loggedAccountName = prefHelper.getLoggedAccountName();
@@ -44,13 +75,7 @@ public class GitAuthenticator implements IAuthenticator {
                 }
             });
         } else {
-            loadAccount().subscribe(accountModel -> {
-                saveAccount(accountModel);
-                prefHelper.setLoggedAccountName(accountModel.getAccountName());
-                GitClApplication.setAccount(accountModel);
-                s.onNext(accountModel);
-                s.onCompleted();
-            });
+            // TODO handle. Maybe won't be a case in future
         }
 
         return s;
