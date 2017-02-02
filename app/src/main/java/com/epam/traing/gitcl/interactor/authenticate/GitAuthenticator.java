@@ -1,5 +1,7 @@
 package com.epam.traing.gitcl.interactor.authenticate;
 
+import android.net.Uri;
+
 import com.epam.traing.gitcl.app.GitClApplication;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.tables.AccountTable;
@@ -21,10 +23,13 @@ import rx.subjects.ReplaySubject;
 
 public class GitAuthenticator implements IAuthenticator {
 // TODO store in kind of properties
-    private static final String OAUTH_KEY = "";
+    private static final String QPARAM_CODE = "code";
+    private static final String QPARAM_ERROR = "error";
+    private static final String OAUTH_KEY = "6203c4ce6b8758a78dce";
     private static final String OAUTH_SECRET = "";
-    private static final String OAUTH_URL = "";
-    private static final String OAUTH_CALLBACK_URL = "";
+    private static final String OAUTH_SCOPES = "user public_repo";
+    private static final String OAUTH_URL = "https://github.com/login/oauth/authorize?scope=%s&client_id=%s";
+    private static final String OAUTH_CALLBACK_URL = "githubcl://githubcloauth/callback";
 
     @Inject
     StorIOSQLite storIOSQLite;
@@ -38,6 +43,19 @@ public class GitAuthenticator implements IAuthenticator {
     }
 
     @Override
+    public void parseOAuthCallback(String url) {
+        Uri uri = Uri.parse(url);
+        String code = uri.getQueryParameter(QPARAM_CODE);
+        if (code != null) {
+
+        } else {
+            String errorMsg = uri.getQueryParameter(QPARAM_ERROR);
+            // TODO handle error
+        }
+    }
+
+
+    @Override
     public Observable<AccountModel> startAuthentication() {
         ReplaySubject<AccountModel> s = ReplaySubject.create();
 
@@ -49,15 +67,6 @@ public class GitAuthenticator implements IAuthenticator {
             s.onCompleted();
         });
         return s;
-    }
-
-    public String getOAuthUrl() {
-        // TODO create OAuth URL here!
-        return null;
-    }
-
-    public String getOAuthCallbackUrl() {
-        return OAUTH_CALLBACK_URL;
     }
 
     @Override
@@ -80,6 +89,19 @@ public class GitAuthenticator implements IAuthenticator {
 
         return s;
     }
+
+    @Override
+    public String getOAuthUrl() {
+        // TODO create OAuth URL here!
+        return String.format(OAUTH_URL, OAUTH_SCOPES, OAUTH_KEY);
+    }
+
+    @Override
+    public String getOAuthCallbackUrl() {
+        return OAUTH_CALLBACK_URL;
+    }
+
+
 
     private Observable<AccountModel> loadAccount() {
         final AccountModel accountModel = new AccountModel();

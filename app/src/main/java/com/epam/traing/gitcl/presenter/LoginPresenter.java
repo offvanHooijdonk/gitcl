@@ -43,7 +43,8 @@ public class LoginPresenter implements ILoginPresenter {
     @Override
     public void onLoginCallback(String callbackUrl) {
         loginView.showLoginProgress(true);
-        // TODO pass Url to authenticator for further actions
+
+        authenticator.parseOAuthCallback(callbackUrl);
     }
 
     // FIXME should use this code later

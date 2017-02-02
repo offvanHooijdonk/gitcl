@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
         Uri uri = getIntent().getData();
         if (uri != null && uri.toString().startsWith(callbackUrl)) {
-
+            loginPresenter.onLoginCallback(uri.toString());
         } else if (!isNextScreenStarted) {
             animateRevealLogin();
             isNextScreenStarted = true;
