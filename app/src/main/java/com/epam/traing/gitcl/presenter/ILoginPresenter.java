@@ -14,4 +14,6 @@ public interface ILoginPresenter {
     void onLoginSelected();
 
     void onLoginCallback(String callbackUrl);
+
+    boolean isCallbackUrl(String s);
 }

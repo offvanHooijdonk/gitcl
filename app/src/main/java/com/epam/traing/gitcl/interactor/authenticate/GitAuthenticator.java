@@ -9,6 +9,7 @@ import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 import com.epam.traing.gitcl.network.json.AccessTokenJson;
+import com.epam.traing.gitcl.network.json.AccountJson;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -17,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subjects.ReplaySubject;
 
 /**
@@ -24,13 +27,13 @@ import rx.subjects.ReplaySubject;
  */
 
 public class GitAuthenticator implements IAuthenticator {
-// TODO store in kind of properties
+    // TODO store in kind of properties
     private static final String QPARAM_CODE = "code";
     private static final String QPARAM_ERROR = "error";
     private static final String OAUTH_KEY = "6203c4ce6b8758a78dce";
     private static final String OAUTH_SECRET = "c71efb17a495bce469e238624de486b7bce1edf5";
     private static final String OAUTH_SCOPES = "user public_repo";
-    private static final String OAUTH_URL = "https://github.com/login/oauth/authorize?scope=%s&client_id=%s&redirect_uri=%s";
+    private static final String OAUTH_URL = "https://github.com/login/oauth/authorize?scope=%s&client_id=%s";
     private static final String OAUTH_CALLBACK_URL = "githubcl://githubcloauth/callback";
 
     @Inject
@@ -42,42 +45,46 @@ public class GitAuthenticator implements IAuthenticator {
     @Inject
     GitHubUserClient userClient;
 
+    ReplaySubject<AccountModel> loadAccountSubject = ReplaySubject.create();
+
     public GitAuthenticator() {
         GitClApplication.getAuthenticatorComponent().inject(this);
     }
 
     @Override
-    public void authorizeFromCallback(String callbackUrl) {
+    public Observable<AccountModel> authorizeFromCallback(String callbackUrl) {
         Uri uri = Uri.parse(callbackUrl);
         String code = uri.getQueryParameter(QPARAM_CODE);
         if (code != null) {
             tokenClient.requestAccessToken(OAUTH_KEY, OAUTH_SECRET, code)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .map(AccessTokenJson::getAccessToken)
                     .subscribe(token -> {
-                        // TODO store token
-                        userClient.getUserInfo("token " + token).subscribe(accountJson -> {
-                            // TODO convert returned user to AccountModel, do other stuff
-                        });
+                        userClient.getUserInfo("token " + token)
+                                .map(this::convertJsonToAccountModel)
+                                .flatMap(accountModel -> {
+                                    accountModel.setAccessToken(token);
+                                    return Observable.just(accountModel);
+                                })
+                                .subscribe(this::onAccountLoaded);
+                    },th -> {
+                        loadAccountSubject.onError(th);
                     });
         } else {
             String errorMsg = uri.getQueryParameter(QPARAM_ERROR);
             // TODO handle error
         }
+
+        return loadAccountSubject;
     }
 
-
-    @Override
-    public Observable<AccountModel> startAuthentication() {
-        ReplaySubject<AccountModel> s = ReplaySubject.create();
-
-        loadAccount().subscribe(accountModel -> {
-            saveAccount(accountModel);
-            prefHelper.setLoggedAccountName(accountModel.getAccountName());
-            GitClApplication.setAccount(accountModel);
-            s.onNext(accountModel);
-            s.onCompleted();
-        });
-        return s;
+    private void onAccountLoaded(AccountModel accountModel) {
+        saveAccount(accountModel);
+        GitClApplication.setAccount(accountModel);
+        prefHelper.setLoggedAccountName(accountModel.getAccountName());
+        loadAccountSubject.onNext(accountModel);
+        // TODO start avatar loading if not null
     }
 
     @Override
@@ -104,7 +111,7 @@ public class GitAuthenticator implements IAuthenticator {
     @Override
     public String getOAuthUrl() {
         // TODO create OAuth URL here!
-        return String.format(OAUTH_URL, OAUTH_SCOPES, OAUTH_KEY, OAUTH_CALLBACK_URL);
+        return String.format(OAUTH_URL, OAUTH_SCOPES, OAUTH_KEY);
     }
 
     @Override
@@ -112,13 +119,19 @@ public class GitAuthenticator implements IAuthenticator {
         return OAUTH_CALLBACK_URL;
     }
 
-
+    private AccountModel convertJsonToAccountModel(AccountJson json) {
+        AccountModel model = new AccountModel();
+        model.setAccountName(json.getLogin());
+        model.setPersonName(json.getPersonName());
+        model.setAvatar(json.getAvatarUrl());
+        model.setEmail(json.getEmail());
+        return model;
+    }
 
     private Observable<AccountModel> loadAccount() {
         final AccountModel accountModel = new AccountModel();
         accountModel.setId(42L);
-        accountModel.setFirstName("John");
-        accountModel.setLastName("Doe");
+        accountModel.setPersonName("John Doe");
         accountModel.setAccountName("goJohnyGo");
 
         return Observable.just(accountModel)

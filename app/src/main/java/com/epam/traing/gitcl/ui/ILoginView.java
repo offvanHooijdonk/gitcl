@@ -8,11 +8,11 @@ public interface ILoginView {
 
     void showLoginProgress(boolean show);
 
-    void showAuthErrorMessage(String message);
+    void showAuthErrorMessage(Throwable e);
 
     void startMainViewAsLogged();
 
     void startMainViewAsAnon();
 
-    void startWebViewForOAuth(String authUrl, String callbackUrl);
+    void startWebViewForOAuth(String authUrl);
 }

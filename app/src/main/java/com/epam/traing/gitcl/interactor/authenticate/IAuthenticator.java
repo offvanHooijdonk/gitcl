@@ -9,9 +9,7 @@ import rx.Observable;
  */
 
 public interface IAuthenticator {
-    void authorizeFromCallback(String uri);
-    @Deprecated
-    Observable<AccountModel> startAuthentication();
+    Observable<AccountModel> authorizeFromCallback(String uri);
     Observable<AccountModel> getLoggedAccount();
     String getOAuthUrl();
     String getOAuthCallbackUrl();

@@ -12,6 +12,7 @@ public class PrefHelper {
     private static final String FLAG_FIRST_START = "flag_first_start";
     private static final String PREF_LOGGED_IN_ACCOUNT_ID = "pref_logged_in_account_id";
 
+
     private Context ctx;
 
     public PrefHelper(Context context) {

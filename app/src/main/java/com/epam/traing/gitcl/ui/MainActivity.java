@@ -108,10 +108,6 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -122,7 +118,7 @@ public class MainActivity extends AppCompatActivity
     private void displayAccountInfo() {
         AccountModel accountModel = GitClApplication.getAccount();
         if (accountModel != null) {
-            txtDrawerAccountUserName.setText(String.format("%s %s", accountModel.getFirstName(), accountModel.getLastName()));
+            txtDrawerAccountUserName.setText(accountModel.getPersonName());
             txtDrawerAccountName.setText(accountModel.getAccountName());
         }
     }

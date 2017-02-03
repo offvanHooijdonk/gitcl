@@ -7,9 +7,6 @@ import com.epam.traing.gitcl.ui.ILoginView;
 
 import javax.inject.Inject;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
 /**
  * Created by Yahor_Fralou on 1/25/2017 5:12 PM.
  */
@@ -36,29 +33,24 @@ public class LoginPresenter implements ILoginPresenter {
 
     @Override
     public void onLoginSelected() {
-        // TODO set provided URLs
-        loginView.startWebViewForOAuth(null, null);
+        // TODO check first if account logged exists
+        // if account if Prefs - load it. If now - start OAuth flow
+        loginView.startWebViewForOAuth(authenticator.getOAuthUrl());
     }
 
     @Override
     public void onLoginCallback(String callbackUrl) {
         loginView.showLoginProgress(true);
 
-        authenticator.authorizeFromCallback(callbackUrl);
-    }
-
-    // FIXME should use this code later
-    public void stub() {
-        loginView.showLoginProgress(true);
-
-        authenticator.startAuthentication()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .skipWhile(accountModel -> accountModel == null)
+        authenticator.authorizeFromCallback(callbackUrl)
                 .first()
                 .subscribe(this::onLoginSuccess, this::onLoginFail);
     }
 
+    @Override
+    public boolean isCallbackUrl(String s) {
+        return s != null && s.startsWith(authenticator.getOAuthCallbackUrl());
+    }
 
     public void onLoginSuccess(AccountModel accountModel) {
         loginView.showLoginProgress(false);
@@ -67,6 +59,8 @@ public class LoginPresenter implements ILoginPresenter {
 
 
     public void onLoginFail(Throwable th) {
+        // TODO show error message
         loginView.showLoginProgress(false);
+        loginView.showAuthErrorMessage(th);
     }
 }

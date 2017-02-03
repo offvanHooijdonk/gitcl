@@ -32,7 +32,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
 
     boolean isNextScreenStarted = false;
-    private String callbackUrl;
 
     @Inject
     ILoginPresenter loginPresenter;
@@ -71,7 +70,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         super.onResume();
 
         Uri uri = getIntent().getData();
-        if (uri != null && uri.toString().startsWith(callbackUrl)) {
+        if (uri != null && loginPresenter.isCallbackUrl(uri.toString())) {
             loginPresenter.onLoginCallback(uri.toString());
         } else if (!isNextScreenStarted) {
             animateRevealLogin();
@@ -138,8 +137,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
 
     @Override
-    public void showAuthErrorMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    public void showAuthErrorMessage(Throwable th) {
+        Toast.makeText(this, th.toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -153,7 +152,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
 
     @Override
-    public void startWebViewForOAuth(String authUrl, String callbackUrl) {
+    public void startWebViewForOAuth(String authUrl) {
         Intent intent = new Intent(
                 Intent.ACTION_VIEW, Uri.parse(authUrl));
         startActivity(intent);

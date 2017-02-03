@@ -12,12 +12,16 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 public class AccountModel {
     @StorIOSQLiteColumn(name = AccountTable.COLUMN_ID, key = true)
     long id;
-    @StorIOSQLiteColumn(name = AccountTable.COLUMN_FNAME)
-    String firstName;
-    @StorIOSQLiteColumn(name = AccountTable.COLUMN_LNAME)
-    String lastName;
+    @StorIOSQLiteColumn(name = AccountTable.COLUMN_PERSON_NAME)
+    String personName;
     @StorIOSQLiteColumn(name = AccountTable.COLUMN_ACCOUNT_NAME)
     String accountName;
+    @StorIOSQLiteColumn(name = AccountTable.COLUMN_ACCESS_TOKEN)
+    String accessToken;
+    @StorIOSQLiteColumn(name = AccountTable.COLUMN_AVATAR_FILE_NAME)
+    String avatar;
+    @StorIOSQLiteColumn(name = AccountTable.COLUMN_EMAIL)
+    String email;
 
     public long getId() {
         return id;
@@ -27,20 +31,12 @@ public class AccountModel {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getPersonName() {
+        return personName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 
     public String getAccountName() {
@@ -49,5 +45,29 @@ public class AccountModel {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
