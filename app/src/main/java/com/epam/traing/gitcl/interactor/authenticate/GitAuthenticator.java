@@ -45,7 +45,7 @@ public class GitAuthenticator implements IAuthenticator {
     @Inject
     GitHubUserClient userClient;
 
-    ReplaySubject<AccountModel> loadAccountSubject = ReplaySubject.create();
+    private ReplaySubject<AccountModel> loadAccountSubject = ReplaySubject.create();
 
     public GitAuthenticator() {
         GitClApplication.getAuthenticatorComponent().inject(this);
@@ -62,6 +62,8 @@ public class GitAuthenticator implements IAuthenticator {
                     .map(AccessTokenJson::getAccessToken)
                     .subscribe(token -> {
                         userClient.getUserInfo("token " + token)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
                                 .map(this::convertJsonToAccountModel)
                                 .flatMap(accountModel -> {
                                     accountModel.setAccessToken(token);
