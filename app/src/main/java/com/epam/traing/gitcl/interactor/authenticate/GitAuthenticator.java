@@ -6,7 +6,9 @@ import com.epam.traing.gitcl.app.GitClApplication;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.tables.AccountTable;
 import com.epam.traing.gitcl.helper.PrefHelper;
-import com.epam.traing.gitcl.helper.account.GitHubAccountAuthenticator;
+import com.epam.traing.gitcl.network.GitHubTokenClient;
+import com.epam.traing.gitcl.network.GitHubUserClient;
+import com.epam.traing.gitcl.network.json.AccessTokenJson;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -26,9 +28,9 @@ public class GitAuthenticator implements IAuthenticator {
     private static final String QPARAM_CODE = "code";
     private static final String QPARAM_ERROR = "error";
     private static final String OAUTH_KEY = "6203c4ce6b8758a78dce";
-    private static final String OAUTH_SECRET = "";
+    private static final String OAUTH_SECRET = "c71efb17a495bce469e238624de486b7bce1edf5";
     private static final String OAUTH_SCOPES = "user public_repo";
-    private static final String OAUTH_URL = "https://github.com/login/oauth/authorize?scope=%s&client_id=%s";
+    private static final String OAUTH_URL = "https://github.com/login/oauth/authorize?scope=%s&client_id=%s&redirect_uri=%s";
     private static final String OAUTH_CALLBACK_URL = "githubcl://githubcloauth/callback";
 
     @Inject
@@ -36,18 +38,27 @@ public class GitAuthenticator implements IAuthenticator {
     @Inject
     PrefHelper prefHelper;
     @Inject
-    GitHubAccountAuthenticator gitHubAuthenticator;
+    GitHubTokenClient tokenClient;
+    @Inject
+    GitHubUserClient userClient;
 
     public GitAuthenticator() {
         GitClApplication.getAuthenticatorComponent().inject(this);
     }
 
     @Override
-    public void parseOAuthCallback(String url) {
-        Uri uri = Uri.parse(url);
+    public void authorizeFromCallback(String callbackUrl) {
+        Uri uri = Uri.parse(callbackUrl);
         String code = uri.getQueryParameter(QPARAM_CODE);
         if (code != null) {
-
+            tokenClient.requestAccessToken(OAUTH_KEY, OAUTH_SECRET, code)
+                    .map(AccessTokenJson::getAccessToken)
+                    .subscribe(token -> {
+                        // TODO store token
+                        userClient.getUserInfo("token " + token).subscribe(accountJson -> {
+                            // TODO convert returned user to AccountModel, do other stuff
+                        });
+                    });
         } else {
             String errorMsg = uri.getQueryParameter(QPARAM_ERROR);
             // TODO handle error
@@ -93,7 +104,7 @@ public class GitAuthenticator implements IAuthenticator {
     @Override
     public String getOAuthUrl() {
         // TODO create OAuth URL here!
-        return String.format(OAUTH_URL, OAUTH_SCOPES, OAUTH_KEY);
+        return String.format(OAUTH_URL, OAUTH_SCOPES, OAUTH_KEY, OAUTH_CALLBACK_URL);
     }
 
     @Override

@@ -44,7 +44,7 @@ public class LoginPresenter implements ILoginPresenter {
     public void onLoginCallback(String callbackUrl) {
         loginView.showLoginProgress(true);
 
-        authenticator.parseOAuthCallback(callbackUrl);
+        authenticator.authorizeFromCallback(callbackUrl);
     }
 
     // FIXME should use this code later
