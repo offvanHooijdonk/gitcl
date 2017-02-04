@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
@@ -36,11 +37,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Inject
     ILoginPresenter loginPresenter;
 
-
-    /*@Bind(R.id.editLayoutLogin)
-    TextInputLayout editLayoutLogin;
-    @Bind(R.id.editLayoutPassword)
-    TextInputLayout editLayoutPassword;*/
     @Bind(R.id.btnLogin)
     Button btnLogin;
     @Bind(R.id.txtSkipLogin)
@@ -59,8 +55,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
         ButterKnife.bind(this);
 
-        /*editLayoutLogin.setAlpha(0f);
-        editLayoutPassword.setAlpha(0f);*/
         btnLogin.setAlpha(0f);
         txtSkipLogin.setAlpha(0f);
     }
@@ -68,15 +62,37 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(GitClApplication.LOG, "onResume");
 
         Uri uri = getIntent().getData();
+        Log.d(GitClApplication.LOG, "onResume data: " + (uri != null ? uri.toString() : "null"));
         if (uri != null && loginPresenter.isCallbackUrl(uri.toString())) {
+            Log.d(GitClApplication.LOG, "Uri received: " + uri.toString());
             loginPresenter.onLoginCallback(uri.toString());
         } else if (!isNextScreenStarted) {
+            Log.d(GitClApplication.LOG, "Animation reveal started.");
             animateRevealLogin();
             isNextScreenStarted = true;
         }
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(GitClApplication.LOG, "onRestart");
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        Log.d(GitClApplication.LOG, "onPostResume");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.d(GitClApplication.LOG, "onRestoreInstanceState");
     }
 
     private void animateRevealLogin() {
@@ -89,8 +105,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(imgLogoAnim, View.SCALE_X, 1, logoEndScale);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(imgLogoAnim, View.SCALE_Y, 1, logoEndScale);
         ObjectAnimator moveY = ObjectAnimator.ofFloat(imgLogoAnim, View.Y, marginTopStart, marginTopEnd);
-        /*ObjectAnimator fadeEditLogin = ObjectAnimator.ofFloat(editLayoutLogin, View.ALPHA, 1f);
-        ObjectAnimator fadeEditPassword = ObjectAnimator.ofFloat(editLayoutPassword, View.ALPHA, 1f);*/
         ObjectAnimator fadeBtnLogin = ObjectAnimator.ofFloat(btnLogin, View.ALPHA, 1f);
         ObjectAnimator fadeTxtSkipLogin = ObjectAnimator.ofFloat(txtSkipLogin, View.ALPHA, 1f);
 
@@ -101,8 +115,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         set.play(scaleX)
                 .with(scaleY)
                 .with(moveY)
-/*                .before(fadeEditLogin)
-                .before(fadeEditPassword)*/
                 .before(fadeBtnLogin)
                 .before(fadeTxtSkipLogin);
 
@@ -121,6 +133,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void showLoginProgress(boolean show) {
+        Log.d(GitClApplication.LOG, "Progress: " + show);
         if (show) {
             if (progressDialog == null) {
                 progressDialog = new ProgressDialog(LoginActivity.this);
@@ -138,11 +151,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void showAuthErrorMessage(Throwable th) {
+        Log.e(GitClApplication.LOG, "Error handled.", th);
         Toast.makeText(this, th.toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void startMainViewAsLogged() {
+        Log.d(GitClApplication.LOG, "Starting Main Activity");
         startMain(ENTER_TYPE.logged_in);
     }
 

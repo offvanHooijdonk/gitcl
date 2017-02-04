@@ -10,26 +10,16 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 @StorIOSQLiteType(table = AccountTable.TABLE)
 public class AccountModel {
-    @StorIOSQLiteColumn(name = AccountTable.COLUMN_ID, key = true)
-    long id;
+    @StorIOSQLiteColumn(name = AccountTable.COLUMN_ACCOUNT_NAME, key = true)
+    String accountName;
     @StorIOSQLiteColumn(name = AccountTable.COLUMN_PERSON_NAME)
     String personName;
-    @StorIOSQLiteColumn(name = AccountTable.COLUMN_ACCOUNT_NAME)
-    String accountName;
     @StorIOSQLiteColumn(name = AccountTable.COLUMN_ACCESS_TOKEN)
     String accessToken;
     @StorIOSQLiteColumn(name = AccountTable.COLUMN_AVATAR_FILE_NAME)
     String avatar;
     @StorIOSQLiteColumn(name = AccountTable.COLUMN_EMAIL)
     String email;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getPersonName() {
         return personName;

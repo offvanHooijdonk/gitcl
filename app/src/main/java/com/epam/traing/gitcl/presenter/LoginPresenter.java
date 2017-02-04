@@ -1,9 +1,12 @@
 package com.epam.traing.gitcl.presenter;
 
+import android.util.Log;
+
 import com.epam.traing.gitcl.app.GitClApplication;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.interactor.authenticate.IAuthenticator;
 import com.epam.traing.gitcl.ui.ILoginView;
+import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
@@ -53,6 +56,8 @@ public class LoginPresenter implements ILoginPresenter {
     }
 
     public void onLoginSuccess(AccountModel accountModel) {
+        Log.d(GitClApplication.LOG, "Login Success");
+        Log.d(GitClApplication.LOG, new Gson().toJson(accountModel));
         loginView.showLoginProgress(false);
         loginView.startMainViewAsLogged();
     }

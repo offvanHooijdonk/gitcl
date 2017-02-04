@@ -19,6 +19,7 @@ import com.epam.traing.gitcl.presenter.PresenterModule;
  */
 
 public class GitClApplication extends Application {
+    public static final String LOG = "githubcl";
     private static AppComponent appComponent;
     private static LoginComponent loginComponent;
     private static AuthenticatorComponent authenticatorComponent;
