@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
  */
 
 public class PrefHelper {
-    private static final String FLAG_FIRST_START = "flag_first_start";
+    private static final String FLAG_SHOW_LOGIN = "flag_first_start";
     private static final String PREF_LOGGED_IN_ACCOUNT_ID = "pref_logged_in_account_id";
     private static final String PREF_TOKEN_TYPE = "pref_token_type";
 
@@ -23,12 +23,12 @@ public class PrefHelper {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
-    public boolean showLoginScreen() {
-        return isFirstStart();
+    public boolean isShowLogin() {
+        return getSharedPreference().getBoolean(FLAG_SHOW_LOGIN, true);
     }
 
-    public boolean isFirstStart() {
-        return getSharedPreference().getBoolean(FLAG_FIRST_START, true);
+    public void setShowLogin(Boolean show) {
+        getSharedPreference().edit().putBoolean(FLAG_SHOW_LOGIN, show).apply();
     }
 
     public String getLoggedAccountName() {

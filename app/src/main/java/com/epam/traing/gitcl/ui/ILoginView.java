@@ -6,13 +6,13 @@ package com.epam.traing.gitcl.ui;
 
 public interface ILoginView {
 
-    void showLoginProgress(boolean show);
+    void startLoginProgress(boolean show);
 
     void showAuthErrorMessage(Throwable e);
 
-    void startMainViewAsLogged();
+    void startMainView();
 
-    void startMainViewAsAnon();
+    void showLoginScreen();
 
     void startWebViewForOAuth(String authUrl);
 }

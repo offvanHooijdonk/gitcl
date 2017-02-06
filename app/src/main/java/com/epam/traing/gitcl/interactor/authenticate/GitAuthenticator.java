@@ -91,6 +91,7 @@ public class GitAuthenticator implements IAuthenticator {
         // TODO start avatar loading if not null
     }
 
+    @Deprecated
     @Override
     public Observable<AccountModel> getLoggedAccount() {
         ReplaySubject<AccountModel> s = ReplaySubject.create();
@@ -113,14 +114,42 @@ public class GitAuthenticator implements IAuthenticator {
     }
 
     @Override
+    public Observable<Boolean> getShowLogin() {
+        return Observable.just(prefHelper.isShowLogin());
+    }
+
+    @Override
+    public Observable<AccountModel> prepareOnLoginData() {
+        ReplaySubject<AccountModel> subj = ReplaySubject.create();
+
+        String loggedAccountName = prefHelper.getLoggedAccountName();
+        if (loggedAccountName == null) {
+            subj.onNext(null);
+            subj.onCompleted();
+        } else {
+            findAccountLocal(loggedAccountName).subscribe(accountModel -> {
+                GitClApplication.setAccount(accountModel);
+                subj.onNext(accountModel);
+                subj.onCompleted();
+            }, subj::onError);
+        }
+
+        return subj;
+    }
+
+    @Override
     public String getOAuthUrl() {
-        // TODO create OAuth URL here!
         return String.format(OAUTH_URL, OAUTH_SCOPES, OAUTH_KEY);
     }
 
     @Override
     public String getOAuthCallbackUrl() {
         return OAUTH_CALLBACK_URL;
+    }
+
+    @Override
+    public void setShowLogin(boolean show) {
+        prefHelper.setShowLogin(show);
     }
 
     private AccountModel convertJsonToAccountModel(AccountJson json) {

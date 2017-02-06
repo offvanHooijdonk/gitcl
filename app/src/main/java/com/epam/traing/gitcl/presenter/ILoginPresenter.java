@@ -1,5 +1,7 @@
 package com.epam.traing.gitcl.presenter;
 
+import android.content.Intent;
+
 import com.epam.traing.gitcl.ui.ILoginView;
 
 /**
@@ -13,7 +15,5 @@ public interface ILoginPresenter {
 
     void onLoginSelected();
 
-    void onLoginCallback(String callbackUrl);
-
-    boolean isCallbackUrl(String s);
+    void onActivityResume(Intent intent);
 }

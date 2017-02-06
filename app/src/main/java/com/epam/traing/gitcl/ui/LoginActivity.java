@@ -28,10 +28,6 @@ import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity implements ILoginView {
 
-    private enum ENTER_TYPE {
-        skip, login_new, logged_in
-    }
-
     boolean isNextScreenStarted = false;
 
     @Inject
@@ -64,35 +60,64 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         super.onResume();
         Log.d(GitClApplication.LOG, "onResume");
 
-        Uri uri = getIntent().getData();
-        Log.d(GitClApplication.LOG, "onResume data: " + (uri != null ? uri.toString() : "null"));
-        if (uri != null && loginPresenter.isCallbackUrl(uri.toString())) {
-            Log.d(GitClApplication.LOG, "Uri received: " + uri.toString());
-            loginPresenter.onLoginCallback(uri.toString());
-        } else if (!isNextScreenStarted) {
+        loginPresenter.onActivityResume(getIntent());
+    }
+
+    @OnClick(R.id.btnLogin)
+    void onLoginClick() {
+        loginPresenter.onLoginSelected();
+    }
+
+    @OnClick(R.id.txtSkipLogin)
+    void onSkipLoginClick() {
+        loginPresenter.onSkipLoginSelected();
+    }
+
+    @Override
+    public void startLoginProgress(boolean show) {
+        Log.d(GitClApplication.LOG, "Progress: " + show);
+        if (show) {
+            if (progressDialog == null) {
+                progressDialog = new ProgressDialog(LoginActivity.this);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage(LoginActivity.this.getString(R.string.authentication_progress));
+            }
+
+            progressDialog.show();
+        } else {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
+    }
+
+    @Override
+    public void showAuthErrorMessage(Throwable th) {
+        Log.e(GitClApplication.LOG, "Error handled.", th);
+        showLoginScreen();
+        Toast.makeText(this, th.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void startMainView() {
+        Log.d(GitClApplication.LOG, "Starting Main Activity");
+        startMain();
+    }
+
+    @Override
+    public void showLoginScreen() {
+        if (!isNextScreenStarted) {
             Log.d(GitClApplication.LOG, "Animation reveal started.");
             animateRevealLogin();
             isNextScreenStarted = true;
         }
-
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d(GitClApplication.LOG, "onRestart");
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        Log.d(GitClApplication.LOG, "onPostResume");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.d(GitClApplication.LOG, "onRestoreInstanceState");
+    public void startWebViewForOAuth(String authUrl) {
+        Intent intent = new Intent(
+                Intent.ACTION_VIEW, Uri.parse(authUrl));
+        startActivity(intent);
     }
 
     private void animateRevealLogin() {
@@ -117,91 +142,25 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
                 .with(moveY)
                 .before(fadeBtnLogin)
                 .before(fadeTxtSkipLogin);
-
+        // TODO return observable to notify animation end
         new Handler().postDelayed(set::start, 750);
     }
 
-    @OnClick(R.id.btnLogin)
-    void onLoginClick() {
-        loginPresenter.onLoginSelected();
-    }
-
-    @OnClick(R.id.txtSkipLogin)
-    void onSkipLoginClick() {
-        loginPresenter.onSkipLoginSelected();
-    }
-
-    @Override
-    public void showLoginProgress(boolean show) {
-        Log.d(GitClApplication.LOG, "Progress: " + show);
-        if (show) {
-            if (progressDialog == null) {
-                progressDialog = new ProgressDialog(LoginActivity.this);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setMessage(LoginActivity.this.getString(R.string.authentication_progress));
-            }
-
-            progressDialog.show();
-        } else {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-        }
-    }
-
-    @Override
-    public void showAuthErrorMessage(Throwable th) {
-        Log.e(GitClApplication.LOG, "Error handled.", th);
-        Toast.makeText(this, th.toString(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void startMainViewAsLogged() {
-        Log.d(GitClApplication.LOG, "Starting Main Activity");
-        startMain(ENTER_TYPE.logged_in);
-    }
-
-    @Override
-    public void startMainViewAsAnon() {
-        startMain(ENTER_TYPE.skip);
-    }
-
-    @Override
-    public void startWebViewForOAuth(String authUrl) {
-        Intent intent = new Intent(
-                Intent.ACTION_VIEW, Uri.parse(authUrl));
-        startActivity(intent);
-    }
-
-    private void startMain(ENTER_TYPE enterType) {
+    private void startMain() {
         Intent intent = new Intent(this, MainActivity.class);
         this.startActivity(intent);
-        setTransitionToMain(enterType);
+        setTransitionToMain();
     }
 
-    private void setTransitionToMain(ENTER_TYPE enterType) {
+    private void setTransitionToMain() {
         int animEnter;
         int animLeave;
-        switch (enterType) {
-            case skip: {
-                animEnter = R.anim.activity_slide_rl_enter;
-                animLeave = R.anim.activity_slide_rl_leave;
-            }
-            break;
-            case login_new: {
-                animEnter = R.anim.activity_slide_rl_enter;
-                animLeave = R.anim.activity_slide_rl_leave;
-            }
-            break;
-            case logged_in: {
-                animEnter = android.R.anim.fade_in;
-                animLeave = android.R.anim.fade_out;
-            }
-            break;
-            default: {
-                animEnter = android.R.anim.fade_in;
-                animLeave = android.R.anim.fade_out;
-            }
+        if (isNextScreenStarted) {
+            animEnter = R.anim.activity_slide_rl_enter;
+            animLeave = R.anim.activity_slide_rl_leave;
+        } else {
+            animEnter = android.R.anim.fade_in;
+            animLeave = android.R.anim.fade_out;
         }
         overridePendingTransition(animEnter, animLeave);
     }
