@@ -26,7 +26,7 @@
         android:paddingTop="@dimen/nav_header_top_padding">
 
         <com.mikhaellopez.circularimageview.CircularImageView
-            android:id="@+id/imgAccount"
+            android:id="@+id/imgAccountAvatar"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:padding="0dp"

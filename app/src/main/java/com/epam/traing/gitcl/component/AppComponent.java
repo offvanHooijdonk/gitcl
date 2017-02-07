@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.epam.traing.gitcl.app.AppModule;
 import com.epam.traing.gitcl.helper.PrefHelper;
-import com.epam.traing.gitcl.presenter.PresenterModule;
-import com.epam.traing.gitcl.ui.LoginActivity;
+import com.epam.traing.gitcl.presentation.presenter.PresenterModule;
+import com.epam.traing.gitcl.presentation.ui.LoginActivity;
 
 import javax.inject.Singleton;
 

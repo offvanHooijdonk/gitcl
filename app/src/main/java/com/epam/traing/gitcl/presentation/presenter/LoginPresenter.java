@@ -1,13 +1,14 @@
-package com.epam.traing.gitcl.presenter;
+package com.epam.traing.gitcl.presentation.presenter;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
+import com.epam.traing.gitcl.app.Constants;
 import com.epam.traing.gitcl.app.GitClApplication;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.interactor.authenticate.IAuthenticator;
-import com.epam.traing.gitcl.ui.ILoginView;
+import com.epam.traing.gitcl.presentation.ui.ILoginView;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -40,11 +41,11 @@ public class LoginPresenter implements ILoginPresenter {
     public void onLoginSelected() {
         // TODO check first if account logged exists
         // if account if Prefs - load it. If now - start OAuth flow
-        loginView.startWebViewForOAuth(authenticator.getOAuthUrl());
+        loginView.startWebViewForOAuth(authenticator.composeOAuthUrl());
     }
 
     private boolean isCallbackUrl(String s) {
-        return s != null && s.startsWith(authenticator.getOAuthCallbackUrl());
+        return s != null && s.startsWith(Constants.Api.OAUTH_CALLBACK_URL);
     }
 
     @Override

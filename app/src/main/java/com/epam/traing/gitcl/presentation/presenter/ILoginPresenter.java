@@ -1,8 +1,8 @@
-package com.epam.traing.gitcl.presenter;
+package com.epam.traing.gitcl.presentation.presenter;
 
 import android.content.Intent;
 
-import com.epam.traing.gitcl.ui.ILoginView;
+import com.epam.traing.gitcl.presentation.ui.ILoginView;
 
 /**
  * Created by Yahor_Fralou on 1/25/2017 5:09 PM.

@@ -3,6 +3,7 @@ package com.epam.traing.gitcl.interactor.authenticate;
 import android.net.Uri;
 import android.util.Log;
 
+import com.epam.traing.gitcl.app.Constants;
 import com.epam.traing.gitcl.app.GitClApplication;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.tables.AccountTable;
@@ -28,11 +29,6 @@ public class GitAuthenticator implements IAuthenticator {
     // TODO store in kind of properties
     private static final String QPARAM_CODE = "code";
     private static final String QPARAM_ERROR = "error";
-    private static final String OAUTH_KEY = "6203c4ce6b8758a78dce";
-    private static final String OAUTH_SECRET = "c71efb17a495bce469e238624de486b7bce1edf5";
-    private static final String OAUTH_SCOPES = "user user:email public_repo";
-    private static final String OAUTH_URL = "https://github.com/login/oauth/authorize?scope=%s&client_id=%s";
-    private static final String OAUTH_CALLBACK_URL = "githubcl://githubcloauth/callback";
 
     @Inject
     StorIOSQLite storIOSQLite;
@@ -54,7 +50,7 @@ public class GitAuthenticator implements IAuthenticator {
         Uri uri = Uri.parse(callbackUrl);
         String code = uri.getQueryParameter(QPARAM_CODE);
         if (code != null) {
-            tokenClient.requestAccessToken(OAUTH_KEY, OAUTH_SECRET, code)
+            tokenClient.requestAccessToken(Constants.Api.OAUTH_KEY, Constants.Api.OAUTH_SECRET, code)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(tokenJson -> {
@@ -138,13 +134,8 @@ public class GitAuthenticator implements IAuthenticator {
     }
 
     @Override
-    public String getOAuthUrl() {
-        return String.format(OAUTH_URL, OAUTH_SCOPES, OAUTH_KEY);
-    }
-
-    @Override
-    public String getOAuthCallbackUrl() {
-        return OAUTH_CALLBACK_URL;
+    public String composeOAuthUrl() {
+        return String.format(Constants.Api.OAUTH_URL, Constants.Api.OAUTH_SCOPES, Constants.Api.OAUTH_KEY);
     }
 
     @Override

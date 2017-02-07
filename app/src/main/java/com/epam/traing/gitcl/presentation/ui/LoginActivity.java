@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.ui;
+package com.epam.traing.gitcl.presentation.ui;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.GitClApplication;
-import com.epam.traing.gitcl.presenter.ILoginPresenter;
+import com.epam.traing.gitcl.presentation.presenter.ILoginPresenter;
 
 import javax.inject.Inject;
 

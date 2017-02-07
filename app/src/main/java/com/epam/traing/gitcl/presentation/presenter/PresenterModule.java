@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.presenter;
+package com.epam.traing.gitcl.presentation.presenter;
 
 import javax.inject.Singleton;
 

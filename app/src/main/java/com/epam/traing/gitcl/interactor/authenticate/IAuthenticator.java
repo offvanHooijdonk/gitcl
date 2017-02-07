@@ -12,8 +12,7 @@ public interface IAuthenticator {
     Observable<AccountModel> authorizeFromCallback(String uri);
     Observable<AccountModel> getLoggedAccount();
     Observable<Boolean> getShowLogin();
-    String getOAuthUrl();
-    String getOAuthCallbackUrl();
+    String composeOAuthUrl();
     void setShowLogin(boolean show);
 
     Observable<AccountModel> prepareOnLoginData();

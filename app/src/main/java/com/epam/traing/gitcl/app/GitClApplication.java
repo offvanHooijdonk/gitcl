@@ -12,7 +12,7 @@ import com.epam.traing.gitcl.component.DaggerLoginComponent;
 import com.epam.traing.gitcl.component.LoginComponent;
 import com.epam.traing.gitcl.db.DBModule;
 import com.epam.traing.gitcl.db.model.AccountModel;
-import com.epam.traing.gitcl.presenter.PresenterModule;
+import com.epam.traing.gitcl.presentation.presenter.PresenterModule;
 
 /**
  * Created by off on 22.01.2017.

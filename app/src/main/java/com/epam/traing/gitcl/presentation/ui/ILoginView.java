@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.ui;
+package com.epam.traing.gitcl.presentation.ui;
 
 /**
  * Created by Yahor_Fralou on 1/27/2017 3:07 PM.
