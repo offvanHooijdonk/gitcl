@@ -53,31 +53,36 @@ public class LoginPresenter implements ILoginPresenter {
         Log.d(GitClApplication.LOG, "onResume data: " + (uri != null ? uri.toString() : "null"));
         if (uri != null && isCallbackUrl(uri.toString())) {
             Log.d(GitClApplication.LOG, "Uri received: " + uri.toString());
-            // TODO hide logo here to make layout blank?
-            loginView.startLoginProgress(true);
 
-            authenticator.authorizeFromCallback(uri.toString())
-                    .first()
-                    .subscribe(this::onLoginSuccess, this::onLoginFail);
+            onOAuthCallback(uri.toString());
         } else {
             authenticator.getShowLogin().subscribe(show -> {
                 if (show) {
                     loginView.showLoginScreen();
                 } else {
-                    final AccountModel[] accountLogged = new AccountModel[1];
-                    authenticator.prepareOnLoginData().subscribe(accountModel -> {
-                                accountLogged[0] = accountModel;
-                            },
-                            this::onLoginFail,
-                            () -> {
-                                onLoginSuccess(accountLogged[0]);
-                            });
+                    doLoginWithCurrentAccount();
                 }
             });
         }
     }
 
-    public void onLoginSuccess(AccountModel accountModel) {
+    private void onOAuthCallback(String url) {
+        // TODO hide logo here to make layout blank?
+        loginView.startLoginProgress(true);
+
+        authenticator.authorizeFromCallback(url)
+                .first()
+                .subscribe(this::onLoginSuccess, this::onLoginFail);
+    }
+
+    private void doLoginWithCurrentAccount() {
+        authenticator.prepareOnLoginData()
+                .first()
+                .subscribe(this::onLoginSuccess,
+                        this::onLoginFail);
+    }
+
+    private void onLoginSuccess(AccountModel accountModel) {
         Log.d(GitClApplication.LOG, "Login Success");
         Log.d(GitClApplication.LOG, new Gson().toJson(accountModel));
         authenticator.setShowLogin(false);
@@ -86,7 +91,7 @@ public class LoginPresenter implements ILoginPresenter {
     }
 
 
-    public void onLoginFail(Throwable th) {
+    private void onLoginFail(Throwable th) {
         // TODO show error message
         loginView.startLoginProgress(false);
         loginView.showAuthErrorMessage(th);

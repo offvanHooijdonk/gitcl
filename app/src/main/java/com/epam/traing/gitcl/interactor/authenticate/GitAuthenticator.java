@@ -90,7 +90,7 @@ public class GitAuthenticator implements IAuthenticator {
 
     @Override
     public Observable<Boolean> getShowLogin() {
-        return Observable.just(prefHelper.isShowLogin());
+        return Observable.fromCallable(prefHelper::isShowLogin);
     }
 
     @Override
@@ -108,6 +108,7 @@ public class GitAuthenticator implements IAuthenticator {
                         GitClApplication.setAccount(accountModel);
                         prefHelper.setAccessToken(accountModel.getAccessToken());
                     } else {
+                        // TODO pass AccountName
                         throw Exceptions.propagate(new AccountNotFoundException(""));
                     }
                 });
