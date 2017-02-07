@@ -10,10 +10,8 @@ import rx.Observable;
 
 public interface IAuthenticator {
     Observable<AccountModel> authorizeFromCallback(String uri);
-    Observable<AccountModel> getLoggedAccount();
     Observable<Boolean> getShowLogin();
     String composeOAuthUrl();
     void setShowLogin(boolean show);
-
     Observable<AccountModel> prepareOnLoginData();
 }

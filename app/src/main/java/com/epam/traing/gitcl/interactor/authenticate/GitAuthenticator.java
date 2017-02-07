@@ -87,28 +87,6 @@ public class GitAuthenticator implements IAuthenticator {
         // TODO start avatar loading if not null
     }
 
-    @Deprecated
-    @Override
-    public Observable<AccountModel> getLoggedAccount() {
-        ReplaySubject<AccountModel> s = ReplaySubject.create();
-
-        String loggedAccountName = prefHelper.getLoggedAccountName();
-        if (loggedAccountName != null) {
-            findAccountLocal(loggedAccountName).subscribe(accountModel -> {
-                if (accountModel != null) {
-                    s.onNext(accountModel);
-                    s.onCompleted();
-                } else {
-                    s.onError(new AccountNotFoundException(loggedAccountName));
-                }
-            });
-        } else {
-            // TODO handle. Maybe won't be a case in future
-        }
-
-        return s;
-    }
-
     @Override
     public Observable<Boolean> getShowLogin() {
         return Observable.just(prefHelper.isShowLogin());
@@ -116,21 +94,19 @@ public class GitAuthenticator implements IAuthenticator {
 
     @Override
     public Observable<AccountModel> prepareOnLoginData() {
-        ReplaySubject<AccountModel> subj = ReplaySubject.create();
-
-        String loggedAccountName = prefHelper.getLoggedAccountName();
-        if (loggedAccountName == null) {
-            subj.onNext(null);
-            subj.onCompleted();
-        } else {
-            findAccountLocal(loggedAccountName).subscribe(accountModel -> {
-                GitClApplication.setAccount(accountModel);
-                subj.onNext(accountModel);
-                subj.onCompleted();
-            }, subj::onError);
-        }
-
-        return subj;
+        return Observable.fromCallable(prefHelper::getLoggedAccountName)
+                .flatMap(loggedAccountName -> {
+                    if (loggedAccountName == null) {
+                        return Observable.defer(null);
+                    } else {
+                        return findAccountLocal(loggedAccountName);
+                    }
+                })
+                .doOnNext(accountModel -> {
+                    if (accountModel != null) {
+                        GitClApplication.setAccount(accountModel);
+                    }
+                });
     }
 
     @Override

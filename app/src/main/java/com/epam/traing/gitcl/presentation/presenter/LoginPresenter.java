@@ -39,8 +39,6 @@ public class LoginPresenter implements ILoginPresenter {
 
     @Override
     public void onLoginSelected() {
-        // TODO check first if account logged exists
-        // if account if Prefs - load it. If now - start OAuth flow
         loginView.startWebViewForOAuth(authenticator.composeOAuthUrl());
     }
 
