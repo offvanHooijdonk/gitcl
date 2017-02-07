@@ -11,7 +11,8 @@ import android.preference.PreferenceManager;
 public class PrefHelper {
     private static final String FLAG_SHOW_LOGIN = "flag_first_start";
     private static final String PREF_LOGGED_IN_ACCOUNT_ID = "pref_logged_in_account_id";
-    private static final String PREF_TOKEN_TYPE = "pref_token_type";
+    private static final String TOKEN_TYPE = "pref_token_type";
+    private static final String ACCESS_TOKEN = "access_token";
 
     private Context ctx;
 
@@ -40,10 +41,17 @@ public class PrefHelper {
     }
 
     public String getTokenType() {
-        return getSharedPreference().getString(PREF_TOKEN_TYPE, null);
+        return getSharedPreference().getString(TOKEN_TYPE, null);
     }
 
     public void setTokenType(String value) {
-        getSharedPreference().edit().putString(PREF_TOKEN_TYPE, String.valueOf(value)).apply();
+        getSharedPreference().edit().putString(TOKEN_TYPE, String.valueOf(value)).apply();
+    }
+    public void setAccessToken(String value) {
+        getSharedPreference().edit().putString(ACCESS_TOKEN, String.valueOf(value)).apply();
+    }
+
+    public String getAccessToken() {
+        return getSharedPreference().getString(ACCESS_TOKEN, null);
     }
 }

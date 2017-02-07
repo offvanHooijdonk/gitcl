@@ -18,8 +18,8 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.exceptions.Exceptions;
 import rx.schedulers.Schedulers;
-import rx.subjects.ReplaySubject;
 
 /**
  * Created by Yahor_Fralou on 1/27/2017 5:59 PM.
@@ -39,8 +39,6 @@ public class GitAuthenticator implements IAuthenticator {
     @Inject
     GitHubUserClient userClient;
 
-    private ReplaySubject<AccountModel> loadAccountSubject = ReplaySubject.create();
-
     public GitAuthenticator() {
         GitClApplication.getAuthenticatorComponent().inject(this);
     }
@@ -48,41 +46,44 @@ public class GitAuthenticator implements IAuthenticator {
     @Override
     public Observable<AccountModel> authorizeFromCallback(String callbackUrl) {
         Uri uri = Uri.parse(callbackUrl);
-        String code = uri.getQueryParameter(QPARAM_CODE);
-        if (code != null) {
-            tokenClient.requestAccessToken(Constants.Api.OAUTH_KEY, Constants.Api.OAUTH_SECRET, code)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(tokenJson -> {
-                                Log.d(GitClApplication.LOG, "Token received: " + tokenJson.getTokenType() + " " + tokenJson.getAccessToken());
-                                prefHelper.setTokenType(tokenJson.getTokenType());
-                                userClient.getUserInfo(tokenJson.getTokenType() + " " + tokenJson.getAccessToken())
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .map(this::convertJsonToAccountModel)
-                                        .flatMap(accountModel -> {
-                                            accountModel.setAccessToken(tokenJson.getTokenType());
-                                            return Observable.just(accountModel);
-                                        })
-                                        .subscribe(this::onAccountLoaded, loadAccountSubject::onError);
-                            },
-                            loadAccountSubject::onError);
-        } else {
-            String errorMsg = uri.getQueryParameter(QPARAM_ERROR);
-            // TODO handle error
-        }
 
-        return loadAccountSubject;
+        return Observable.just(uri.getQueryParameter(QPARAM_CODE))
+                .flatMap(code -> {
+                    if (code == null) {
+                        String errorMsg = uri.getQueryParameter(QPARAM_ERROR);
+                        throw Exceptions.propagate(new AuthenticationException(errorMsg != null ? errorMsg : ""));
+                    } else {
+                        return tokenClient.requestAccessToken(Constants.Api.OAUTH_KEY, Constants.Api.OAUTH_SECRET, code)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread());
+                    }
+                })
+                .doOnNext(tokenJson -> {
+                    Log.d(GitClApplication.LOG, "Token received: " + tokenJson.getTokenType() + " " + tokenJson.getAccessToken());
+                    prefHelper.setTokenType(tokenJson.getTokenType());
+                    prefHelper.setAccessToken(tokenJson.getAccessToken());
+                })
+                .flatMap(tokenJson ->
+                        userClient.getUserInfo(tokenJson.getTokenType() + " " + tokenJson.getAccessToken())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread()))
+                .map(this::convertJsonToAccountModel)
+                .doOnNext(accountModel -> {
+                    accountModel.setAccessToken(prefHelper.getAccessToken());
+                    onAccountLoaded(accountModel);
+                });
     }
 
     private void onAccountLoaded(AccountModel accountModel) {
-        // TODO if no Person Name provided - set it to Account Name instead
+        // if no Person Name provided - set it to Account Name instead
+        if (accountModel.getPersonName() == null) {
+            accountModel.setPersonName(accountModel.getAccountName());
+        }
         saveAccount(accountModel);
         GitClApplication.setAccount(accountModel);
         prefHelper.setLoggedAccountName(accountModel.getAccountName());
 
         Log.d(GitClApplication.LOG, "Account passing to presenter");
-        loadAccountSubject.onNext(accountModel);
 
         // TODO start avatar loading if not null
     }
@@ -105,6 +106,9 @@ public class GitAuthenticator implements IAuthenticator {
                 .doOnNext(accountModel -> {
                     if (accountModel != null) {
                         GitClApplication.setAccount(accountModel);
+                        prefHelper.setAccessToken(accountModel.getAccessToken());
+                    } else {
+                        throw Exceptions.propagate(new AccountNotFoundException(""));
                     }
                 });
     }
@@ -120,6 +124,7 @@ public class GitAuthenticator implements IAuthenticator {
     }
 
     private AccountModel convertJsonToAccountModel(AccountJson json) {
+        // TODO implement auto conversion or move to a converter
         AccountModel model = new AccountModel();
         model.setAccountName(json.getLogin());
         model.setPersonName(json.getPersonName());
