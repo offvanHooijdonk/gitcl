@@ -3,7 +3,10 @@ package com.epam.traing.gitcl.component;
 import com.epam.traing.gitcl.db.DBModule;
 import com.epam.traing.gitcl.interactor.authenticate.GitAuthenticator;
 import com.epam.traing.gitcl.interactor.authenticate.LoginScope;
+import com.epam.traing.gitcl.network.GitHubTokenClient;
+import com.epam.traing.gitcl.network.GitHubUserClient;
 import com.epam.traing.gitcl.network.NetworkModule;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import dagger.Component;
 
@@ -16,5 +19,7 @@ import dagger.Component;
 public interface AuthenticatorComponent {
     void inject(GitAuthenticator gitAuthenticator);
 
-    /*StorIOSQLite storIOSQLite();*/
+    GitHubTokenClient gitHubTokenClient();
+    GitHubUserClient gitHubUserClient();
+    StorIOSQLite storIOSQLite();
 }

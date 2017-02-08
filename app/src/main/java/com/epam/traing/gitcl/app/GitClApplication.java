@@ -31,6 +31,9 @@ public class GitClApplication extends Application {
         super.onCreate();
 
         appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).presenterModule(new PresenterModule()).build();
+        getLoginComponent();
+        getAuthenticatorComponent();
+
 
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
     }

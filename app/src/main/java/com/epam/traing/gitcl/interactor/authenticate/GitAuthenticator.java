@@ -3,11 +3,11 @@ package com.epam.traing.gitcl.interactor.authenticate;
 import android.net.Uri;
 import android.util.Log;
 
-import com.epam.traing.gitcl.app.Constants;
 import com.epam.traing.gitcl.app.GitClApplication;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.tables.AccountTable;
 import com.epam.traing.gitcl.helper.PrefHelper;
+import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 import com.epam.traing.gitcl.network.json.AccountJson;
@@ -26,21 +26,20 @@ import rx.schedulers.Schedulers;
  */
 
 public class GitAuthenticator implements IAuthenticator {
-    // TODO store in kind of properties
     private static final String QPARAM_CODE = "code";
     private static final String QPARAM_ERROR = "error";
 
-    @Inject
-    StorIOSQLite storIOSQLite;
-    @Inject
-    PrefHelper prefHelper;
-    @Inject
-    GitHubTokenClient tokenClient;
-    @Inject
-    GitHubUserClient userClient;
+    private StorIOSQLite storIOSQLite;
+    private PrefHelper prefHelper;
+    private GitHubTokenClient tokenClient;
+    private GitHubUserClient userClient;
 
-    public GitAuthenticator() {
-        GitClApplication.getAuthenticatorComponent().inject(this);
+    @Inject
+    public GitAuthenticator(StorIOSQLite storIOSQLite, PrefHelper prefHelper, GitHubTokenClient tokenClient, GitHubUserClient userClient) {
+        this.storIOSQLite = storIOSQLite;
+        this.prefHelper = prefHelper;
+        this.tokenClient = tokenClient;
+        this.userClient = userClient;
     }
 
     @Override
@@ -95,8 +94,10 @@ public class GitAuthenticator implements IAuthenticator {
 
     @Override
     public Observable<AccountModel> prepareOnLoginData() {
+        final String[] accountName = new String[1];
         return Observable.fromCallable(prefHelper::getLoggedAccountName)
                 .flatMap(loggedAccountName -> {
+                    accountName[0] = loggedAccountName;
                     if (loggedAccountName == null) {
                         return Observable.defer(null);
                     } else {
@@ -109,7 +110,7 @@ public class GitAuthenticator implements IAuthenticator {
                         prefHelper.setAccessToken(accountModel.getAccessToken());
                     } else {
                         // TODO pass AccountName
-                        throw Exceptions.propagate(new AccountNotFoundException(""));
+                        throw Exceptions.propagate(new AccountNotFoundException(accountName[0]));
                     }
                 });
     }

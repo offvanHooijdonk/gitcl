@@ -8,8 +8,6 @@ import com.epam.traing.gitcl.db.model.AccountModelSQLiteTypeMapping;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 

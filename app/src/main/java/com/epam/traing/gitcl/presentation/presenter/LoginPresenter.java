@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.epam.traing.gitcl.app.Constants;
 import com.epam.traing.gitcl.app.GitClApplication;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.interactor.authenticate.IAuthenticator;
+import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.ui.ILoginView;
 import com.google.gson.Gson;
 
@@ -18,13 +18,14 @@ import javax.inject.Inject;
  */
 
 public class LoginPresenter implements ILoginPresenter {
-    @Inject
-    IAuthenticator authenticator;
+
+    private IAuthenticator authenticator;
 
     private ILoginView loginView;
 
-    public LoginPresenter() {
-        GitClApplication.getLoginComponent().inject(this);
+    @Inject
+    public LoginPresenter(IAuthenticator authenticator) {
+        this.authenticator = authenticator;
     }
 
     @Override
