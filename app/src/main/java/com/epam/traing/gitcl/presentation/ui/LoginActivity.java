@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        GitClApplication.getAppComponent().inject(this);
+        GitClApplication.getLoginComponent().inject(this);
         loginPresenter.setView(this);
 
         ButterKnife.bind(this);

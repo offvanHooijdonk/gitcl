@@ -29,10 +29,13 @@ public class GitAuthenticator implements IAuthenticator {
     private static final String QPARAM_CODE = "code";
     private static final String QPARAM_ERROR = "error";
 
-    private StorIOSQLite storIOSQLite;
-    private PrefHelper prefHelper;
-    private GitHubTokenClient tokenClient;
-    private GitHubUserClient userClient;
+    /*private */StorIOSQLite storIOSQLite;
+
+    /*private */PrefHelper prefHelper;
+
+    /*private */GitHubTokenClient tokenClient;
+
+    /*private */GitHubUserClient userClient;
 
     @Inject
     public GitAuthenticator(StorIOSQLite storIOSQLite, PrefHelper prefHelper, GitHubTokenClient tokenClient, GitHubUserClient userClient) {
@@ -41,6 +44,10 @@ public class GitAuthenticator implements IAuthenticator {
         this.tokenClient = tokenClient;
         this.userClient = userClient;
     }
+
+    /*public GitAuthenticator() {
+        GitClApplication.getAuthenticatorComponent().inject(this);
+    }*/
 
     @Override
     public Observable<AccountModel> authorizeFromCallback(String callbackUrl) {
@@ -52,6 +59,7 @@ public class GitAuthenticator implements IAuthenticator {
                         String errorMsg = uri.getQueryParameter(QPARAM_ERROR);
                         throw Exceptions.propagate(new AuthenticationException(errorMsg != null ? errorMsg : ""));
                     } else {
+                        Log.d(GitClApplication.LOG, "Request Access token");
                         return tokenClient.requestAccessToken(Constants.Api.OAUTH_KEY, Constants.Api.OAUTH_SECRET, code)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread());
@@ -62,10 +70,12 @@ public class GitAuthenticator implements IAuthenticator {
                     prefHelper.setTokenType(tokenJson.getTokenType());
                     prefHelper.setAccessToken(tokenJson.getAccessToken());
                 })
-                .flatMap(tokenJson ->
-                        userClient.getUserInfo(tokenJson.getTokenType() + " " + tokenJson.getAccessToken())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread()))
+                .flatMap(tokenJson -> {
+                    Log.d(GitClApplication.LOG, "Call Api '/user'");
+                    return userClient.getUserInfo()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread());
+                })
                 .map(this::convertJsonToAccountModel)
                 .doOnNext(accountModel -> {
                     accountModel.setAccessToken(prefHelper.getAccessToken());

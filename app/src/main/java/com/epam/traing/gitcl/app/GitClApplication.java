@@ -5,13 +5,13 @@ import android.preference.PreferenceManager;
 
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.component.AppComponent;
-import com.epam.traing.gitcl.component.AuthenticatorComponent;
 import com.epam.traing.gitcl.component.DaggerAppComponent;
-import com.epam.traing.gitcl.component.DaggerAuthenticatorComponent;
 import com.epam.traing.gitcl.component.DaggerLoginComponent;
 import com.epam.traing.gitcl.component.LoginComponent;
 import com.epam.traing.gitcl.db.DBModule;
 import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.interactor.authenticate.AuthenticatorModule;
+import com.epam.traing.gitcl.network.NetworkModule;
 import com.epam.traing.gitcl.presentation.presenter.PresenterModule;
 
 /**
@@ -22,7 +22,7 @@ public class GitClApplication extends Application {
     public static final String LOG = "githubcl";
     private static AppComponent appComponent;
     private static LoginComponent loginComponent;
-    private static AuthenticatorComponent authenticatorComponent;
+    /*private static AuthenticatorComponent authenticatorComponent;*/
 
     private static AccountModel accountModel;
 
@@ -30,9 +30,11 @@ public class GitClApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).presenterModule(new PresenterModule()).build();
-        getLoginComponent();
-        getAuthenticatorComponent();
+        appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))/*.presenterModule(new PresenterModule())*/
+                .build();
+        /*getLoginComponent();
+        getAuthenticatorComponent();*/
 
 
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
@@ -44,19 +46,30 @@ public class GitClApplication extends Application {
 
     public static LoginComponent getLoginComponent() {
         if (loginComponent == null) {
-            loginComponent = DaggerLoginComponent.create();
+            loginComponent = DaggerLoginComponent.builder()
+                    .appComponent(getAppComponent())
+                    .authenticatorModule(new AuthenticatorModule())
+                    .presenterModule(new PresenterModule())
+                    .networkModule(new NetworkModule())
+                    .dBModule(new DBModule())
+                    .build();
         }
 
         return loginComponent;
     }
 
-    public static AuthenticatorComponent getAuthenticatorComponent() {
+    /*public static AuthenticatorComponent getAuthenticatorComponent() {
         if (authenticatorComponent == null) {
-            authenticatorComponent = DaggerAuthenticatorComponent.builder().dBModule(new DBModule()).appComponent(getAppComponent()).build();
+            authenticatorComponent = DaggerAuthenticatorComponent.builder()
+                    .appComponent(getAppComponent())
+                    .authenticatorModule(new AuthenticatorModule())
+                    .networkModule(new NetworkModule())
+                    .dBModule(new DBModule())
+                    .build();
         }
 
         return authenticatorComponent;
-    }
+    }*/
 
     public static void setAccount(AccountModel account) {
         accountModel = account;
