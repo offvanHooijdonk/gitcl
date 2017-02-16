@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.app.GitClApplication;
+import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.presentation.presenter.ILoginPresenter;
 
 import javax.inject.Inject;
@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        GitClApplication.getLoginComponent().inject(this);
+        Application.getLoginComponent().inject(this);
         loginPresenter.attachView(this);
 
         ButterKnife.bind(this);
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(GitClApplication.LOG, "onResume");
+        Log.d(Application.LOG, "onResume");
 
         loginPresenter.onActivityResume(getIntent());
     }
@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void startLoginProgress(boolean show) {
-        Log.d(GitClApplication.LOG, "Progress: " + show);
+        Log.d(Application.LOG, "Progress: " + show);
         if (show) {
             if (progressDialog == null) {
                 progressDialog = new ProgressDialog(LoginActivity.this);
@@ -93,21 +93,21 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void showAuthErrorMessage(Throwable th) {
-        Log.e(GitClApplication.LOG, "Error handled.", th);
+        Log.e(Application.LOG, "Error handled.", th);
         showLoginScreen();
         Toast.makeText(this, th.toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void startMainView() {
-        Log.d(GitClApplication.LOG, "Starting Main Activity");
+        Log.d(Application.LOG, "Starting Main Activity");
         startMain();
     }
 
     @Override
     public void showLoginScreen() {
         if (!isNextScreenStarted) {
-            Log.d(GitClApplication.LOG, "Animation reveal started.");
+            Log.d(Application.LOG, "Animation reveal started.");
             animateRevealLogin();
             isNextScreenStarted = true;
         }

@@ -3,9 +3,10 @@ package com.epam.traing.gitcl.interactor.authenticate;
 import android.net.Uri;
 import android.util.Log;
 
-import com.epam.traing.gitcl.app.GitClApplication;
+import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.tables.AccountTable;
+import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
@@ -29,24 +30,27 @@ public class GitAuthenticator implements IAuthenticator {
     private static final String QPARAM_CODE = "code";
     private static final String QPARAM_ERROR = "error";
 
-    /*private */StorIOSQLite storIOSQLite;
-
-    /*private */PrefHelper prefHelper;
-
-    /*private */GitHubTokenClient tokenClient;
-
-    /*private */GitHubUserClient userClient;
+    private StorIOSQLite storIOSQLite;
+    private PrefHelper prefHelper;
+    private GitHubTokenClient tokenClient;
+    private GitHubUserClient userClient;
+    private SessionHelper session;
 
     @Inject
-    public GitAuthenticator(StorIOSQLite storIOSQLite, PrefHelper prefHelper, GitHubTokenClient tokenClient, GitHubUserClient userClient) {
+    public GitAuthenticator(StorIOSQLite storIOSQLite,
+                            PrefHelper prefHelper,
+                            GitHubTokenClient tokenClient,
+                            GitHubUserClient userClient,
+                            SessionHelper session) {
         this.storIOSQLite = storIOSQLite;
         this.prefHelper = prefHelper;
         this.tokenClient = tokenClient;
         this.userClient = userClient;
+        this.session = session;
     }
 
     /*public GitAuthenticator() {
-        GitClApplication.getAuthenticatorComponent().inject(this);
+        Application.getAuthenticatorComponent().inject(this);
     }*/
 
     @Override
@@ -59,19 +63,19 @@ public class GitAuthenticator implements IAuthenticator {
                         String errorMsg = uri.getQueryParameter(QPARAM_ERROR);
                         throw Exceptions.propagate(new AuthenticationException(errorMsg != null ? errorMsg : ""));
                     } else {
-                        Log.d(GitClApplication.LOG, "Request Access token");
+                        Log.d(Application.LOG, "Request Access token");
                         return tokenClient.requestAccessToken(Constants.Api.OAUTH_KEY, Constants.Api.OAUTH_SECRET, code)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread());
                     }
                 })
                 .doOnNext(tokenJson -> {
-                    Log.d(GitClApplication.LOG, "Token received: " + tokenJson.getTokenType() + " " + tokenJson.getAccessToken());
+                    Log.d(Application.LOG, "Token received: " + tokenJson.getTokenType() + " " + tokenJson.getAccessToken());
                     prefHelper.setTokenType(tokenJson.getTokenType());
                     prefHelper.setAccessToken(tokenJson.getAccessToken());
                 })
                 .flatMap(tokenJson -> {
-                    Log.d(GitClApplication.LOG, "Call Api '/user'");
+                    Log.d(Application.LOG, "Call Api '/user'");
                     return userClient.getUserInfo()
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread());
@@ -89,10 +93,10 @@ public class GitAuthenticator implements IAuthenticator {
             accountModel.setPersonName(accountModel.getAccountName());
         }
         saveAccount(accountModel);
-        GitClApplication.setAccount(accountModel);
+        session.setCurrentAccount(accountModel);
         prefHelper.setLoggedAccountName(accountModel.getAccountName());
 
-        Log.d(GitClApplication.LOG, "Account passing to presenter");
+        Log.d(Application.LOG, "Account passing to presenter");
 
         // TODO start avatar loading if not null
     }
@@ -116,7 +120,7 @@ public class GitAuthenticator implements IAuthenticator {
                 })
                 .doOnNext(accountModel -> {
                     if (accountModel != null) {
-                        GitClApplication.setAccount(accountModel);
+                        session.setCurrentAccount(accountModel);
                         prefHelper.setAccessToken(accountModel.getAccessToken());
                     } else {
                         // TODO pass AccountName

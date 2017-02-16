@@ -2,6 +2,7 @@ package com.epam.traing.gitcl.app;
 
 import android.content.Context;
 
+import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.helper.PrefHelper;
 
 import javax.inject.Singleton;
@@ -15,9 +16,9 @@ import dagger.Provides;
 
 @Module
 public class AppModule {
-    private final GitClApplication app;
+    private final Application app;
 
-    AppModule(GitClApplication app) {
+    AppModule(Application app) {
         this.app = app;
     }
 
@@ -31,5 +32,11 @@ public class AppModule {
     @Singleton
     PrefHelper providePreferenceHelper() {
         return new PrefHelper(app);
+    }
+
+    @Provides
+    @Singleton
+    SessionHelper provideSession(Context ctx) {
+        return new SessionHelper(ctx);
     }
 }

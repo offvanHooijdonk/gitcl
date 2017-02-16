@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.epam.traing.gitcl.app.GitClApplication;
+import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.interactor.authenticate.IAuthenticator;
 import com.epam.traing.gitcl.network.Constants;
@@ -51,9 +51,9 @@ public class LoginPresenter implements ILoginPresenter {
     public void onActivityResume(Intent intent) {
         Uri uri = intent.getData();
 
-        Log.d(GitClApplication.LOG, "onResume data: " + (uri != null ? uri.toString() : "null"));
+        Log.d(Application.LOG, "onResume data: " + (uri != null ? uri.toString() : "null"));
         if (uri != null && isCallbackUrl(uri.toString())) {
-            Log.d(GitClApplication.LOG, "Uri received: " + uri.toString());
+            Log.d(Application.LOG, "Uri received: " + uri.toString());
 
             onOAuthCallback(uri.toString());
         } else {
@@ -84,8 +84,8 @@ public class LoginPresenter implements ILoginPresenter {
     }
 
     private void onLoginSuccess(AccountModel accountModel) {
-        Log.d(GitClApplication.LOG, "Login Success");
-        Log.d(GitClApplication.LOG, new Gson().toJson(accountModel));
+        Log.d(Application.LOG, "Login Success");
+        Log.d(Application.LOG, new Gson().toJson(accountModel));
         authenticator.setShowLogin(false);
         loginView.startLoginProgress(false);
         loginView.startMainView();

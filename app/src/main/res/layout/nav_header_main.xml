@@ -13,7 +13,7 @@
         android:layout_alignStart="@+id/layoutHeader"
         android:layout_alignTop="@+id/layoutHeader"
         android:scaleType="centerCrop"
-        android:src="@drawable/drawer_bkgr_image"/>
+        android:src="@drawable/drawer_bkgr_image_faded"/>
 
     <LinearLayout
         android:id="@id/layoutHeader"

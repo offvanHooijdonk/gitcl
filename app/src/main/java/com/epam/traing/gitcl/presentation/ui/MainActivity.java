@@ -15,8 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.app.GitClApplication;
+import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.helper.SessionHelper;
+import com.epam.traing.gitcl.presentation.presenter.IMainPresenter;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,10 +36,19 @@ public class MainActivity extends AppCompatActivity
     private TextView txtDrawerAccountName;
     private ImageView imgAvatar;
 
+    @Inject
+    IMainPresenter presenter;
+    @Inject
+    SessionHelper session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Application.getAppComponent().inject(this);
+        presenter.attachView(this);
+
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
@@ -113,7 +126,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void displayAccountInfo() {
-        AccountModel accountModel = GitClApplication.getAccount();
+        AccountModel accountModel = session.getCurrentAccount();
         if (accountModel != null) {
             txtDrawerAccountUserName.setText(accountModel.getPersonName());
             txtDrawerAccountName.setText(accountModel.getAccountName());
