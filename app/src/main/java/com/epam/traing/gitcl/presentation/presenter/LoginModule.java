@@ -1,7 +1,7 @@
 package com.epam.traing.gitcl.presentation.presenter;
 
 import com.epam.traing.gitcl.interactor.authenticate.GitAuthenticator;
-import com.epam.traing.gitcl.interactor.authenticate.LoginScope;
+import com.epam.traing.gitcl.component.LoginScope;
 
 import dagger.Module;
 import dagger.Provides;
@@ -11,11 +11,10 @@ import dagger.Provides;
  */
 
 @Module()
-public class PresenterModule {
+public class LoginModule {
 
     @Provides
     @LoginScope
-    //@Singleton
     ILoginPresenter provideLoginPresenter(GitAuthenticator authenticator) {
         return new LoginPresenter(authenticator);
     }

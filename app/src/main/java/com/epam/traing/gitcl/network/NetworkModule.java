@@ -5,6 +5,7 @@ import com.epam.traing.gitcl.helper.PrefHelper;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -18,6 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 @Module
+@Singleton
 public class NetworkModule {
 // TODO setup Scopes
 
@@ -58,11 +60,13 @@ public class NetworkModule {
     }
 
     @Provides
+    @Singleton
     public GitHubTokenClient getTokenClient(@Named("oauthRetrofit") Retrofit oauthRetrofit) {
         return oauthRetrofit.create(GitHubTokenClient.class);
     }
 
     @Provides
+    @Singleton
     public GitHubUserClient getUserClient(@Named("apiRetrofit") Retrofit apiRetrofit) {
         return apiRetrofit.create(GitHubUserClient.class);
     }

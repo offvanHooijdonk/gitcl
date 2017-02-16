@@ -9,7 +9,7 @@ import com.epam.traing.gitcl.presentation.ui.ILoginView;
  */
 
 public interface ILoginPresenter {
-    void setView(ILoginView loginView);
+    void attachView(ILoginView loginView);
 
     void onSkipLoginSelected();
 

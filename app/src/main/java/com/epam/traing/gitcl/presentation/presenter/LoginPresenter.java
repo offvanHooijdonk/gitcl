@@ -29,7 +29,7 @@ public class LoginPresenter implements ILoginPresenter {
     }
 
     @Override
-    public void setView(ILoginView loginView) {
+    public void attachView(ILoginView loginView) {
         this.loginView = loginView;
     }
 

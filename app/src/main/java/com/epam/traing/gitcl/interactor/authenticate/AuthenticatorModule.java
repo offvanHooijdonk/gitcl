@@ -1,5 +1,6 @@
 package com.epam.traing.gitcl.interactor.authenticate;
 
+import com.epam.traing.gitcl.component.LoginScope;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;

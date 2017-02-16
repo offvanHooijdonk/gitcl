@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.interactor.authenticate;
+package com.epam.traing.gitcl.component;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

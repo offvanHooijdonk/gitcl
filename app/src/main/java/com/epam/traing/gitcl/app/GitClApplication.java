@@ -6,13 +6,12 @@ import android.preference.PreferenceManager;
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.component.AppComponent;
 import com.epam.traing.gitcl.component.DaggerAppComponent;
-import com.epam.traing.gitcl.component.DaggerLoginComponent;
 import com.epam.traing.gitcl.component.LoginComponent;
 import com.epam.traing.gitcl.db.DBModule;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.interactor.authenticate.AuthenticatorModule;
 import com.epam.traing.gitcl.network.NetworkModule;
-import com.epam.traing.gitcl.presentation.presenter.PresenterModule;
+import com.epam.traing.gitcl.presentation.presenter.LoginModule;
 
 /**
  * Created by off on 22.01.2017.
@@ -31,7 +30,9 @@ public class GitClApplication extends Application {
         super.onCreate();
 
         appComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))/*.presenterModule(new PresenterModule())*/
+                .appModule(new AppModule(this))
+                .networkModule(new NetworkModule())
+                .dBModule(new DBModule())
                 .build();
         /*getLoginComponent();
         getAuthenticatorComponent();*/
@@ -46,13 +47,8 @@ public class GitClApplication extends Application {
 
     public static LoginComponent getLoginComponent() {
         if (loginComponent == null) {
-            loginComponent = DaggerLoginComponent.builder()
-                    .appComponent(getAppComponent())
-                    .authenticatorModule(new AuthenticatorModule())
-                    .presenterModule(new PresenterModule())
-                    .networkModule(new NetworkModule())
-                    .dBModule(new DBModule())
-                    .build();
+            loginComponent = getAppComponent()
+                    .plusLoginComponent(new LoginModule(), new AuthenticatorModule());
         }
 
         return loginComponent;
