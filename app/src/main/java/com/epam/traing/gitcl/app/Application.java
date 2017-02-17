@@ -6,6 +6,8 @@ import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.di.AppComponent;
 import com.epam.traing.gitcl.di.AppModule;
 import com.epam.traing.gitcl.di.DaggerAppComponent;
+import com.epam.traing.gitcl.di.login.AuthDaoModule;
+import com.epam.traing.gitcl.di.login.AuthApiModule;
 import com.epam.traing.gitcl.di.login.LoginComponent;
 import com.epam.traing.gitcl.di.DBModule;
 import com.epam.traing.gitcl.di.login.AuthenticatorModule;
@@ -46,7 +48,10 @@ public class Application extends android.app.Application {
     public static LoginComponent getLoginComponent() {
         if (loginComponent == null) {
             loginComponent = getAppComponent()
-                    .plusLoginComponent(new LoginModule(), new AuthenticatorModule());
+                    .plusLoginComponent(new LoginModule(),
+                            new AuthenticatorModule(),
+                            new AuthApiModule(),
+                            new AuthDaoModule());
         }
 
         return loginComponent;

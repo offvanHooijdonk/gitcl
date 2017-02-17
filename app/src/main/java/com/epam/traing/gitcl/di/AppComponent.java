@@ -2,6 +2,8 @@ package com.epam.traing.gitcl.di;
 
 import android.content.Context;
 
+import com.epam.traing.gitcl.di.login.AuthDaoModule;
+import com.epam.traing.gitcl.di.login.AuthApiModule;
 import com.epam.traing.gitcl.di.login.LoginComponent;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
@@ -31,5 +33,8 @@ public interface AppComponent {
     PrefHelper getPreferenceHelper();
     SessionHelper getSession();
 
-    LoginComponent plusLoginComponent(LoginModule loginModule, AuthenticatorModule authenticatorModule);
+    LoginComponent plusLoginComponent(LoginModule loginModule,
+                                      AuthenticatorModule authenticatorModule,
+                                      AuthApiModule authApiModule,
+                                      AuthDaoModule accountDaoModule);
 }

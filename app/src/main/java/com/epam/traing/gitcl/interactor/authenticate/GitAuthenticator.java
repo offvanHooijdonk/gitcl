@@ -4,16 +4,14 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.db.dao.AccountDao;
 import com.epam.traing.gitcl.db.model.AccountModel;
-import com.epam.traing.gitcl.db.tables.AccountTable;
-import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.helper.PrefHelper;
+import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 import com.epam.traing.gitcl.network.json.AccountJson;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import javax.inject.Inject;
 
@@ -30,22 +28,22 @@ public class GitAuthenticator implements IAuthenticator {
     private static final String QPARAM_CODE = "code";
     private static final String QPARAM_ERROR = "error";
 
-    private StorIOSQLite storIOSQLite;
     private PrefHelper prefHelper;
     private GitHubTokenClient tokenClient;
     private GitHubUserClient userClient;
+    private AccountDao accountDao;
     private SessionHelper session;
 
     @Inject
-    public GitAuthenticator(StorIOSQLite storIOSQLite,
-                            PrefHelper prefHelper,
+    public GitAuthenticator(PrefHelper prefHelper,
                             GitHubTokenClient tokenClient,
                             GitHubUserClient userClient,
+                            AccountDao accountDao,
                             SessionHelper session) {
-        this.storIOSQLite = storIOSQLite;
         this.prefHelper = prefHelper;
         this.tokenClient = tokenClient;
         this.userClient = userClient;
+        this.accountDao = accountDao;
         this.session = session;
     }
 
@@ -92,7 +90,7 @@ public class GitAuthenticator implements IAuthenticator {
         if (accountModel.getPersonName() == null) {
             accountModel.setPersonName(accountModel.getAccountName());
         }
-        saveAccount(accountModel);
+        accountDao.saveAccount(accountModel);
         session.setCurrentAccount(accountModel);
         prefHelper.setLoggedAccountName(accountModel.getAccountName());
 
@@ -115,7 +113,7 @@ public class GitAuthenticator implements IAuthenticator {
                     if (loggedAccountName == null) {
                         return Observable.defer(null);
                     } else {
-                        return findAccountLocal(loggedAccountName);
+                        return accountDao.findAccountByName(loggedAccountName);
                     }
                 })
                 .doOnNext(accountModel -> {
@@ -123,7 +121,6 @@ public class GitAuthenticator implements IAuthenticator {
                         session.setCurrentAccount(accountModel);
                         prefHelper.setAccessToken(accountModel.getAccessToken());
                     } else {
-                        // TODO pass AccountName
                         throw Exceptions.propagate(new AccountNotFoundException(accountName[0]));
                     }
                 });
@@ -147,19 +144,5 @@ public class GitAuthenticator implements IAuthenticator {
         model.setAvatar(json.getAvatarUrl());
         model.setEmail(json.getEmail());
         return model;
-    }
-
-    private Observable<AccountModel> findAccountLocal(String accountName) {
-        // TODO move to DAO
-        return storIOSQLite.get().object(AccountModel.class)
-                .withQuery(Query.builder()
-                        .table(AccountTable.TABLE)
-                        .where(String.format("%s='%s'", AccountTable.COLUMN_ACCOUNT_NAME, accountName)).build())
-                .prepare().asRxObservable();
-    }
-
-    private void saveAccount(AccountModel accountModel) {
-        // TODO move to DAO
-        storIOSQLite.put().object(accountModel).prepare().executeAsBlocking();
     }
 }

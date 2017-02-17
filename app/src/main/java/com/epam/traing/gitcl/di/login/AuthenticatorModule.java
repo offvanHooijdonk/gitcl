@@ -1,12 +1,12 @@
 package com.epam.traing.gitcl.di.login;
 
+import com.epam.traing.gitcl.db.dao.AccountDao;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.interactor.authenticate.GitAuthenticator;
 import com.epam.traing.gitcl.interactor.authenticate.IAuthenticator;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,7 +20,11 @@ public class AuthenticatorModule {
 
     @Provides
     @LoginScope
-    IAuthenticator provideAuthenticator(StorIOSQLite storIOSQLite, PrefHelper prefHelper, GitHubTokenClient tokenClient, GitHubUserClient userClient, SessionHelper session) {
-        return new GitAuthenticator(storIOSQLite, prefHelper, tokenClient, userClient, session);
+    IAuthenticator provideAuthenticator(PrefHelper prefHelper,
+                                        GitHubTokenClient tokenClient,
+                                        GitHubUserClient userClient,
+                                        AccountDao accountDao,
+                                        SessionHelper session) {
+        return new GitAuthenticator(prefHelper, tokenClient, userClient, accountDao, session);
     }
 }

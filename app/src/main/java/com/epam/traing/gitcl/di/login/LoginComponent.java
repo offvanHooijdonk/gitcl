@@ -11,7 +11,8 @@ import dagger.Subcomponent;
 @Subcomponent(modules = {
         LoginModule.class,
         AuthenticatorModule.class,
-        AuthApiModule.class
+        AuthApiModule.class,
+        AuthDaoModule.class
 })
 @LoginScope
 public interface LoginComponent {
