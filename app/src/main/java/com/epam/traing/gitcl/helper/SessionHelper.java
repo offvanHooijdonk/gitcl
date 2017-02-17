@@ -23,4 +23,8 @@ public class SessionHelper {
     public void setCurrentAccount(AccountModel account) {
         this.account = account;
     }
+
+    public boolean isLoggedIn() {
+        return account != null;
+    }
 }

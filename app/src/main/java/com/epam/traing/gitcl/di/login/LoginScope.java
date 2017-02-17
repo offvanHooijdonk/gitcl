@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.component;
+package com.epam.traing.gitcl.di.login;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

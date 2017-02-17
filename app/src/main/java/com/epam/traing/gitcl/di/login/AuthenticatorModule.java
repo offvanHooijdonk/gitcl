@@ -1,8 +1,9 @@
-package com.epam.traing.gitcl.interactor.authenticate;
+package com.epam.traing.gitcl.di.login;
 
-import com.epam.traing.gitcl.component.LoginScope;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
+import com.epam.traing.gitcl.interactor.authenticate.GitAuthenticator;
+import com.epam.traing.gitcl.interactor.authenticate.IAuthenticator;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;

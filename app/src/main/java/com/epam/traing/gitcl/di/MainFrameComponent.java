@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.component;
+package com.epam.traing.gitcl.di;
 
 /**
  * Created by Yahor_Fralou on 2/16/2017 6:32 PM.

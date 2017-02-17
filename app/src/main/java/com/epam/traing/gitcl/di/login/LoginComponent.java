@@ -1,7 +1,5 @@
-package com.epam.traing.gitcl.component;
+package com.epam.traing.gitcl.di.login;
 
-import com.epam.traing.gitcl.interactor.authenticate.AuthenticatorModule;
-import com.epam.traing.gitcl.presentation.presenter.LoginModule;
 import com.epam.traing.gitcl.presentation.ui.LoginActivity;
 
 import dagger.Subcomponent;
@@ -12,7 +10,8 @@ import dagger.Subcomponent;
 
 @Subcomponent(modules = {
         LoginModule.class,
-        AuthenticatorModule.class
+        AuthenticatorModule.class,
+        AuthApiModule.class
 })
 @LoginScope
 public interface LoginComponent {

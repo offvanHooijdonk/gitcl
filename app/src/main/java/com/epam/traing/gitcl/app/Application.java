@@ -3,13 +3,14 @@ package com.epam.traing.gitcl.app;
 import android.preference.PreferenceManager;
 
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.component.AppComponent;
-import com.epam.traing.gitcl.component.DaggerAppComponent;
-import com.epam.traing.gitcl.component.LoginComponent;
-import com.epam.traing.gitcl.db.DBModule;
-import com.epam.traing.gitcl.interactor.authenticate.AuthenticatorModule;
-import com.epam.traing.gitcl.network.NetworkModule;
-import com.epam.traing.gitcl.presentation.presenter.LoginModule;
+import com.epam.traing.gitcl.di.AppComponent;
+import com.epam.traing.gitcl.di.AppModule;
+import com.epam.traing.gitcl.di.DaggerAppComponent;
+import com.epam.traing.gitcl.di.login.LoginComponent;
+import com.epam.traing.gitcl.di.DBModule;
+import com.epam.traing.gitcl.di.login.AuthenticatorModule;
+import com.epam.traing.gitcl.di.NetworkModule;
+import com.epam.traing.gitcl.di.login.LoginModule;
 import com.epam.traing.gitcl.presentation.presenter.MainFrameModule;
 
 /**

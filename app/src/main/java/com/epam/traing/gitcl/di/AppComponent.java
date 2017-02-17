@@ -1,14 +1,12 @@
-package com.epam.traing.gitcl.component;
+package com.epam.traing.gitcl.di;
 
 import android.content.Context;
 
-import com.epam.traing.gitcl.app.AppModule;
-import com.epam.traing.gitcl.db.DBModule;
+import com.epam.traing.gitcl.di.login.LoginComponent;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
-import com.epam.traing.gitcl.interactor.authenticate.AuthenticatorModule;
-import com.epam.traing.gitcl.network.NetworkModule;
-import com.epam.traing.gitcl.presentation.presenter.LoginModule;
+import com.epam.traing.gitcl.di.login.AuthenticatorModule;
+import com.epam.traing.gitcl.di.login.LoginModule;
 import com.epam.traing.gitcl.presentation.presenter.MainFrameModule;
 import com.epam.traing.gitcl.presentation.ui.MainActivity;
 
