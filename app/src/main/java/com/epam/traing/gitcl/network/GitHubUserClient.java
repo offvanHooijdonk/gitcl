@@ -3,6 +3,7 @@ package com.epam.traing.gitcl.network;
 import com.epam.traing.gitcl.network.json.AccountJson;
 
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import rx.Observable;
 
 /**
@@ -10,8 +11,9 @@ import rx.Observable;
  */
 
 public interface GitHubUserClient {
-// TODO rename to a Login Client for it needs AccessToken passed, and other User interaction can go
-// through another Client that has AccessToken already set
     @GET("/user")
-    public Observable<AccountJson> getUserInfo();
+    Observable<AccountJson> getCurrentUserInfo();
+
+    @GET("/users/{userName}")
+    Observable<AccountJson> getUserInfo(@Path("username") String userName);
 }

@@ -3,8 +3,8 @@ package com.epam.traing.gitcl.di.login;
 import com.epam.traing.gitcl.db.dao.AccountDao;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
-import com.epam.traing.gitcl.interactor.authenticate.GitAuthenticator;
-import com.epam.traing.gitcl.interactor.authenticate.IAuthenticator;
+import com.epam.traing.gitcl.data.interactor.authenticate.GitAuthenticator;
+import com.epam.traing.gitcl.data.interactor.authenticate.IAuthenticator;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 

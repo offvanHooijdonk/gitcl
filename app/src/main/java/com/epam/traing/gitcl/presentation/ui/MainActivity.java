@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         txtDrawerAccountName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtDrawerAccountName);
         imgAvatar = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.imgAccountAvatar);
 
-        displayAccountInfo();
+        updateAccountInfo();
     }
 
     @Override
@@ -125,11 +125,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void displayAccountInfo() {
+    @Override
+    public void updateAccountInfo() {
         AccountModel accountModel = session.getCurrentAccount();
         if (accountModel != null) {
             txtDrawerAccountUserName.setText(accountModel.getPersonName());
             txtDrawerAccountName.setText(accountModel.getAccountName());
+            // TODO get image
         }
     }
 }

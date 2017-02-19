@@ -8,4 +8,6 @@ import com.epam.traing.gitcl.presentation.ui.IMainView;
 
 public interface IMainPresenter {
     void attachView(IMainView mainView);
+
+    void onViewPrepare();
 }

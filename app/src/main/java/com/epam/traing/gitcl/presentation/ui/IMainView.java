@@ -5,4 +5,5 @@ package com.epam.traing.gitcl.presentation.ui;
  */
 
 public interface IMainView {
+    void updateAccountInfo();
 }

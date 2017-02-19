@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.interactor.authenticate;
+package com.epam.traing.gitcl.data.interactor.authenticate;
 
 /**
  * Created by Yahor_Fralou on 1/31/2017 12:03 PM.

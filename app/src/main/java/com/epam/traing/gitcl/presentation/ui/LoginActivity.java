@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
 
     @Override
-    public void startLoginProgress(boolean show) {
+    public void showLoginProgress(boolean show) {
         Log.d(Application.LOG, "Progress: " + show);
         if (show) {
             if (progressDialog == null) {

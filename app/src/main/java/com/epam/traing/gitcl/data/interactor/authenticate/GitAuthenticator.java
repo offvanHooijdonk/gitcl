@@ -1,9 +1,10 @@
-package com.epam.traing.gitcl.interactor.authenticate;
+package com.epam.traing.gitcl.data.interactor.authenticate;
 
 import android.net.Uri;
 import android.util.Log;
 
 import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.db.dao.AccountDao;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
@@ -33,23 +34,22 @@ public class GitAuthenticator implements IAuthenticator {
     private GitHubUserClient userClient;
     private AccountDao accountDao;
     private SessionHelper session;
+    private ModelConverter modelConverter;
 
     @Inject
     public GitAuthenticator(PrefHelper prefHelper,
                             GitHubTokenClient tokenClient,
                             GitHubUserClient userClient,
                             AccountDao accountDao,
-                            SessionHelper session) {
+                            SessionHelper session,
+                            ModelConverter modelConverter) {
         this.prefHelper = prefHelper;
         this.tokenClient = tokenClient;
         this.userClient = userClient;
         this.accountDao = accountDao;
         this.session = session;
+        this.modelConverter = modelConverter;
     }
-
-    /*public GitAuthenticator() {
-        Application.getAuthenticatorComponent().inject(this);
-    }*/
 
     @Override
     public Observable<AccountModel> authorizeFromCallback(String callbackUrl) {
@@ -74,11 +74,11 @@ public class GitAuthenticator implements IAuthenticator {
                 })
                 .flatMap(tokenJson -> {
                     Log.d(Application.LOG, "Call Api '/user'");
-                    return userClient.getUserInfo()
+                    return userClient.getCurrentUserInfo()
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread());
                 })
-                .map(this::convertJsonToAccountModel)
+                .map(modelConverter::toAccountModel)
                 .doOnNext(accountModel -> {
                     accountModel.setAccessToken(prefHelper.getAccessToken());
                     onAccountLoaded(accountModel);
@@ -136,13 +136,4 @@ public class GitAuthenticator implements IAuthenticator {
         prefHelper.setShowLogin(show);
     }
 
-    private AccountModel convertJsonToAccountModel(AccountJson json) {
-        // TODO implement auto conversion or move to a converter
-        AccountModel model = new AccountModel();
-        model.setAccountName(json.getLogin());
-        model.setPersonName(json.getPersonName());
-        model.setAvatar(json.getAvatarUrl());
-        model.setEmail(json.getEmail());
-        return model;
-    }
 }

@@ -6,7 +6,7 @@ package com.epam.traing.gitcl.presentation.ui;
 
 public interface ILoginView {
 
-    void startLoginProgress(boolean show);
+    void showLoginProgress(boolean show);
 
     void showAuthErrorMessage(Throwable e);
 

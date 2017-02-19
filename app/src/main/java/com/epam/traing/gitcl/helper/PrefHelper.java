@@ -13,6 +13,8 @@ public class PrefHelper {
     private static final String PREF_LOGGED_IN_ACCOUNT_ID = "pref_logged_in_account_id";
     private static final String TOKEN_TYPE = "pref_token_type";
     private static final String ACCESS_TOKEN = "access_token";
+    private static final String ACCOUNT_LAST_UPDATE_TIME = "account_last_update_time";
+
 
     private Context ctx;
 
@@ -54,4 +56,13 @@ public class PrefHelper {
     public String getAccessToken() {
         return getSharedPreference().getString(ACCESS_TOKEN, null);
     }
+
+    public long getAccountLastUpdateTime() {
+        return getSharedPreference().getLong(ACCOUNT_LAST_UPDATE_TIME, 0);
+    }
+
+    public void setAccountLastUpdateTime(long time) {
+        getSharedPreference().edit().putLong(ACCOUNT_LAST_UPDATE_TIME, time).apply();
+    }
+
 }

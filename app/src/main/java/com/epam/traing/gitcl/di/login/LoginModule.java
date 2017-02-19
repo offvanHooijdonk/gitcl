@@ -1,6 +1,6 @@
 package com.epam.traing.gitcl.di.login;
 
-import com.epam.traing.gitcl.interactor.authenticate.IAuthenticator;
+import com.epam.traing.gitcl.data.interactor.authenticate.IAuthenticator;
 import com.epam.traing.gitcl.presentation.presenter.ILoginPresenter;
 import com.epam.traing.gitcl.presentation.presenter.LoginPresenter;
 

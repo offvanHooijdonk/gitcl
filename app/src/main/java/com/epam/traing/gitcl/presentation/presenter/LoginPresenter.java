@@ -6,10 +6,13 @@ import android.util.Log;
 
 import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.db.model.AccountModel;
-import com.epam.traing.gitcl.interactor.authenticate.IAuthenticator;
+import com.epam.traing.gitcl.helper.PrefHelper;
+import com.epam.traing.gitcl.data.interactor.authenticate.IAuthenticator;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.ui.ILoginView;
 import com.google.gson.Gson;
+
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -18,14 +21,15 @@ import javax.inject.Inject;
  */
 
 public class LoginPresenter implements ILoginPresenter {
-
-    private IAuthenticator authenticator;
-
     private ILoginView loginView;
 
+    private IAuthenticator authenticator;
+    private PrefHelper prefHelper;
+
     @Inject
-    public LoginPresenter(IAuthenticator authenticator) {
+    public LoginPresenter(IAuthenticator authenticator, PrefHelper prefHelper) {
         this.authenticator = authenticator;
+        this.prefHelper = prefHelper;
     }
 
     @Override
@@ -69,10 +73,11 @@ public class LoginPresenter implements ILoginPresenter {
 
     private void onOAuthCallback(String url) {
         // TODO hide logo here to make layout blank?
-        loginView.startLoginProgress(true);
+        loginView.showLoginProgress(true);
 
         authenticator.authorizeFromCallback(url)
                 .first()
+                .doOnNext(accountModel -> prefHelper.setAccountLastUpdateTime(new Date().getTime()))
                 .subscribe(this::onLoginSuccess, this::onLoginFail);
     }
 
@@ -87,14 +92,14 @@ public class LoginPresenter implements ILoginPresenter {
         Log.d(Application.LOG, "Login Success");
         Log.d(Application.LOG, new Gson().toJson(accountModel));
         authenticator.setShowLogin(false);
-        loginView.startLoginProgress(false);
+        loginView.showLoginProgress(false);
         loginView.startMainView();
     }
 
 
     private void onLoginFail(Throwable th) {
         // TODO show error message
-        loginView.startLoginProgress(false);
+        loginView.showLoginProgress(false);
         loginView.showAuthErrorMessage(th);
     }
 }

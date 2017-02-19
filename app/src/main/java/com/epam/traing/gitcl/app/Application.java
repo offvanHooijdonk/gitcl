@@ -13,7 +13,7 @@ import com.epam.traing.gitcl.di.DBModule;
 import com.epam.traing.gitcl.di.login.AuthenticatorModule;
 import com.epam.traing.gitcl.di.NetworkModule;
 import com.epam.traing.gitcl.di.login.LoginModule;
-import com.epam.traing.gitcl.presentation.presenter.MainFrameModule;
+import com.epam.traing.gitcl.di.main.MainFrameModule;
 
 /**
  * Created by off on 22.01.2017.

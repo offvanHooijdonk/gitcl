@@ -9,7 +9,7 @@ import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.di.login.AuthenticatorModule;
 import com.epam.traing.gitcl.di.login.LoginModule;
-import com.epam.traing.gitcl.presentation.presenter.MainFrameModule;
+import com.epam.traing.gitcl.di.main.MainFrameModule;
 import com.epam.traing.gitcl.presentation.ui.MainActivity;
 
 import javax.inject.Singleton;
