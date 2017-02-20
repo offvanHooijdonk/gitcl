@@ -2,15 +2,15 @@ package com.epam.traing.gitcl.di;
 
 import android.content.Context;
 
-import com.epam.traing.gitcl.di.login.AuthDaoModule;
 import com.epam.traing.gitcl.di.login.AuthApiModule;
+import com.epam.traing.gitcl.di.login.AuthenticatorModule;
 import com.epam.traing.gitcl.di.login.LoginComponent;
+import com.epam.traing.gitcl.di.login.LoginModule;
+import com.epam.traing.gitcl.di.main.AccountModule;
+import com.epam.traing.gitcl.di.main.MainFrameComponent;
+import com.epam.traing.gitcl.di.main.MainFrameModule;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
-import com.epam.traing.gitcl.di.login.AuthenticatorModule;
-import com.epam.traing.gitcl.di.login.LoginModule;
-import com.epam.traing.gitcl.di.main.MainFrameModule;
-import com.epam.traing.gitcl.presentation.ui.MainActivity;
 
 import javax.inject.Singleton;
 
@@ -22,12 +22,12 @@ import dagger.Component;
 
 @Component(modules = {
         AppModule.class,
-        MainFrameModule.class,
         DBModule.class,
-        NetworkModule.class})
+        NetworkModule.class,
+        AccountModule.class
+})
 @Singleton
 public interface AppComponent {
-    void inject(MainActivity mainActivity);
 
     Context getContext();
     PrefHelper getPreferenceHelper();
@@ -35,6 +35,7 @@ public interface AppComponent {
 
     LoginComponent plusLoginComponent(LoginModule loginModule,
                                       AuthenticatorModule authenticatorModule,
-                                      AuthApiModule authApiModule,
-                                      AuthDaoModule accountDaoModule);
+                                      AuthApiModule authApiModule);
+
+    MainFrameComponent plusMainFrameComponent(MainFrameModule mainFrameModule);
 }

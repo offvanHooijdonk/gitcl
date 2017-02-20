@@ -5,14 +5,13 @@ import android.util.Log;
 
 import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.data.converter.ModelConverter;
-import com.epam.traing.gitcl.db.dao.AccountDao;
+import com.epam.traing.gitcl.db.dao.IAccountDao;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
-import com.epam.traing.gitcl.network.json.AccountJson;
 
 import javax.inject.Inject;
 
@@ -32,7 +31,7 @@ public class GitAuthenticator implements IAuthenticator {
     private PrefHelper prefHelper;
     private GitHubTokenClient tokenClient;
     private GitHubUserClient userClient;
-    private AccountDao accountDao;
+    private IAccountDao accountDao;
     private SessionHelper session;
     private ModelConverter modelConverter;
 
@@ -40,7 +39,7 @@ public class GitAuthenticator implements IAuthenticator {
     public GitAuthenticator(PrefHelper prefHelper,
                             GitHubTokenClient tokenClient,
                             GitHubUserClient userClient,
-                            AccountDao accountDao,
+                            IAccountDao accountDao,
                             SessionHelper session,
                             ModelConverter modelConverter) {
         this.prefHelper = prefHelper;

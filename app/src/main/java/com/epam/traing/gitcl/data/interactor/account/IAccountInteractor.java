@@ -9,7 +9,9 @@ import rx.Observable;
  */
 
 public interface IAccountInteractor {
-    Observable<AccountModel> updateAccount(String accountName);
+    Observable<AccountModel> reloadAccount(String accountName);
 
-    Observable<AccountModel> updateCurrentAccount();
+    Observable<AccountModel> subscribeCurrentAccountChange();
+
+    Observable<AccountModel> reloadCurrentAccount();
 }

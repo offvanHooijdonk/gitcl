@@ -1,6 +1,7 @@
 package com.epam.traing.gitcl.di.login;
 
 import com.epam.traing.gitcl.data.interactor.authenticate.IAuthenticator;
+import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.presentation.presenter.ILoginPresenter;
 import com.epam.traing.gitcl.presentation.presenter.LoginPresenter;
 
@@ -16,7 +17,7 @@ public class LoginModule {
 
     @Provides
     @LoginScope
-    ILoginPresenter provideLoginPresenter(IAuthenticator authenticator) {
-        return new LoginPresenter(authenticator);
+    ILoginPresenter provideLoginPresenter(IAuthenticator authenticator, PrefHelper prefHelper) {
+        return new LoginPresenter(authenticator, prefHelper);
     }
 }

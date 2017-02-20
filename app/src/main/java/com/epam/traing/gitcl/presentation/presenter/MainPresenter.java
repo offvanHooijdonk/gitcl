@@ -1,6 +1,6 @@
 package com.epam.traing.gitcl.presentation.presenter;
 
-import com.epam.traing.gitcl.data.interactor.account.AccountInteractor;
+import com.epam.traing.gitcl.data.interactor.account.IAccountInteractor;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.ui.IMainView;
@@ -16,11 +16,11 @@ import javax.inject.Inject;
 public class MainPresenter implements IMainPresenter {
     private IMainView view;
 
-    private AccountInteractor accountInteractor;
+    private IAccountInteractor accountInteractor;
     private PrefHelper prefHelper;
 
     @Inject
-    public MainPresenter(AccountInteractor accountInteractor, PrefHelper prefHelper) {
+    public MainPresenter(IAccountInteractor accountInteractor, PrefHelper prefHelper) {
         this.accountInteractor = accountInteractor;
         this.prefHelper = prefHelper;
     }
@@ -38,6 +38,11 @@ public class MainPresenter implements IMainPresenter {
     }
 
     private void subscribeAccountChange() {
+        accountInteractor.subscribeCurrentAccountChange()
+                .subscribe(accountModel -> {
+                    view.updateAccountInfo();
+                    // request image here
+                });
 
     }
 
@@ -51,7 +56,7 @@ public class MainPresenter implements IMainPresenter {
 
 
     private void requestAccountInfo() {
-        accountInteractor.updateCurrentAccount()
+        accountInteractor.reloadCurrentAccount()
                 .subscribe(accountModel -> {
                     view.updateAccountInfo();
                 });

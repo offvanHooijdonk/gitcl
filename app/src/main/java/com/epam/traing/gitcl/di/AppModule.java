@@ -3,6 +3,7 @@ package com.epam.traing.gitcl.di;
 import android.content.Context;
 
 import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.helper.PrefHelper;
 
@@ -39,5 +40,11 @@ public class AppModule {
     @Singleton
     SessionHelper provideSession(Context ctx) {
         return new SessionHelper(ctx);
+    }
+
+    @Provides
+    @Singleton
+    ModelConverter provideModelConverter() {
+        return new ModelConverter();
     }
 }

@@ -1,7 +1,7 @@
 package com.epam.traing.gitcl.data.interactor.account;
 
 import com.epam.traing.gitcl.data.converter.ModelConverter;
-import com.epam.traing.gitcl.db.dao.AccountDao;
+import com.epam.traing.gitcl.db.dao.IAccountDao;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.GitHubUserClient;
@@ -19,11 +19,11 @@ public class AccountInteractor implements IAccountInteractor {
     private GitHubUserClient userClient;
     private SessionHelper sessionHelper;
     private ModelConverter modelConverter;
-    private AccountDao accountDao;
+    private IAccountDao accountDao;
 
     @Inject
     public AccountInteractor(GitHubUserClient userClient,
-                             AccountDao accountDao,
+                             IAccountDao accountDao,
                              SessionHelper sessionHelper,
                              ModelConverter modelConverter) {
         this.userClient = userClient;
@@ -34,21 +34,26 @@ public class AccountInteractor implements IAccountInteractor {
 
     @Deprecated
     @Override
-    public Observable<AccountModel> updateAccount(String accountName) {
-        return null;
-    }
-
-    public Observable<AccountModel> subscribeAccountChange() {
-        // FIXME
+    public Observable<AccountModel> reloadAccount(String accountName) {
         return null;
     }
 
     @Override
-    public Observable<AccountModel> updateCurrentAccount() {
-        return userClient.getCurrentUserInfo()
-                .map(modelConverter::toAccountModel)
-                .doOnNext(accountDao::saveAccount)
-                .doOnNext(sessionHelper::setCurrentAccount);
+    public Observable<AccountModel> subscribeCurrentAccountChange() {
+        return accountDao.subscribeAccountChange()
+                .flatMap(changes -> accountDao.findAccountByName(sessionHelper.getCurrentAccount().getAccountName()));
+        // do not store changes here as they are already stored
     }
 
+    @Override
+    public Observable<AccountModel> reloadCurrentAccount() {
+        return userClient.getCurrentUserInfo()
+                .map(modelConverter::toAccountModel)
+                .doOnNext(this::storeCurrentAccount);
+    }
+
+    private void storeCurrentAccount(AccountModel accountModel) {
+        accountDao.saveAccount(accountModel);
+        sessionHelper.setCurrentAccount(accountModel);
+    }
 }

@@ -1,10 +1,11 @@
 package com.epam.traing.gitcl.di.login;
 
-import com.epam.traing.gitcl.db.dao.AccountDao;
-import com.epam.traing.gitcl.helper.PrefHelper;
-import com.epam.traing.gitcl.helper.SessionHelper;
+import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.data.interactor.authenticate.GitAuthenticator;
 import com.epam.traing.gitcl.data.interactor.authenticate.IAuthenticator;
+import com.epam.traing.gitcl.db.dao.IAccountDao;
+import com.epam.traing.gitcl.helper.PrefHelper;
+import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 
@@ -23,8 +24,9 @@ public class AuthenticatorModule {
     IAuthenticator provideAuthenticator(PrefHelper prefHelper,
                                         GitHubTokenClient tokenClient,
                                         GitHubUserClient userClient,
-                                        AccountDao accountDao,
-                                        SessionHelper session) {
-        return new GitAuthenticator(prefHelper, tokenClient, userClient, accountDao, session);
+                                        IAccountDao accountDao,
+                                        SessionHelper session,
+                                        ModelConverter modelConverter) {
+        return new GitAuthenticator(prefHelper, tokenClient, userClient, accountDao, session, modelConverter);
     }
 }
