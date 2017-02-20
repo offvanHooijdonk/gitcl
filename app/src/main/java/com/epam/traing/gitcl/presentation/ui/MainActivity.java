@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.db.model.AccountModel;
@@ -132,6 +133,9 @@ public class MainActivity extends AppCompatActivity
             txtDrawerAccountUserName.setText(accountModel.getPersonName());
             txtDrawerAccountName.setText(accountModel.getAccountName());
             // TODO get image
+            if (accountModel.getAvatar() != null) {
+                Glide.with(this).load(accountModel.getAvatar()).into(imgAvatar);
+            }
         }
     }
 }

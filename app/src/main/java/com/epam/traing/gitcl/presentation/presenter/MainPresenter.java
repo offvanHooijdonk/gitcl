@@ -39,10 +39,7 @@ public class MainPresenter implements IMainPresenter {
 
     private void subscribeAccountChange() {
         accountInteractor.subscribeCurrentAccountChange()
-                .subscribe(accountModel -> {
-                    view.updateAccountInfo();
-                    // request image here
-                });
+                .subscribe(accountModel -> view.updateAccountInfo());
 
     }
 
@@ -50,16 +47,12 @@ public class MainPresenter implements IMainPresenter {
         if (hasTimePassed(prefHelper.getAccountLastUpdateTime(), Constants.Refresh.REFRESH_ACCOUNT_MILLS)) {
             requestAccountInfo();
         }
-
-        // TODO subscribe DB change?
     }
 
 
     private void requestAccountInfo() {
         accountInteractor.reloadCurrentAccount()
-                .subscribe(accountModel -> {
-                    view.updateAccountInfo();
-                });
+                .subscribe(accountModel -> view.updateAccountInfo());
     }
 
     private boolean hasTimePassed(long timeFrom, int timePass) {
