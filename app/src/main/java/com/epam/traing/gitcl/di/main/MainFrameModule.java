@@ -30,7 +30,8 @@ public class MainFrameModule {
     public IAccountInteractor provideAccountInteractor(GitHubUserClient userClient,
                                                        IAccountDao accountDao,
                                                        SessionHelper sessionHelper,
+                                                       PrefHelper prefHelper,
                                                        ModelConverter modelConverter) {
-        return new AccountInteractor(userClient, accountDao, sessionHelper, modelConverter);
+        return new AccountInteractor(userClient, accountDao, sessionHelper, prefHelper, modelConverter);
     }
 }

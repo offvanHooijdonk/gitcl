@@ -39,7 +39,7 @@ public class PrefHelper {
     }
 
     public void setLoggedAccountName(String value) {
-        getSharedPreference().edit().putString(PREF_LOGGED_IN_ACCOUNT_ID, String.valueOf(value)).apply();
+        getSharedPreference().edit().putString(PREF_LOGGED_IN_ACCOUNT_ID, value).apply();
     }
 
     public String getTokenType() {

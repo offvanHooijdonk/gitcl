@@ -10,4 +10,10 @@ public interface IMainPresenter {
     void attachView(IMainView mainView);
 
     void onViewPrepare();
+
+    void onLogoutSelected();
+
+    void onLogoutConfirmed();
+
+    void onLogoutCanceled();
 }

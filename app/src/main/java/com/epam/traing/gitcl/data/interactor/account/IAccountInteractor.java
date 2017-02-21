@@ -14,4 +14,6 @@ public interface IAccountInteractor {
     Observable<AccountModel> subscribeCurrentAccountChange();
 
     Observable<AccountModel> reloadCurrentAccount();
+
+    Observable logOutAccount();
 }

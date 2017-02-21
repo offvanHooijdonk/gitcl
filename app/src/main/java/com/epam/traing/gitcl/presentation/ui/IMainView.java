@@ -6,4 +6,8 @@ package com.epam.traing.gitcl.presentation.ui;
 
 public interface IMainView {
     void updateAccountInfo();
+
+    void showLogoutDialog(boolean show);
+
+    void startLoginActivity();
 }

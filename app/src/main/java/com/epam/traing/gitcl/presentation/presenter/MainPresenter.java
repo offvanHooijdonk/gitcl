@@ -37,6 +37,24 @@ public class MainPresenter implements IMainPresenter {
         updateAccountInfo();
     }
 
+    @Override
+    public void onLogoutSelected() {
+        view.showLogoutDialog(true);
+    }
+
+    @Override
+    public void onLogoutConfirmed() {
+        accountInteractor.logOutAccount().subscribe(o -> {}, th -> {}, () -> {
+            view.showLogoutDialog(false);
+            view.startLoginActivity();
+        });
+    }
+
+    @Override
+    public void onLogoutCanceled() {
+        view.showLogoutDialog(false);
+    }
+
     private void subscribeAccountChange() {
         accountInteractor.subscribeCurrentAccountChange()
                 .subscribe(accountModel -> view.updateAccountInfo());

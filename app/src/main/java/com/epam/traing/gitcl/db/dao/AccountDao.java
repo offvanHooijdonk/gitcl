@@ -37,4 +37,5 @@ public class AccountDao implements IAccountDao {
     public Observable<Changes> subscribeAccountChange() {
         return storIOSQLite.observeChangesInTable(AccountTable.TABLE);
     }
+
 }

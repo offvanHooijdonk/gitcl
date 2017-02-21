@@ -1,6 +1,9 @@
 package com.epam.traing.gitcl.presentation.ui;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity
     private TextView txtDrawerAccountUserName;
     private TextView txtDrawerAccountName;
     private ImageView imgAvatar;
+
+    private AlertDialog logoutDialog;
 
     @Inject
     IMainPresenter presenter;
@@ -107,7 +112,7 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -118,6 +123,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_logout) {
+            presenter.onLogoutSelected();
 
         }
 
@@ -137,5 +145,32 @@ public class MainActivity extends AppCompatActivity
                 Glide.with(this).load(accountModel.getAvatar()).into(imgAvatar);
             }
         }
+    }
+
+    @Override
+    public void showLogoutDialog(boolean show) {
+        if (show) {
+            if (logoutDialog == null || !logoutDialog.isShowing()) {
+                logoutDialog = new AlertDialog.Builder(this)
+                        .setCancelable(true)
+                        .setTitle(R.string.dialog_logout_title)
+                        .setMessage(R.string.dialod_logout_message)
+                        .setPositiveButton(R.string.dialog_btn_positive, (dialog, which) -> presenter.onLogoutConfirmed())
+                        .setNegativeButton(R.string.dialog_btn_negative, (dialog, which) -> presenter.onLogoutCanceled())
+                        .show();
+            }
+        } else {
+            if (logoutDialog != null && logoutDialog.isShowing()) {
+                logoutDialog.dismiss();
+            }
+        }
+    }
+
+    @Override
+    public void startLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        overridePendingTransition(R.anim.activity_slide_lr_enter, R.anim.activity_slide_lr_leave);
     }
 }
