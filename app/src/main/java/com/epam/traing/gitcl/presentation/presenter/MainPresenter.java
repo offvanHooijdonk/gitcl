@@ -45,6 +45,7 @@ public class MainPresenter implements IMainPresenter {
     @Override
     public void onLogoutConfirmed() {
         accountInteractor.logOutAccount().subscribe(o -> {}, th -> {}, () -> {
+            prefHelper.setShowLogin(true);
             view.showLogoutDialog(false);
             view.startLoginActivity();
         });

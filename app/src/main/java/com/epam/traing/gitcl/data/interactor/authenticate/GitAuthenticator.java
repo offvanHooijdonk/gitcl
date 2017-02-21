@@ -99,18 +99,13 @@ public class GitAuthenticator implements IAuthenticator {
     }
 
     @Override
-    public Observable<Boolean> getShowLogin() {
-        return Observable.fromCallable(prefHelper::isShowLogin);
-    }
-
-    @Override
     public Observable<AccountModel> prepareOnLoginData() {
         final String[] accountName = new String[1];
         return Observable.fromCallable(prefHelper::getLoggedAccountName)
                 .flatMap(loggedAccountName -> {
                     accountName[0] = loggedAccountName;
                     if (loggedAccountName == null) {
-                        return Observable.defer(null);
+                        return Observable.just(null);
                     } else {
                         return accountDao.findAccountByName(loggedAccountName);
                     }
@@ -128,11 +123,6 @@ public class GitAuthenticator implements IAuthenticator {
     @Override
     public String composeOAuthUrl() {
         return String.format(Constants.Api.OAUTH_URL, Constants.Api.OAUTH_SCOPES, Constants.Api.OAUTH_KEY);
-    }
-
-    @Override
-    public void setShowLogin(boolean show) {
-        prefHelper.setShowLogin(show);
     }
 
 }

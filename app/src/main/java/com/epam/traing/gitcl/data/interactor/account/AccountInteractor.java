@@ -58,7 +58,6 @@ public class AccountInteractor implements IAccountInteractor {
 
     @Override
     public Observable logOutAccount() {
-
         sessionHelper.setCurrentAccount(null);
         prefHelper.setLoggedAccountName(null);
 

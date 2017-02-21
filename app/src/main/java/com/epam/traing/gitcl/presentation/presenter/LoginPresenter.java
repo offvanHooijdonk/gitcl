@@ -39,6 +39,7 @@ public class LoginPresenter implements ILoginPresenter {
 
     @Override
     public void onSkipLoginSelected() {
+        prefHelper.setShowLogin(false);
         loginView.startMainView();
     }
 
@@ -61,13 +62,7 @@ public class LoginPresenter implements ILoginPresenter {
 
             onOAuthCallback(uri.toString());
         } else {
-            authenticator.getShowLogin().subscribe(show -> {
-                if (show) {
-                    loginView.showLoginScreen();
-                } else {
-                    doLoginWithCurrentAccount();
-                }
-            });
+            proceedLogin();
         }
     }
 
@@ -88,10 +83,22 @@ public class LoginPresenter implements ILoginPresenter {
                         this::onLoginFail);
     }
 
+    private void proceedLogin() {
+        if (prefHelper.getLoggedAccountName() == null) {
+            if (prefHelper.isShowLoginScreen()) {
+                loginView.showLoginScreen();
+            } else {
+                onLoginSuccess(null);
+            }
+        } else {
+            doLoginWithCurrentAccount();
+        }
+    }
+
     private void onLoginSuccess(AccountModel accountModel) {
         Log.d(Application.LOG, "Login Success");
-        Log.d(Application.LOG, new Gson().toJson(accountModel));
-        authenticator.setShowLogin(false);
+        Log.d(Application.LOG, accountModel != null ? new Gson().toJson(accountModel) : "empty");
+        prefHelper.setShowLogin(false);
         loginView.showLoginProgress(false);
         loginView.startMainView();
     }

@@ -26,7 +26,7 @@ public class PrefHelper {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
-    public boolean isShowLogin() {
+    public boolean isShowLoginScreen() {
         return getSharedPreference().getBoolean(FLAG_SHOW_LOGIN, true);
     }
 
@@ -47,10 +47,10 @@ public class PrefHelper {
     }
 
     public void setTokenType(String value) {
-        getSharedPreference().edit().putString(TOKEN_TYPE, String.valueOf(value)).apply();
+        getSharedPreference().edit().putString(TOKEN_TYPE, value).apply();
     }
     public void setAccessToken(String value) {
-        getSharedPreference().edit().putString(ACCESS_TOKEN, String.valueOf(value)).apply();
+        getSharedPreference().edit().putString(ACCESS_TOKEN, value).apply();
     }
 
     public String getAccessToken() {
