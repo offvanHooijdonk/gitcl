@@ -20,4 +20,6 @@
     <string name="dialod_logout_message">Are you sure you want to log out?</string>
     <string name="dialog_btn_positive">Yes</string>
     <string name="dialog_btn_negative">No</string>
+    <string name="nav_repo_list">Repositories</string>
+    <string name="nav_starred">Starred</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.epam.traing.gitcl.presentation.ui;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,6 +32,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
         implements IMainView, NavigationView.OnNavigationItemSelectedListener {
+    private static final String FRAG_REPO_LIST = "repo_list";
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -76,6 +78,8 @@ public class MainActivity extends AppCompatActivity
         imgAvatar = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.imgAccountAvatar);
 
         updateAccountInfo();
+
+        loadFragment(new RepoListFragment(), FRAG_REPO_LIST);
     }
 
     @Override
@@ -116,9 +120,9 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_repo_list) {
+            loadFragment(new RepoListFragment(), FRAG_REPO_LIST);
+        } else if (id == R.id.nav_starred) {
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -126,7 +130,6 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
             presenter.onLogoutSelected();
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -172,5 +175,9 @@ public class MainActivity extends AppCompatActivity
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         overridePendingTransition(R.anim.activity_slide_lr_enter, R.anim.activity_slide_lr_leave);
+    }
+
+    private void loadFragment(Fragment fragment, String tag) {
+        getFragmentManager().beginTransaction().replace(R.id.content_main, fragment, tag).commit();
     }
 }
