@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity
 
         updateAccountInfo();
 
+        navigationView.setCheckedItem(R.id.nav_repo_list);
         loadFragment(new RepoListFragment(), FRAG_REPO_LIST);
     }
 

@@ -18,6 +18,7 @@ public class AccountTable {
                 COLUMN_PERSON_NAME + " TEXT NOT NULL," +
                 COLUMN_ACCESS_TOKEN + " TEXT NOT NULL," +
                 COLUMN_EMAIL + " TEXT," +
-                COLUMN_AVATAR_FILE_NAME + " TEXT)";
+                COLUMN_AVATAR_FILE_NAME + " TEXT" +
+                ")";
     }
 }

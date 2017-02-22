@@ -5,13 +5,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.epam.traing.gitcl.db.tables.AccountTable;
+import com.epam.traing.gitcl.db.tables.RepoTable;
 
 /**
  * Created by off on 28.01.2017.
  */
 
 public class DBOpenHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 5;
+    private static final int DB_VERSION = 6;
     private static final String DB_NAME = "github_db";
 
     public DBOpenHelper(Context context) {
@@ -21,10 +22,14 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(AccountTable.getCreateTableQuery());
+        db.execSQL(RepoTable.getCreateTableQuery());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (oldVersion < 6 && newVersion >= 6) {
+            db.execSQL(RepoTable.getCreateTableQuery());
+        }
     }
+
 }

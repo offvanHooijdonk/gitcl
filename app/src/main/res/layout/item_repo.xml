@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/list_item_padding_hor"
+    android:paddingEnd="@dimen/list_item_padding_hor"
+    android:paddingTop="@dimen/list_item_padding_vert"
+    android:paddingBottom="@dimen/list_item_padding_vert">
+
+    <ImageView
+        android:id="@+id/imgLogoCircle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="@dimen/list_item_padding_hor"
+        android:tint="@color/colorPrimary"
+        android:src="@drawable/circle"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:layout_alignStart="@id/imgLogoCircle"
+        android:layout_alignTop="@id/imgLogoCircle"
+        android:tint="@color/md_white_1000"
+        android:src="@drawable/ic_fork_32"/>
+
+    <TextView
+        android:id="@+id/txtRepoName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/imgLogoCircle"
+        android:layout_alignTop="@id/imgLogoCircle"
+        android:textSize="@dimen/list_item_primary"
+        android:textColor="@android:color/primary_text_light"
+        android:text="Repo name"/>
+
+    <TextView
+        android:id="@+id/txtOwnerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/txtRepoName"
+        android:layout_below="@id/txtRepoName"
+        android:text="Owner"/>
+
+</RelativeLayout>

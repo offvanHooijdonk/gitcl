@@ -15,6 +15,8 @@ import com.epam.traing.gitcl.di.login.LoginModule;
 import com.epam.traing.gitcl.di.main.AccountModule;
 import com.epam.traing.gitcl.di.main.MainFrameComponent;
 import com.epam.traing.gitcl.di.main.MainFrameModule;
+import com.epam.traing.gitcl.di.repositories.RepositoryComponent;
+import com.epam.traing.gitcl.di.repositories.RepositoryModule;
 
 /**
  * Created by off on 22.01.2017.
@@ -25,6 +27,7 @@ public class Application extends android.app.Application {
     private static AppComponent appComponent;
     private static LoginComponent loginComponent;
     private static MainFrameComponent mainFrameComponent;
+    private static RepositoryComponent repositoryComponent;
 
     @Override
     public void onCreate() {
@@ -62,5 +65,14 @@ public class Application extends android.app.Application {
         }
 
         return mainFrameComponent;
+    }
+
+    public static RepositoryComponent getRepositoryComponent() {
+        if (repositoryComponent == null) {
+            repositoryComponent = Application.getAppComponent()
+                    .plusRepositoryComponent(new RepositoryModule());
+        }
+
+        return repositoryComponent;
     }
 }

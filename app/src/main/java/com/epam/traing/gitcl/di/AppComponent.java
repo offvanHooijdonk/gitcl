@@ -9,6 +9,8 @@ import com.epam.traing.gitcl.di.login.LoginModule;
 import com.epam.traing.gitcl.di.main.AccountModule;
 import com.epam.traing.gitcl.di.main.MainFrameComponent;
 import com.epam.traing.gitcl.di.main.MainFrameModule;
+import com.epam.traing.gitcl.di.repositories.RepositoryComponent;
+import com.epam.traing.gitcl.di.repositories.RepositoryModule;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
 
@@ -38,4 +40,6 @@ public interface AppComponent {
                                       AuthApiModule authApiModule);
 
     MainFrameComponent plusMainFrameComponent(MainFrameModule mainFrameModule);
+
+    RepositoryComponent plusRepositoryComponent(RepositoryModule repositoryModule);
 }

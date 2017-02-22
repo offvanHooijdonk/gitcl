@@ -22,4 +22,7 @@
     <string name="dialog_btn_negative">No</string>
     <string name="nav_repo_list">Repositories</string>
     <string name="nav_starred">Starred</string>
+    <string name="empty_repos_list_message">You have no repositories at the moment.\nTry to search or create one!</string>
+    <string name="action_search">Search</string>
+    <string name="title_repos">Repositories</string>
 </resources>
