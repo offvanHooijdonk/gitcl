@@ -24,6 +24,8 @@ public class RepoModel {
     long stargazersCount;
     @StorIOSQLiteColumn(name = RepoTable.COLUMN_WATCHERS_COUNT)
     long watchersCount;
+    @StorIOSQLiteColumn(name = RepoTable.COLUMN_FORKS_COUNT)
+    long forksCount;
     @StorIOSQLiteColumn(name = RepoTable.COLUMN_LANGUAGE)
     String language;
 
@@ -89,5 +91,13 @@ public class RepoModel {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public long getForksCount() {
+        return forksCount;
+    }
+
+    public void setForksCount(long forksCount) {
+        this.forksCount = forksCount;
     }
 }

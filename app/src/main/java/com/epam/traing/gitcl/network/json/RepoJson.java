@@ -19,6 +19,8 @@ public class RepoJson {
     private boolean fork;
     @SerializedName("stargazers_count")
     private long stargazersCount;
+    @SerializedName("forks_count")
+    private long forksCount;
     @SerializedName("watchers_count")
     private long watchersCount;
     @SerializedName("language")
@@ -86,6 +88,14 @@ public class RepoJson {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public long getForksCount() {
+        return forksCount;
+    }
+
+    public void setForksCount(long forksCount) {
+        this.forksCount = forksCount;
     }
 
     private class Owner {
