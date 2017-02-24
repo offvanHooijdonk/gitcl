@@ -98,7 +98,7 @@ public class RepoJson {
         this.forksCount = forksCount;
     }
 
-    private class Owner {
+    public class Owner {
         @SerializedName("login")
         private String accountName;
 

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.Application;
@@ -37,8 +38,8 @@ public class RepoListFragment extends Fragment implements IRepoListView {
     IRepoListPresenter presenter;
     @Inject
     SessionHelper session;
-    @Inject
-    Context ctx;
+
+    private Context ctx;
 
     @Bind(R.id.lstRepos)
     RecyclerView lstRepos;
@@ -62,10 +63,15 @@ public class RepoListFragment extends Fragment implements IRepoListView {
             v = inflater.inflate(R.layout.frag_repo_list, container, false);
         }
         ButterKnife.bind(this, v);
+        ctx = getActivity();
 
         getActivity().setTitle(getString(R.string.title_repos));
-        refreshLayout.setVisibility(View.VISIBLE);
+        lstRepos.setVisibility(View.VISIBLE);
         viewEmptyList.setVisibility(View.GONE);
+        refreshLayout.setColorSchemeColors(ctx.getResources().getColor(R.color.refresh1),
+                ctx.getResources().getColor(R.color.refresh2),
+                ctx.getResources().getColor(R.color.refresh3));
+        refreshLayout.setOnRefreshListener(() -> presenter.onRefreshTriggered());
 
         lstRepos.setLayoutManager(new LinearLayoutManager(ctx));
         lstRepos.setHasFixedSize(true);
@@ -74,11 +80,45 @@ public class RepoListFragment extends Fragment implements IRepoListView {
         repoListAdapter = new RepoListAdapter(ctx, repositories, session.getCurrentAccount());
         lstRepos.setAdapter(repoListAdapter);
 
+        presenter.onViewCreate();
+        // TODO refactor colors names!
+
         return v;
+    }
+
+    @Override
+    public void updateRepoList(List<RepoModel> repoModels) {
+        showListOrEmptyView(!repoModels.isEmpty());
+        if (!repoModels.isEmpty()) {
+            this.repositories.clear();
+            this.repositories.addAll(repoModels);
+            repoListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void showRefreshProgress(boolean show) {
+        refreshLayout.setRefreshing(show);
+    }
+
+    @Override
+    public void displayError(Throwable th) {
+        Toast.makeText(ctx, th.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    private void showListOrEmptyView(boolean showList) {
+        if (showList) {
+            lstRepos.setVisibility(View.VISIBLE);
+            viewEmptyList.setVisibility(View.GONE);
+        } else {
+            lstRepos.setVisibility(View.GONE);
+            viewEmptyList.setVisibility(View.VISIBLE);
+        }
     }
 
     private void injectComponent() {
         Application.getRepositoryComponent().inject(this);
+        presenter.attachView(this);
     }
 
     private List<RepoModel> getSampleList() {

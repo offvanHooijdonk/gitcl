@@ -2,6 +2,8 @@ package com.epam.traing.gitcl.network;
 
 import com.epam.traing.gitcl.network.json.RepoJson;
 
+import java.util.List;
+
 import retrofit2.http.GET;
 import rx.Observable;
 
@@ -12,5 +14,5 @@ import rx.Observable;
 public interface GitHubRepoClient {
 
     @GET("/user/repos")
-    Observable<RepoJson> getAccountRepositories();
+    Observable<List<RepoJson>> getAccountRepositories();
 }

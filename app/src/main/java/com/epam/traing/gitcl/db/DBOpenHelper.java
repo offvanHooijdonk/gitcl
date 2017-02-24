@@ -12,7 +12,7 @@ import com.epam.traing.gitcl.db.tables.RepoTable;
  */
 
 public class DBOpenHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 6;
+    private static final int DB_VERSION = 8;
     private static final String DB_NAME = "github_db";
 
     public DBOpenHelper(Context context) {
@@ -27,7 +27,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 6 && newVersion >= 6) {
+        if (oldVersion < 8 && newVersion >= 8) {
             db.execSQL(RepoTable.getCreateTableQuery());
         }
     }

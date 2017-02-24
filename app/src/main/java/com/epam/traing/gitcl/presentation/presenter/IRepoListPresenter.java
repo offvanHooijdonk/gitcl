@@ -8,4 +8,8 @@ import com.epam.traing.gitcl.presentation.ui.IRepoListView;
 
 public interface IRepoListPresenter {
     void attachView(IRepoListView view);
+
+    void onViewCreate();
+
+    void onRefreshTriggered();
 }
