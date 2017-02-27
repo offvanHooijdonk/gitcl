@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
  * Created by Yahor_Fralou on 2/22/2017 5:10 PM.
  */
 
-public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHolder> {
+public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoViewHolder> {
     private Context ctx;
     private List<RepoModel> repositories;
     private AccountModel accountModel;
@@ -36,13 +36,13 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RepoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(ctx).inflate(R.layout.item_repo, parent, false);
-        return new ViewHolder(v);
+        return new RepoViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder vh, int position) {
+    public void onBindViewHolder(RepoViewHolder vh, int position) {
         RepoModel model = repositories.get(position);
 
         if (model.isFork()) {
@@ -54,6 +54,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
         }
 
         vh.txtRepoName.setText(model.getName());
+        vh.txtRepoName.setTransitionName(ctx.getString(R.string.transit_repo_name) + position);
         vh.txtOwnerName.setText(model.getOwnerName());
         if (model.getOwnerName().equalsIgnoreCase(accountModel.getAccountName())) {
             vh.txtOwnerName.setTextColor(ctx.getResources().getColor(R.color.repo_own) | 0x88000000);
@@ -67,7 +68,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
         vh.txtWatchCount.setText(transformNumbers(model.getWatchersCount()));
         vh.itemRoot.setOnClickListener(view -> {
             if (listener != null) {
-                listener.onRepoClick(position);
+                listener.onRepoClick(vh, position);
             }
         });
     }
@@ -77,7 +78,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
         return repositories.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public class RepoViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.itemRoot)
         ViewGroup itemRoot;
         @Bind(R.id.imgLogoCircle)
@@ -87,7 +88,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
         @Bind(R.id.imgRepoLogo)
         ImageView imgRepoLogo;
         @Bind(R.id.txtRepoName)
-        TextView txtRepoName;
+        public TextView txtRepoName;
         @Bind(R.id.txtOwnerName)
         TextView txtOwnerName;
         @Bind(R.id.txtLanguage)
@@ -99,10 +100,10 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
         @Bind(R.id.txtWatchCount)
         TextView txtWatchCount;
 
-        ViewHolder(View v) {
+        RepoViewHolder(View v) {
             super(v);
 
-            ButterKnife.bind(ViewHolder.this, v);
+            ButterKnife.bind(RepoViewHolder.this, v);
         }
     }
 
@@ -136,6 +137,6 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
     }
 
     public interface RepoClickListener {
-        void onRepoClick(int position);
+        void onRepoClick(RepoViewHolder vh, int position);
     }
 }

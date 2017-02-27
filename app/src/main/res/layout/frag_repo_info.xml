@@ -58,6 +58,7 @@
             android:layout_centerVertical="true"
             android:ellipsize="end"
             android:maxLines="1"
+            android:transitionName="@string/transit_repo_name"
             android:text="Repository"
             android:textSize="18sp"/>
     </RelativeLayout>

@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -133,6 +134,21 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         Toast.makeText(ctx, th.toString(), Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onRepoClick(RepoListAdapter.RepoViewHolder holder, int position) {
+        if (position < repositories.size()) {
+            setExitTransition(new Fade());
+            String transName = ctx.getString(R.string.transit_repo_name) + position;
+            getActivity().getFragmentManager()
+                    .beginTransaction()
+                    .addSharedElement(holder.txtRepoName, transName)
+                    .replace(R.id.content_main, RepoInfoFragment.getInstance(repositories.get(position), transName))
+                    .commit();
+        } else {
+            // TODO handle this
+        }
+    }
+
     private void showListOrEmptyView(boolean showList) {
         if (showList) {
             refreshLayoutList.setVisibility(View.VISIBLE);
@@ -155,10 +171,6 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         presenter.attachView(this);
     }
 
-    @Override
-    public void onRepoClick(int position) {
-        getFragmentManager().beginTransaction().replace(R.id.content_main, new RepoInfoFragment()).commit();
-    }
 /*
     private List<RepoModel> getSampleList() {
         RepoModel model1 = new RepoModel();
