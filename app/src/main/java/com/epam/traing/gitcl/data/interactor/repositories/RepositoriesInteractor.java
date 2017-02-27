@@ -38,14 +38,6 @@ public class RepositoriesInteractor implements IRepositoriesInteractor {
     }
 
     @Override
-    public Observable<List<RepoModel>> subscribeReposChanges() {
-        return repoDao.subscribeReposChanges()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(changes -> repoDao.getRepositories());
-    }
-
-    @Override
     public Observable<List<RepoModel>> loadRepositories() {
         // TODO implement pagination ?
         return repoClient.getAccountRepositories()

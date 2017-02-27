@@ -11,8 +11,6 @@ import rx.Observable;
 public interface IAccountInteractor {
     Observable<AccountModel> reloadAccount(String accountName);
 
-    Observable<AccountModel> subscribeCurrentAccountChange();
-
     Observable<AccountModel> reloadCurrentAccount();
 
     Observable logOutAccount();

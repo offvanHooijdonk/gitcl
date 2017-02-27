@@ -43,13 +43,6 @@ public class AccountInteractor implements IAccountInteractor {
     }
 
     @Override
-    public Observable<AccountModel> subscribeCurrentAccountChange() {
-        return accountDao.subscribeAccountChange()
-                .flatMap(changes -> accountDao.findAccountByName(sessionHelper.getCurrentAccount().getAccountName()));
-        // do not store changes here as they are already stored
-    }
-
-    @Override
     public Observable<AccountModel> reloadCurrentAccount() {
         return userClient.getCurrentUserInfo()
                 .map(modelConverter::toAccountModel)
@@ -58,6 +51,7 @@ public class AccountInteractor implements IAccountInteractor {
 
     @Override
     public Observable logOutAccount() {
+        // TODO move this to presenter?
         sessionHelper.setCurrentAccount(null);
         prefHelper.setLoggedAccountName(null);
 

@@ -1,7 +1,6 @@
 package com.epam.traing.gitcl.db.dao;
 
 import com.epam.traing.gitcl.db.model.RepoModel;
-import com.pushtorefresh.storio.sqlite.Changes;
 
 import java.util.List;
 
@@ -13,8 +12,6 @@ import rx.Observable;
 
 public interface IRepoDao {
     Observable<List<RepoModel>> getRepositories();
-
-    Observable<Changes> subscribeReposChanges();
 
     void saveAll(List<RepoModel> models);
 

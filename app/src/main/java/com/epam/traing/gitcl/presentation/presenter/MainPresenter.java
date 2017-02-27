@@ -32,9 +32,7 @@ public class MainPresenter implements IMainPresenter {
 
     @Override
     public void onViewPrepare() {
-        subscribeAccountChange();
-
-        updateAccountInfo();
+       updateAccountInfo();
     }
 
     @Override
@@ -54,12 +52,6 @@ public class MainPresenter implements IMainPresenter {
     @Override
     public void onLogoutCanceled() {
         view.showLogoutDialog(false);
-    }
-
-    private void subscribeAccountChange() {
-        accountInteractor.subscribeCurrentAccountChange()
-                .subscribe(accountModel -> view.updateAccountInfo());
-
     }
 
     private void updateAccountInfo() {

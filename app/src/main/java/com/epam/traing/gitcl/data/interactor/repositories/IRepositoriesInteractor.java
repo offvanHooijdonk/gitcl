@@ -13,7 +13,5 @@ import rx.Observable;
 public interface IRepositoriesInteractor {
     Observable<List<RepoModel>> getRepositories();
 
-    Observable<List<RepoModel>> subscribeReposChanges();
-
     Observable<List<RepoModel>> loadRepositories();
 }

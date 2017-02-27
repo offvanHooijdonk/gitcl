@@ -2,7 +2,6 @@ package com.epam.traing.gitcl.db.dao;
 
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.tables.AccountTable;
-import com.pushtorefresh.storio.sqlite.Changes;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -31,11 +30,6 @@ public class AccountDao implements IAccountDao {
     @Override
     public void saveAccount(AccountModel accountModel) {
         storIOSQLite.put().object(accountModel).prepare().executeAsBlocking();
-    }
-
-    @Override
-    public Observable<Changes> subscribeAccountChange() {
-        return storIOSQLite.observeChangesInTable(AccountTable.TABLE);
     }
 
 }

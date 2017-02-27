@@ -2,7 +2,6 @@ package com.epam.traing.gitcl.db.dao;
 
 import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.db.tables.RepoTable;
-import com.pushtorefresh.storio.sqlite.Changes;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -32,11 +31,6 @@ public class RepoDao implements IRepoDao {
                 .withQuery(Query.builder()
                         .table(RepoTable.TABLE).build())
                 .prepare().asRxObservable();
-    }
-
-    @Override
-    public Observable<Changes> subscribeReposChanges() {
-        return sqLite.observeChangesInTable(RepoTable.TABLE);
     }
 
     @Override

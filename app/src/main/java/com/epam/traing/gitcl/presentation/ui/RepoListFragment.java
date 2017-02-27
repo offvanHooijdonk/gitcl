@@ -4,9 +4,12 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +48,12 @@ public class RepoListFragment extends Fragment implements IRepoListView {
     RecyclerView lstRepos;
     @Bind(R.id.emptyListPlaceholder)
     View viewEmptyList;
-    @Bind(R.id.swipeRefreshLayout)
-    SwipeRefreshLayout refreshLayout;
+    @Bind(R.id.srlList)
+    SwipeRefreshLayout refreshLayoutList;
+    @Bind(R.id.srlEmpty)
+    SwipeRefreshLayout refreshLayoutEmpty;
+    @Bind(R.id.fabCreateRepo)
+    FloatingActionButton fab;
 
     private List<RepoModel> repositories = new ArrayList<>();
     private RepoListAdapter repoListAdapter;
@@ -66,24 +73,41 @@ public class RepoListFragment extends Fragment implements IRepoListView {
         ctx = getActivity();
 
         getActivity().setTitle(getString(R.string.title_repos));
-        lstRepos.setVisibility(View.VISIBLE);
-        viewEmptyList.setVisibility(View.GONE);
-        refreshLayout.setColorSchemeColors(ctx.getResources().getColor(R.color.refresh1),
-                ctx.getResources().getColor(R.color.refresh2),
-                ctx.getResources().getColor(R.color.refresh3));
-        refreshLayout.setOnRefreshListener(() -> presenter.onRefreshTriggered());
+        initRefreshLayout(refreshLayoutList);
+        initRefreshLayout(refreshLayoutEmpty);
+        refreshLayoutList.setVisibility(View.VISIBLE);
+        refreshLayoutEmpty.setVisibility(View.GONE);
+
 
         lstRepos.setLayoutManager(new LinearLayoutManager(ctx));
         lstRepos.setHasFixedSize(true);
         repositories.clear();
-        repositories.addAll(getSampleList());
         repoListAdapter = new RepoListAdapter(ctx, repositories, session.getCurrentAccount());
         lstRepos.setAdapter(repoListAdapter);
+        lstRepos.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    fab.hide();
+                } else {
+                    fab.show();
+                }
+            }
+        });
+        fab.setOnClickListener(view -> Snackbar.make(fab, "No", Snackbar.LENGTH_SHORT).show());
 
-        presenter.onViewCreate();
         // TODO refactor colors names!
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Log.i(Application.LOG, "onResume Repo List");
+        presenter.onViewShows();
     }
 
     @Override
@@ -92,28 +116,38 @@ public class RepoListFragment extends Fragment implements IRepoListView {
         if (!repoModels.isEmpty()) {
             this.repositories.clear();
             this.repositories.addAll(repoModels);
+            Log.i(Application.LOG, "Updating repos on UI");
             repoListAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void showRefreshProgress(boolean show) {
-        refreshLayout.setRefreshing(show);
+        refreshLayoutList.setRefreshing(show);
+        refreshLayoutEmpty.setRefreshing(show);
     }
 
     @Override
     public void displayError(Throwable th) {
+        Log.e(Application.LOG, "Error on repos", th);
         Toast.makeText(ctx, th.toString(), Toast.LENGTH_LONG).show();
     }
 
     private void showListOrEmptyView(boolean showList) {
         if (showList) {
-            lstRepos.setVisibility(View.VISIBLE);
-            viewEmptyList.setVisibility(View.GONE);
+            refreshLayoutList.setVisibility(View.VISIBLE);
+            refreshLayoutEmpty.setVisibility(View.GONE);
         } else {
-            lstRepos.setVisibility(View.GONE);
-            viewEmptyList.setVisibility(View.VISIBLE);
+            refreshLayoutList.setVisibility(View.GONE);
+            refreshLayoutEmpty.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void initRefreshLayout(SwipeRefreshLayout srl) {
+        srl.setColorSchemeColors(ctx.getResources().getColor(R.color.refresh1),
+                ctx.getResources().getColor(R.color.refresh2),
+                ctx.getResources().getColor(R.color.refresh3));
+        srl.setOnRefreshListener(() -> presenter.onRefreshTriggered());
     }
 
     private void injectComponent() {

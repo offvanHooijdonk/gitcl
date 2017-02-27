@@ -28,11 +28,8 @@ public class RepoListPresenter implements IRepoListPresenter {
     }
 
     @Override
-    public void onViewCreate() {
+    public void onViewShows() {
         getReposFromDB();
-
-        reposInteractor.subscribeReposChanges()
-                .subscribe(this::onReposUpdated, this::onError);
         // TODO decide if need update Repos at the moment and update if so
     }
 
@@ -48,8 +45,7 @@ public class RepoListPresenter implements IRepoListPresenter {
 
     private void getReposFromDB() {
         reposInteractor.getRepositories()
-                .doOnNext(this::onReposUpdated)
-                .subscribe(repoModels -> {}, this::onError);
+                .subscribe(this::onReposUpdated, this::onError);
     }
 
     private void onReposUpdated(List<RepoModel> repoModels) {

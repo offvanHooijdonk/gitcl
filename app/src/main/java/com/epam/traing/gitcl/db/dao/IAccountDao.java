@@ -1,7 +1,6 @@
 package com.epam.traing.gitcl.db.dao;
 
 import com.epam.traing.gitcl.db.model.AccountModel;
-import com.pushtorefresh.storio.sqlite.Changes;
 
 import rx.Observable;
 
@@ -13,6 +12,4 @@ public interface IAccountDao {
     Observable<AccountModel> findAccountByName(String accountName);
 
     void saveAccount(AccountModel accountModel);
-
-    Observable<Changes> subscribeAccountChange();
 }
