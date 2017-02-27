@@ -1,6 +1,7 @@
 package com.epam.traing.gitcl.presentation.ui.adapter;
 
 import android.content.Context;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +55,10 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
         vh.txtRepoName.setText(model.getName());
         vh.txtOwnerName.setText(model.getOwnerName());
         if (model.getOwnerName().equalsIgnoreCase(accountModel.getAccountName())) {
-            vh.txtOwnerName.setTextColor(ctx.getResources().getColor(R.color.colorPrimaryDark) | 0x88000000);
+            vh.txtOwnerName.setTextColor(ctx.getResources().getColor(R.color.repo_own) | 0x88000000);
+            DrawableCompat.wrap(vh.imgLogoCircle.getDrawable()).setTint(ctx.getResources().getColor(R.color.repo_own));
+        } else {
+            DrawableCompat.wrap(vh.imgLogoCircle.getDrawable()).setTint(ctx.getResources().getColor(R.color.repo_not_own));
         }
         vh.txtLanguage.setText(model.getLanguage());
         vh.txtForksCount.setText(transformNumbers(model.getForksCount()));
@@ -73,6 +77,8 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.itemRoot)
         ViewGroup itemRoot;
+        @Bind(R.id.imgLogoCircle)
+        ImageView imgLogoCircle;
         @Bind(R.id.imgForkLogo)
         ImageView imgForkLogo;
         @Bind(R.id.imgRepoLogo)

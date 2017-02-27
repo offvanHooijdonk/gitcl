@@ -19,7 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginEnd="@dimen/list_item_padding_hor"
         android:src="@drawable/circle"
-        android:tint="@color/colorPrimary"/>
+        android:tint="@color/repo_own"/>
 
     <ImageView
         android:id="@+id/imgForkLogo"
@@ -58,7 +58,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Repo name and so goes it further"
-        android:textColor="@android:color/primary_text_light"
+        android:textColor="@color/repo_list_name"
         android:textSize="@dimen/list_item_primary"/>
 
     <TextView
@@ -115,7 +115,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_watch_24"
-            android:tint="@color/md_grey_600"/>
+            android:tint="@color/badge_disabled"/>
 
         <TextView
             android:id="@+id/txtWatchCount"
@@ -123,7 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="120k"
-            android:textColor="@color/md_grey_600"
+            android:textColor="@color/badge_disabled"
             android:textSize="12sp"/>
     </LinearLayout>
 
@@ -143,7 +143,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_star_24dp"
-            android:tint="@color/md_grey_600"/>
+            android:tint="@color/badge_disabled"/>
 
         <TextView
             android:id="@+id/txtStarsCount"
@@ -151,7 +151,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="23"
-            android:textColor="@color/md_grey_600"
+            android:textColor="@color/badge_disabled"
             android:textSize="12sp"/>
     </LinearLayout>
 
