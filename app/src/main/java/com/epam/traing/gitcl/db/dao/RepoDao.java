@@ -29,7 +29,7 @@ public class RepoDao implements IRepoDao {
         return sqLite.get()
                 .listOfObjects(RepoModel.class)
                 .withQuery(Query.builder()
-                        .table(RepoTable.TABLE).build())
+                        .table(RepoTable.TABLE).orderBy(RepoTable.COLUMN_NAME).build())
                 .prepare().asRxObservable();
     }
 
