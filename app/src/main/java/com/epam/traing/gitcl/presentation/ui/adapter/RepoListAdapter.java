@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.db.model.AccountModel;
@@ -27,6 +26,8 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
     private Context ctx;
     private List<RepoModel> repositories;
     private AccountModel accountModel;
+    private RepoClickListener listener;
+
 
     public RepoListAdapter(Context context, List<RepoModel> repositories, AccountModel accountModel) {
         this.ctx = context;
@@ -65,7 +66,9 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
         vh.txtStarsCount.setText(transformNumbers(model.getStargazersCount()));
         vh.txtWatchCount.setText(transformNumbers(model.getWatchersCount()));
         vh.itemRoot.setOnClickListener(view -> {
-            Toast.makeText(ctx, "Clicked", Toast.LENGTH_LONG).show();
+            if (listener != null) {
+                listener.onRepoClick(position);
+            }
         });
     }
 
@@ -103,6 +106,10 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
         }
     }
 
+    public void setClickListener(RepoClickListener l) {
+        this.listener = l;
+    }
+
     private static String transformNumbers(long number) {
         int grade = (String.valueOf(number).length() - 1) / 3;
         int topGradeNumber = (int) (number / Math.pow(10, 3 * grade));
@@ -126,5 +133,9 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
         result += gradeSign;
 
         return result;
+    }
+
+    public interface RepoClickListener {
+        void onRepoClick(int position);
     }
 }

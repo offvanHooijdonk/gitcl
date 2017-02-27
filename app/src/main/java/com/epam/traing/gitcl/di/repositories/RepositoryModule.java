@@ -8,6 +8,8 @@ import com.epam.traing.gitcl.db.dao.RepoDao;
 import com.epam.traing.gitcl.network.GitHubRepoClient;
 import com.epam.traing.gitcl.presentation.presenter.IRepoListPresenter;
 import com.epam.traing.gitcl.presentation.presenter.RepoListPresenter;
+import com.epam.traing.gitcl.presentation.ui.IRepoInfoPresenter;
+import com.epam.traing.gitcl.presentation.ui.RepoInfoPresenter;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import javax.inject.Named;
@@ -27,6 +29,12 @@ public class RepositoryModule {
     @RepositoryScope
     IRepoListPresenter provideRepoListPresenter(IRepositoriesInteractor repositoriesInteractor) {
         return new RepoListPresenter(repositoriesInteractor);
+    }
+
+    @Provides
+    @RepositoryScope
+    IRepoInfoPresenter provideRepoInfoPresenter(IRepositoriesInteractor repositoriesInteractor) {
+        return new RepoInfoPresenter(repositoriesInteractor);
     }
 
     @Provides

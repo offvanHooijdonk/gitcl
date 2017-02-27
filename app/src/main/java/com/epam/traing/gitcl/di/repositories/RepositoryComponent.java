@@ -1,6 +1,7 @@
 package com.epam.traing.gitcl.di.repositories;
 
 import com.epam.traing.gitcl.presentation.ui.RepoListFragment;
+import com.epam.traing.gitcl.presentation.ui.RepoInfoFragment;
 
 import dagger.Subcomponent;
 
@@ -12,4 +13,5 @@ import dagger.Subcomponent;
 @RepositoryScope
 public interface RepositoryComponent {
     void inject(RepoListFragment repoListFragment);
+    void inject(RepoInfoFragment repoInfoFragment);
 }

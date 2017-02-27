@@ -23,7 +23,6 @@ import com.epam.traing.gitcl.presentation.presenter.IRepoListPresenter;
 import com.epam.traing.gitcl.presentation.ui.adapter.RepoListAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,7 +34,7 @@ import butterknife.ButterKnife;
  * Created by Yahor_Fralou on 2/21/2017 5:40 PM.
  */
 
-public class RepoListFragment extends Fragment implements IRepoListView {
+public class RepoListFragment extends Fragment implements IRepoListView, RepoListAdapter.RepoClickListener {
 
     @Inject
     IRepoListPresenter presenter;
@@ -83,6 +82,7 @@ public class RepoListFragment extends Fragment implements IRepoListView {
         lstRepos.setHasFixedSize(true);
         repositories.clear();
         repoListAdapter = new RepoListAdapter(ctx, repositories, session.getCurrentAccount());
+        repoListAdapter.setClickListener(this);
         lstRepos.setAdapter(repoListAdapter);
         lstRepos.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -97,7 +97,7 @@ public class RepoListFragment extends Fragment implements IRepoListView {
         });
         fab.setOnClickListener(view -> Snackbar.make(fab, "No", Snackbar.LENGTH_SHORT).show());
 
-        // TODO refactor colors names!
+        // TODO refactor sizes!
 
         return v;
     }
@@ -155,6 +155,11 @@ public class RepoListFragment extends Fragment implements IRepoListView {
         presenter.attachView(this);
     }
 
+    @Override
+    public void onRepoClick(int position) {
+        getFragmentManager().beginTransaction().replace(R.id.content_main, new RepoInfoFragment()).commit();
+    }
+/*
     private List<RepoModel> getSampleList() {
         RepoModel model1 = new RepoModel();
         model1.setId(22);
@@ -179,5 +184,5 @@ public class RepoListFragment extends Fragment implements IRepoListView {
         model2.setLanguage("PHP");
 
         return Arrays.asList(model1, model2);
-    }
+    }*/
 }
