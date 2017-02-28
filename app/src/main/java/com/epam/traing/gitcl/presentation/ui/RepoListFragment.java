@@ -143,6 +143,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
                     .beginTransaction()
                     .addSharedElement(holder.txtRepoName, transName)
                     .replace(R.id.content_main, RepoInfoFragment.getInstance(repositories.get(position), transName))
+                    .addToBackStack(null)
                     .commit();
         } else {
             // TODO handle this

@@ -3,11 +3,7 @@ package com.epam.traing.gitcl.presentation.ui;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.TextViewCompat;
-import android.transition.AutoTransition;
-import android.transition.ChangeBounds;
 import android.transition.Fade;
-import android.transition.Transition;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +12,7 @@ import android.widget.TextView;
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.presentation.ui.animation.InfoTransition;
 
 import javax.inject.Inject;
 
@@ -42,8 +39,8 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         fragment.setRepoModel(repoModel);
         fragment.setTransName(transName);
 
-        fragment.setSharedElementEnterTransition(new ChangeBounds());
-        fragment.setSharedElementReturnTransition(new ChangeBounds());
+        fragment.setSharedElementEnterTransition(new InfoTransition());
+        fragment.setSharedElementReturnTransition(new InfoTransition());
         fragment.setEnterTransition(new Fade());
         return fragment;
     }
