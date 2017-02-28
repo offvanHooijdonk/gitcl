@@ -69,7 +69,15 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         if (v == null) {
             v = inflater.inflate(R.layout.frag_repo_list, container, false);
         }
-        ButterKnife.bind(this, v);
+
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ButterKnife.bind(this, view);
         ctx = getActivity();
 
         getActivity().setTitle(getString(R.string.title_repos));
@@ -77,7 +85,6 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         initRefreshLayout(refreshLayoutEmpty);
         refreshLayoutList.setVisibility(View.VISIBLE);
         refreshLayoutEmpty.setVisibility(View.GONE);
-
 
         lstRepos.setLayoutManager(new LinearLayoutManager(ctx));
         lstRepos.setHasFixedSize(true);
@@ -96,19 +103,10 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
                 }
             }
         });
-        fab.setOnClickListener(view -> Snackbar.make(fab, "No", Snackbar.LENGTH_SHORT).show());
+        fab.setOnClickListener(fabView -> Snackbar.make(fab, "No", Snackbar.LENGTH_SHORT).show());
 
-        // TODO refactor sizes!
-
-        return v;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        Log.i(Application.LOG, "onResume Repo List");
         presenter.onViewShows();
+
     }
 
     @Override
@@ -137,13 +135,13 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     @Override
     public void onRepoClick(RepoListAdapter.RepoViewHolder holder, int position) {
         if (position < repositories.size()) {
-            String transName = holder.txtRepoName.getTransitionName();
             setEnterTransition(new Fade());
             setExitTransition(new Fade());
             getActivity().getFragmentManager()
                     .beginTransaction()
-                    .addSharedElement(holder.txtRepoName, transName)
-                    .replace(R.id.content_main, RepoInfoFragment.getInstance(repositories.get(position), transName))
+                    .addSharedElement(holder.txtRepoName, ctx.getString(R.string.transit_repo_name))
+                    .add(R.id.content_main, RepoInfoFragment.getInstance(repositories.get(position)))
+                    .hide(this)
                     .addToBackStack(null)
                     .commit();
         } else {

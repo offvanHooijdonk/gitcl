@@ -21,9 +21,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginEnd="@dimen/list_item_padding_hor"
-            app:iconSize="40dp"
+            app:iconSize="@dimen/repo_info_icon"
             app:isOwn="true"
-            app:privateIconSize="14dp"/>
+            app:privateIconSize="@dimen/repo_info_private"/>
 
         <TextView
             android:id="@+id/txtRepoName"
@@ -34,7 +34,8 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Repository"
-            android:textSize="38sp"/>
+            android:transitionName="@string/transit_repo_name"
+            android:textSize="18sp"/>
     </RelativeLayout>
 
 </RelativeLayout>

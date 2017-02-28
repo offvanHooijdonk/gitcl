@@ -29,15 +29,13 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     IRepoInfoPresenter presenter;
 
     private RepoModel repoModel;
-    private String transName;
 
     @Bind(R.id.txtRepoName)
     TextView txtRepoName;
 
-    public static RepoInfoFragment getInstance(RepoModel repoModel, String transName) {
+    public static RepoInfoFragment getInstance(RepoModel repoModel) {
         RepoInfoFragment fragment = new RepoInfoFragment();
         fragment.setRepoModel(repoModel);
-        fragment.setTransName(transName);
 
         fragment.setSharedElementEnterTransition(new InfoTransition());
         fragment.setSharedElementReturnTransition(new InfoTransition());
@@ -60,17 +58,12 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         ButterKnife.bind(this, v);
 
         txtRepoName.setText(repoModel.getName());
-        txtRepoName.setTransitionName(transName);
 
         return v;
     }
 
     private void setRepoModel(RepoModel repoModel) {
         this.repoModel = repoModel;
-    }
-
-    private void setTransName(String transName) {
-        this.transName = transName;
     }
 
     private void injectComponent() {

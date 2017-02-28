@@ -17,4 +17,8 @@
     <dimen name="list_item_padding_hor">16dp</dimen>
     <dimen name="list_item_padding_vert">8dp</dimen>
     <dimen name="list_item_primary">16sp</dimen>
+    <dimen name="repo_list_icon">40dp</dimen>
+    <dimen name="repo_list_private">14dp</dimen>
+    <dimen name="repo_info_icon">40dp</dimen>
+    <dimen name="repo_info_private">14dp</dimen>
 </resources>

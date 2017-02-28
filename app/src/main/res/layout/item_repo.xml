@@ -19,9 +19,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="@dimen/list_item_padding_hor"
-        app:iconSize="40dp"
+        app:iconSize="@dimen/repo_list_icon"
         app:isOwn="true"
-        app:privateIconSize="14dp"/>
+        app:privateIconSize="@dimen/repo_list_private"/>
 
     <TextView
         android:id="@+id/txtRepoName"
