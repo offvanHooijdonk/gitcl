@@ -34,7 +34,9 @@ public class RepositoriesInteractor implements IRepositoriesInteractor {
 
     @Override
     public Observable<List<RepoModel>> getRepositories() {
-        return repoDao.getRepositories();
+        return repoDao.getRepositories()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override

@@ -17,7 +17,8 @@
     <color name="refresh3">@color/colorPrimary</color>
 
     <color name="repo_own">@color/colorPrimary</color>
-    <color name="repo_not_own">@color/colorAccent</color>
+    <!--<color name="repo_not_own">@color/colorAccent</color>-->
+    <color name="repo_not_own">#CC000000</color>
     <color name="repo_list_name">@android:color/primary_text_light</color>
     <color name="badge_disabled">#000000</color>
     <color name="badge_inactive">@color/md_grey_600</color>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RepoIconView">
+        <attr name="iconSize" format="dimension"/>
+        <attr name="privateIconSize" format="dimension"/>
+        <attr name="repoType" format="enum">
+            <enum name="repo" value="0"/>
+            <enum name="fork" value="1"/>
+        </attr>
+        <attr name="privateRepo" format="boolean"/>
+        <attr name="isOwn" format="boolean"/>
+    </declare-styleable>
+
+</resources>

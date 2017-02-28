@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imgIconCircle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/circle"
+        android:tint="@color/repo_own"/>
+
+    <ImageView
+        android:id="@+id/imgForkIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/imgIconCircle"
+        android:layout_alignEnd="@id/imgIconCircle"
+        android:layout_alignStart="@id/imgIconCircle"
+        android:layout_alignTop="@id/imgIconCircle"
+        android:padding="4dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_fork_32"
+        android:tint="@color/md_white_1000"/>
+
+    <ImageView
+        android:id="@+id/imgRepoIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/imgIconCircle"
+        android:layout_alignEnd="@id/imgIconCircle"
+        android:layout_alignStart="@id/imgIconCircle"
+        android:layout_alignTop="@id/imgIconCircle"
+        android:padding="4dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_repo_32"
+        android:tint="@color/md_white_1000"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/imgPrivateCircle"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_alignBottom="@id/imgIconCircle"
+        android:layout_alignEnd="@id/imgIconCircle"
+        android:src="@drawable/circle"/>
+
+    <ImageView
+        android:id="@+id/imgPrivateIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/imgPrivateCircle"
+        android:layout_alignEnd="@id/imgPrivateCircle"
+        android:layout_alignStart="@id/imgPrivateCircle"
+        android:layout_alignTop="@id/imgPrivateCircle"
+        android:padding="2dp"
+        android:src="@drawable/ic_lock_24"/>
+
+</RelativeLayout>

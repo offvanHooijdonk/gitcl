@@ -137,8 +137,9 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     @Override
     public void onRepoClick(RepoListAdapter.RepoViewHolder holder, int position) {
         if (position < repositories.size()) {
+            String transName = holder.txtRepoName.getTransitionName();
+            setEnterTransition(new Fade());
             setExitTransition(new Fade());
-            String transName = ctx.getString(R.string.transit_repo_name) + position;
             getActivity().getFragmentManager()
                     .beginTransaction()
                     .addSharedElement(holder.txtRepoName, transName)

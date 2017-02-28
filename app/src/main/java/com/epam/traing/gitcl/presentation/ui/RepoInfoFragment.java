@@ -42,6 +42,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         fragment.setSharedElementEnterTransition(new InfoTransition());
         fragment.setSharedElementReturnTransition(new InfoTransition());
         fragment.setEnterTransition(new Fade());
+        fragment.setExitTransition(new Fade());
         return fragment;
     }
 

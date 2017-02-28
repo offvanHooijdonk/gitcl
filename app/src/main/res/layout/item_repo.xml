@@ -2,6 +2,7 @@
 <RelativeLayout
     android:id="@+id/itemRoot"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
@@ -11,49 +12,23 @@
     android:paddingStart="@dimen/list_item_padding_hor"
     android:paddingTop="@dimen/list_item_padding_vert">
 
-    <ImageView
-        android:id="@+id/imgLogoCircle"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+    <com.epam.traing.gitcl.presentation.ui.view.RepoIconView
+        android:id="@+id/repoIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="@dimen/list_item_padding_hor"
-        android:src="@drawable/circle"
-        android:tint="@color/repo_own"/>
-
-    <ImageView
-        android:id="@+id/imgForkLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/imgLogoCircle"
-        android:layout_alignEnd="@id/imgLogoCircle"
-        android:layout_alignStart="@id/imgLogoCircle"
-        android:layout_alignTop="@id/imgLogoCircle"
-        android:padding="4dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_fork_32"
-        android:tint="@color/md_white_1000"/>
-
-    <ImageView
-        android:id="@+id/imgRepoLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/imgLogoCircle"
-        android:layout_alignEnd="@id/imgLogoCircle"
-        android:layout_alignStart="@id/imgLogoCircle"
-        android:layout_alignTop="@id/imgLogoCircle"
-        android:padding="4dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_repo_32"
-        android:tint="@color/md_white_1000"
-        android:visibility="gone"/>
+        app:iconSize="40dp"
+        app:isOwn="true"
+        app:privateIconSize="14dp"/>
 
     <TextView
         android:id="@+id/txtRepoName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/imgLogoCircle"
-        android:layout_toEndOf="@id/imgLogoCircle"
+        android:layout_alignTop="@id/repoIcon"
+        android:layout_toEndOf="@id/repoIcon"
         android:layout_toStartOf="@+id/blockStar"
         android:ellipsize="end"
         android:maxLines="1"
@@ -65,7 +40,7 @@
         android:id="@+id/txtOwnerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/imgLogoCircle"
+        android:layout_alignBottom="@id/repoIcon"
         android:layout_alignEnd="@id/txtRepoName"
         android:layout_alignStart="@id/txtRepoName"
         android:ellipsize="end"
