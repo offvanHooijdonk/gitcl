@@ -5,6 +5,7 @@ import com.epam.traing.gitcl.data.interactor.repositories.IRepositoriesInteracto
 import com.epam.traing.gitcl.data.interactor.repositories.RepositoriesInteractor;
 import com.epam.traing.gitcl.db.dao.IRepoDao;
 import com.epam.traing.gitcl.db.dao.RepoDao;
+import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.network.GitHubRepoClient;
 import com.epam.traing.gitcl.presentation.presenter.IRepoListPresenter;
 import com.epam.traing.gitcl.presentation.presenter.RepoListPresenter;
@@ -27,8 +28,8 @@ public class RepositoryModule {
 
     @Provides
     @RepositoryScope
-    IRepoListPresenter provideRepoListPresenter(IRepositoriesInteractor repositoriesInteractor) {
-        return new RepoListPresenter(repositoriesInteractor);
+    IRepoListPresenter provideRepoListPresenter(IRepositoriesInteractor repositoriesInteractor, PrefHelper prefHelper) {
+        return new RepoListPresenter(repositoriesInteractor, prefHelper);
     }
 
     @Provides

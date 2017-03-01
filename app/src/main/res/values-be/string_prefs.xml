@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_repo_update_time_key">pref_repo_update_time</string>
+    <string name="pref_repo_update_time_title">Repo list update interval</string>
+    <string name="pref_repo_update_time_summary">Time from last update when repositories should be updated again</string>
+    <array name="pref_repo_update_time_entries">
+        <item>10m</item>
+        <item>15m</item>
+        <item>30m</item>
+        <item>1h</item>
+        <item>3h</item>
+        <item>6h</item>
+        <item>Never</item>
+    </array>
+</resources>

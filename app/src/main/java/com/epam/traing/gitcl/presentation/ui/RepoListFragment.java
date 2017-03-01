@@ -12,6 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -69,6 +72,9 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         if (v == null) {
             v = inflater.inflate(R.layout.frag_repo_list, container, false);
         }
+        ButterKnife.bind(this, v);
+
+        setHasOptionsMenu(true);
 
         return v;
     }
@@ -77,7 +83,6 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ButterKnife.bind(this, view);
         ctx = getActivity();
 
         getActivity().setTitle(getString(R.string.title_repos));
@@ -145,8 +150,23 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
                     .addToBackStack(null)
                     .commit();
         } else {
-            // TODO handle this
+            Toast.makeText(ctx, R.string.err_position_out_of_bounds, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.repo_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_refresh) {
+            presenter.onRefreshTriggered();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void showListOrEmptyView(boolean showList) {
@@ -171,30 +191,4 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         presenter.attachView(this);
     }
 
-/*
-    private List<RepoModel> getSampleList() {
-        RepoModel model1 = new RepoModel();
-        model1.setId(22);
-        model1.setName("Samplereposit");
-        model1.setOwnerName("johndoe");
-        model1.setPrivateRepo(true);
-        model1.setFork(true);
-        model1.setStargazersCount(2930);
-        model1.setWatchersCount(627);
-        model1.setForksCount(46);
-        model1.setLanguage("Java");
-
-        RepoModel model2 = new RepoModel();
-        model2.setId(245);
-        model2.setName("Newfreshrepo");
-        model2.setOwnerName("offvanhooijdonk");
-        model2.setPrivateRepo(false);
-        model2.setFork(false);
-        model2.setStargazersCount(185);
-        model2.setWatchersCount(41095);
-        model2.setForksCount(53);
-        model2.setLanguage("PHP");
-
-        return Arrays.asList(model1, model2);
-    }*/
 }

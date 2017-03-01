@@ -38,14 +38,13 @@
             -->
         </activity>
 
-        <!--<service android:name="">
+        <activity android:name=".presentation.ui.PreferenceActivity"
+                  android:theme="@style/AppBaseTheme.Preferences"
+            android:parentActivityName=".presentation.ui.MainActivity">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
+                <category android:name="android.intent.category.PREFERENCE"/>
             </intent-filter>
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator"/>
-        </service>-->
+        </activity>
     </application>
 
 </manifest>

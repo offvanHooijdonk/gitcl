@@ -26,4 +26,6 @@
     <string name="action_search">Search</string>
     <string name="title_repos">Repositories</string>
     <string name="transit_repo_name">transit_repo_name</string>
+    <string name="err_position_out_of_bounds">Did not find clicked item :(</string>
+    <string name="action_refresh">Refresh</string>
 </resources>

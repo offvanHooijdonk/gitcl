@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_repo_update_time_key">pref_repo_update_time</string>
+    <string name="pref_repo_update_time_title">Интервал обновления репозиториев</string>
+    <string name="pref_repo_update_time_summary">Время с последнего обновления репозиториев</string>
+    <array name="pref_repo_update_time_entries">
+        <item>10м</item>
+        <item>15м</item>
+        <item>30м</item>
+        <item>1ч</item>
+        <item>3ч</item>
+        <item>6ч</item>
+        <item>Никогда</item>
+    </array>
+</resources>
