@@ -51,6 +51,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
 
         vh.repoIcon.setRepoType(model.isFork() ? TYPE_FORK : TYPE_REPO);
         vh.repoIcon.setPrivateRepo(model.isPrivateRepo());
+        vh.repoIcon.setTransitionName(ctx.getString(R.string.transit_repo_icon) + position);
 
         vh.txtOwnerName.setText(model.getOwnerName());
         if (model.getOwnerName().equalsIgnoreCase(accountModel.getAccountName())) {
@@ -79,7 +80,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
         @Bind(R.id.itemRoot)
         ViewGroup itemRoot;
         @Bind(R.id.repoIcon)
-        RepoIconView repoIcon;
+        public RepoIconView repoIcon;
         @Bind(R.id.txtRepoName)
         public TextView txtRepoName;
         @Bind(R.id.txtOwnerName)

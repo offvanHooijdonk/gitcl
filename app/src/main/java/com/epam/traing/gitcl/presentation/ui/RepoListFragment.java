@@ -115,6 +115,15 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+        if (!hidden) {
+            getActivity().setTitle(getString(R.string.title_repos));
+        }
+    }
+
+    @Override
     public void updateRepoList(List<RepoModel> repoModels) {
         showListOrEmptyView(!repoModels.isEmpty());
         if (!repoModels.isEmpty()) {
@@ -158,6 +167,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
             getActivity().getFragmentManager()
                     .beginTransaction()
                     .addSharedElement(holder.txtRepoName, ctx.getString(R.string.transit_repo_name))
+                    .addSharedElement(holder.repoIcon, ctx.getString(R.string.transit_repo_icon))
                     .add(R.id.content_main, RepoInfoFragment.getInstance(repositories.get(position)))
                     .hide(this)
                     .addToBackStack(null)
