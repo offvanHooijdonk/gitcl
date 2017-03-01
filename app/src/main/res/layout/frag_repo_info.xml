@@ -1,42 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/cardview_default_elevation">
 
-        <com.epam.traing.gitcl.presentation.ui.view.RepoIconView
-            android:id="@+id/repoIcon"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="@dimen/list_item_padding_hor"
-            android:transitionName="@string/transit_repo_icon"
-            app:iconSize="@dimen/repo_info_icon"
-            app:isOwn="true"
-            app:privateIconSize="@dimen/repo_info_private"/>
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
-        <TextView
-            android:id="@+id/txtRepoName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/repoIcon"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Repository"
-            android:transitionName="@string/transit_repo_name"
-            android:textSize="18sp"/>
-    </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/blockRepo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true">
 
-</RelativeLayout>
+                <com.epam.traing.gitcl.presentation.ui.view.RepoIconView
+                    android:id="@+id/repoIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/list_item_padding_hor"
+                    android:transitionName="@string/transit_repo_icon"
+                    app:iconSize="@dimen/repo_info_icon"
+                    app:isOwn="true"
+                    app:privateIconSize="@dimen/repo_info_private"/>
+
+                <TextView
+                    android:id="@+id/txtRepoName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Repository"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="18sp"
+                    android:transitionName="@string/transit_repo_name"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/blockRepo"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginTop="8dp">
+
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/imgOwnerPhoto"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="@dimen/list_item_padding_hor"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/drawer_bkgr_image_fade_light"
+                    app:civ_border="false"/>
+
+                <TextView
+                    android:id="@+id/txtOwnerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="Ownername"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+</ScrollView>
