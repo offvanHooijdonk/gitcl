@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.transition.Fade;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -79,6 +82,16 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         repoIcon.setPrivateRepo(repoModel.isPrivateRepo());
         repoIcon.setRepoType(repoModel.isFork() ? TYPE_FORK : TYPE_REPO);
         repoIcon.setIsOwn(repoModel.getOwnerName().equalsIgnoreCase(session.getCurrentAccount().getAccountName()));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        if (searchItem != null) {
+            searchItem.setVisible(false);
+        }
     }
 
     private void setRepoModel(RepoModel repoModel) {
