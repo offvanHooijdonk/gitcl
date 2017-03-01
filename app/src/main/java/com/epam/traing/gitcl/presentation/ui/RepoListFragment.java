@@ -127,8 +127,21 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
 
     @Override
     public void showRefreshProgress(boolean show) {
-        refreshLayoutList.setRefreshing(show);
-        refreshLayoutEmpty.setRefreshing(show);
+        if (show) {
+            if (!refreshLayoutList.isRefreshing()) {
+                refreshLayoutList.setRefreshing(true);
+            }
+            if (!refreshLayoutEmpty.isRefreshing()) {
+                refreshLayoutEmpty.setRefreshing(true);
+            }
+        } else {
+            if (refreshLayoutList.isRefreshing()) {
+                refreshLayoutList.setRefreshing(false);
+            }
+            if (refreshLayoutEmpty.isRefreshing()) {
+                refreshLayoutEmpty.setRefreshing(false);
+            }
+        }
     }
 
     @Override
