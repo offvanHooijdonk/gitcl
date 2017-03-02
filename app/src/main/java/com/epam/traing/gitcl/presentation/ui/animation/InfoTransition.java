@@ -12,6 +12,7 @@ import android.util.AttributeSet;
  */
 
 public class InfoTransition extends TransitionSet {
+    public static final int DURATION = 500;
     public InfoTransition() {
         init();
     }
@@ -22,6 +23,7 @@ public class InfoTransition extends TransitionSet {
     }
 
     private void init() {
+        setDuration(500);
         setOrdering(ORDERING_TOGETHER);
         addTransition(new ChangeBounds()).
                 addTransition(new ChangeTransform()).

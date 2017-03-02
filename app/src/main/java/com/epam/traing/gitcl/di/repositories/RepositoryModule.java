@@ -1,6 +1,7 @@
 package com.epam.traing.gitcl.di.repositories;
 
 import com.epam.traing.gitcl.data.converter.ModelConverter;
+import com.epam.traing.gitcl.data.interactor.account.IAccountInteractor;
 import com.epam.traing.gitcl.data.interactor.repositories.IRepositoriesInteractor;
 import com.epam.traing.gitcl.data.interactor.repositories.RepositoriesInteractor;
 import com.epam.traing.gitcl.db.dao.IRepoDao;
@@ -34,8 +35,8 @@ public class RepositoryModule {
 
     @Provides
     @RepositoryScope
-    IRepoInfoPresenter provideRepoInfoPresenter(IRepositoriesInteractor repositoriesInteractor) {
-        return new RepoInfoPresenter(repositoriesInteractor);
+    IRepoInfoPresenter provideRepoInfoPresenter(IRepositoriesInteractor repositoriesInteractor, IAccountInteractor accountInteractor) {
+        return new RepoInfoPresenter(repositoriesInteractor, accountInteractor);
     }
 
     @Provides

@@ -10,6 +10,8 @@ import com.epam.traing.gitcl.network.GitHubUserClient;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by off on 19.02.2017.
@@ -38,13 +40,22 @@ public class AccountInteractor implements IAccountInteractor {
 
     @Deprecated
     @Override
-    public Observable<AccountModel> reloadAccount(String accountName) {
-        return null;
+    public Observable<AccountModel> loadAccount(String accountName) {
+        return accountDao.findAccountByName(accountName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(accountModel -> {
+                    if (accountModel == null) {
+                        onNoAccountLocal(accountName);
+                    }
+                }).filter(accountModel -> accountModel != null);
     }
 
     @Override
     public Observable<AccountModel> reloadCurrentAccount() {
         return userClient.getCurrentUserInfo()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(modelConverter::toAccountModel)
                 .doOnNext(this::storeCurrentAccount);
     }
@@ -56,6 +67,14 @@ public class AccountInteractor implements IAccountInteractor {
         prefHelper.setLoggedAccountName(null);
 
         return Observable.empty();
+    }
+
+    private void onNoAccountLocal(String accountName) {
+        userClient.getUserInfo(accountName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(modelConverter::toAccountModel)
+                .subscribe(accountDao::saveAccount);
     }
 
     private void storeCurrentAccount(AccountModel accountModel) {

@@ -69,7 +69,7 @@ public class Application extends android.app.Application {
 
     public static RepositoryComponent getRepositoryComponent() {
         if (repositoryComponent == null) {
-            repositoryComponent = Application.getAppComponent()
+            repositoryComponent = Application.getMainFrameComponent()
                     .plusRepositoryComponent(new RepositoryModule());
         }
 

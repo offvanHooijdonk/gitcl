@@ -15,5 +15,5 @@ public interface GitHubUserClient {
     Observable<AccountJson> getCurrentUserInfo();
 
     @GET("/users/{userName}")
-    Observable<AccountJson> getUserInfo(@Path("username") String userName);
+    Observable<AccountJson> getUserInfo(@Path("userName") String userName);
 }

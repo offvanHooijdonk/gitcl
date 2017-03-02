@@ -28,6 +28,14 @@ public class RepoModel {
     long forksCount;
     @StorIOSQLiteColumn(name = RepoTable.COLUMN_LANGUAGE)
     String language;
+    @StorIOSQLiteColumn(name = RepoTable.COLUMN_CREATE_DATE)
+    long createDate;
+    @StorIOSQLiteColumn(name = RepoTable.COLUMN_UPDATE_DATE)
+    long updateDate;
+    @StorIOSQLiteColumn(name = RepoTable.COLUMN_PUSH_DATE)
+    long pushDate;
+    @StorIOSQLiteColumn(name = RepoTable.COLUMN_VERBOSE_UPDATE_DATE)
+    long verboseUpdateDate;
 
     public long getId() {
         return id;
@@ -99,5 +107,37 @@ public class RepoModel {
 
     public void setForksCount(long forksCount) {
         this.forksCount = forksCount;
+    }
+
+    public long getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(long createDate) {
+        this.createDate = createDate;
+    }
+
+    public long getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(long updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public long getPushDate() {
+        return pushDate;
+    }
+
+    public void setPushDate(long pushDate) {
+        this.pushDate = pushDate;
+    }
+
+    public long getVerboseUpdateDate() {
+        return verboseUpdateDate;
+    }
+
+    public void setVerboseUpdateDate(long verboseUpdateDate) {
+        this.verboseUpdateDate = verboseUpdateDate;
     }
 }

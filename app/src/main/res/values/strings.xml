@@ -29,5 +29,8 @@
     <string name="err_position_out_of_bounds">Did not find clicked item :(</string>
     <string name="action_refresh">Refresh</string>
     <string name="transit_repo_icon">transit_repo_icon</string>
-    <string name="repo_info_create_date">Create date</string>
+    <string name="repo_info_create_date">Created</string>
+    <string name="repo_info_update_date">Updated</string>
+    <string name="repo_info_push_date">Last pushed</string>
+    <string name="repo_info_date_empty"> -</string>
 </resources>

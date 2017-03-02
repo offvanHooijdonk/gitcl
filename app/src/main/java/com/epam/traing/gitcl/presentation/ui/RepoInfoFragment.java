@@ -1,6 +1,10 @@
 package com.epam.traing.gitcl.presentation.ui;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Fragment;
+import android.app.SharedElementCallback;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.transition.Fade;
@@ -10,20 +14,31 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.presentation.ui.animation.InfoTransition;
 import com.epam.traing.gitcl.presentation.ui.view.RepoIconView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static android.view.View.ALPHA;
 import static com.epam.traing.gitcl.presentation.ui.view.RepoIconView.TYPE_FORK;
 import static com.epam.traing.gitcl.presentation.ui.view.RepoIconView.TYPE_REPO;
 
@@ -39,11 +54,34 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     SessionHelper session;
 
     private RepoModel repoModel;
+    private Context ctx;
+
+    // TODO move to a helper
+    private DateFormat df;
+    private List<View> nonTransitionViews;
 
     @Bind(R.id.txtRepoName)
     TextView txtRepoName;
     @Bind(R.id.repoIcon)
     RepoIconView repoIcon;
+    @Bind(R.id.blockOwner)
+    View blockOwner;
+    @Bind(R.id.imgOwnerPhoto)
+    ImageView imgOwnerPhoto;
+    @Bind(R.id.txtOwnerAccount)
+    TextView txtOwnerAccount;
+    @Bind(R.id.txtOwnerFullName)
+    TextView txtOwnerFullName;
+    @Bind(R.id.txtLanguage)
+    TextView txtLanguage;
+    @Bind(R.id.blockDates)
+    View blockDates;
+    @Bind(R.id.txtCreateTime)
+    TextView txtCreateTime;
+    @Bind(R.id.txtUpdateTime)
+    TextView txtUpdateTime;
+    @Bind(R.id.txtPushTime)
+    TextView txtPushTime;
 
     public static RepoInfoFragment getInstance(RepoModel repoModel) {
         RepoInfoFragment fragment = new RepoInfoFragment();
@@ -52,7 +90,14 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         fragment.setSharedElementEnterTransition(new InfoTransition());
         fragment.setSharedElementReturnTransition(new InfoTransition());
         fragment.setEnterTransition(new Fade());
-        fragment.setExitTransition(new Fade());
+        fragment.setEnterSharedElementCallback(new SharedElementCallback() {
+            @Override
+            public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+                super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
+                fragment.revealNonTransitionViews(true);
+            }
+        });
+        //fragment.setExitTransition(new Fade());
         return fragment;
     }
 
@@ -71,6 +116,10 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
 
         getActivity().setTitle(String.format("%s/%s", repoModel.getOwnerName(), repoModel.getName()));
 
+        ctx = getActivity();
+        df = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT, Locale.getDefault());
+        nonTransitionViews = Arrays.asList(txtLanguage, blockOwner, blockDates);
+
         return v;
     }
 
@@ -82,6 +131,31 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         repoIcon.setPrivateRepo(repoModel.isPrivateRepo());
         repoIcon.setRepoType(repoModel.isFork() ? TYPE_FORK : TYPE_REPO);
         repoIcon.setIsOwn(repoModel.getOwnerName().equalsIgnoreCase(session.getCurrentAccount().getAccountName()));
+        // TODO load owner data
+        txtOwnerAccount.setText(repoModel.getOwnerName());
+        txtOwnerFullName.setText(null);
+        if (repoModel.getLanguage() != null) {
+            txtLanguage.setText(repoModel.getLanguage());
+        } else {
+            txtLanguage.setVisibility(View.GONE);
+        }
+
+        setDateText(txtCreateTime, repoModel.getCreateDate());
+        setDateText(txtUpdateTime, repoModel.getUpdateDate());
+        setDateText(txtPushTime, repoModel.getPushDate());
+
+        presenter.onViewCreated(repoModel);
+        revealNonTransitionViews(false);
+    }
+
+    @Override
+    public void updateOwnerInfo(AccountModel accountModel) {
+        if (accountModel.getPersonName() != null) {
+            txtOwnerFullName.setText(accountModel.getPersonName());
+        }
+        if (accountModel.getAvatar() != null) {
+            Glide.with(this).load(accountModel.getAvatar()).into(imgOwnerPhoto);
+        }
     }
 
     @Override
@@ -98,8 +172,36 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         this.repoModel = repoModel;
     }
 
+    private void setDateText(TextView txt, long dateMillis) {
+        if (dateMillis != 0) {
+            txt.setText(df.format(new Date(dateMillis)));
+        } else {
+            txt.setText(ctx.getString(R.string.repo_info_date_empty));
+        }
+    }
+
+    private void revealNonTransitionViews(boolean show) {
+        if (show) {
+            if (!nonTransitionViews.isEmpty()) {
+                AnimatorSet set = new AnimatorSet();
+                AnimatorSet.Builder animBuilder = set.play(ObjectAnimator.ofFloat(nonTransitionViews.get(0), ALPHA, 1.0f));
+                for (int i = 0; i < nonTransitionViews.size(); i++) {
+                    animBuilder.with(ObjectAnimator.ofFloat(nonTransitionViews.get(i), ALPHA, 1.0f));
+                }
+                set.setStartDelay(InfoTransition.DURATION + 50);
+                set.start();
+            }
+        } else {
+            for (View v : nonTransitionViews) {
+                v.setAlpha(0.0f);
+            }
+        }
+    }
+
     private void injectComponent() {
         Application.getRepositoryComponent().inject(this);
         presenter.attachView(this);
     }
+
+
 }

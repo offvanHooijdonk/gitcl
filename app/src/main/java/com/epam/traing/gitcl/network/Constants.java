@@ -18,7 +18,6 @@ public interface Constants {
 
     interface Refresh {
         int REFRESH_ACCOUNT_MILLS = 2 * 60 * 60 * 1000;
-        int REFRES_REPOS_MILLS = 30 * 60 * 1000;
     }
 
 }

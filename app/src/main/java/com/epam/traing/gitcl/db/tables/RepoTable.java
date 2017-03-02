@@ -15,6 +15,10 @@ public class RepoTable {
     public static final String COLUMN_WATCHERS_COUNT = "watchers_count";
     public static final String COLUMN_FORKS_COUNT = "forks_count";
     public static final String COLUMN_LANGUAGE = "language";
+    public static final String COLUMN_CREATE_DATE = "create_date";
+    public static final String COLUMN_UPDATE_DATE = "update_date";
+    public static final String COLUMN_PUSH_DATE = "push_date";
+    public static final String COLUMN_VERBOSE_UPDATE_DATE = "verbose_update_date";
 
     public static String getCreateTableQuery() {
         return "CREATE TABLE " + TABLE + "(" +
@@ -26,7 +30,11 @@ public class RepoTable {
                 COLUMN_STARGAZERS_COUNT + " INTEGER NOT NULL," +
                 COLUMN_WATCHERS_COUNT + " INTEGER NOT NULL," +
                 COLUMN_FORKS_COUNT + " INTEGER NOT NULL," +
-                COLUMN_LANGUAGE + " TEXT" +
+                COLUMN_LANGUAGE + " TEXT," +
+                COLUMN_CREATE_DATE + " NUMBER," +
+                COLUMN_UPDATE_DATE + " NUMBER," +
+                COLUMN_PUSH_DATE + " NUMBER," +
+                COLUMN_VERBOSE_UPDATE_DATE + " NUMBER" +
                 ")";
     }
 

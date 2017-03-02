@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 public class MainPresenter implements IMainPresenter {
     private IMainView view;
-
+// TODO handle all onErrors !!!
     private IAccountInteractor accountInteractor;
     private PrefHelper prefHelper;
 

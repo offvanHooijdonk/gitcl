@@ -9,7 +9,7 @@ import rx.Observable;
  */
 
 public interface IAccountInteractor {
-    Observable<AccountModel> reloadAccount(String accountName);
+    Observable<AccountModel> loadAccount(String accountName);
 
     Observable<AccountModel> reloadCurrentAccount();
 

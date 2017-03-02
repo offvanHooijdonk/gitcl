@@ -25,6 +25,12 @@ public class RepoJson {
     private long watchersCount;
     @SerializedName("language")
     private String language;
+    @SerializedName("created_at")
+    private String createDate;
+    @SerializedName("updated_at")
+    private String updateDate;
+    @SerializedName("pushed_at")
+    private String pushDate;
 
     public long getId() {
         return id;
@@ -96,6 +102,30 @@ public class RepoJson {
 
     public void setForksCount(long forksCount) {
         this.forksCount = forksCount;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public String getPushDate() {
+        return pushDate;
+    }
+
+    public void setPushDate(String pushDate) {
+        this.pushDate = pushDate;
     }
 
     public class Owner {

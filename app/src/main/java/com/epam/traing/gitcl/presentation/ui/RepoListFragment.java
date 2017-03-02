@@ -162,7 +162,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     @Override
     public void onRepoClick(RepoListAdapter.RepoViewHolder holder, int position) {
         if (position < repositories.size()) {
-            setEnterTransition(new Fade());
+            //setEnterTransition(new Fade());
             setExitTransition(new Fade());
             getActivity().getFragmentManager()
                     .beginTransaction()
