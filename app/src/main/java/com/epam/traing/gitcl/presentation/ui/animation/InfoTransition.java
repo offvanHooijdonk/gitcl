@@ -2,6 +2,7 @@ package com.epam.traing.gitcl.presentation.ui.animation;
 
 import android.content.Context;
 import android.transition.ChangeBounds;
+import android.transition.ChangeClipBounds;
 import android.transition.ChangeImageTransform;
 import android.transition.ChangeTransform;
 import android.transition.TransitionSet;
@@ -13,6 +14,7 @@ import android.util.AttributeSet;
 
 public class InfoTransition extends TransitionSet {
     public static final int DURATION = 500;
+
     public InfoTransition() {
         init();
     }
@@ -23,10 +25,11 @@ public class InfoTransition extends TransitionSet {
     }
 
     private void init() {
-        setDuration(500);
+        setDuration(DURATION);
         setOrdering(ORDERING_TOGETHER);
         addTransition(new ChangeBounds()).
                 addTransition(new ChangeTransform()).
-                addTransition(new ChangeImageTransform());
+                addTransition(new ChangeImageTransform())
+                .addTransition(new ChangeClipBounds());
     }
 }

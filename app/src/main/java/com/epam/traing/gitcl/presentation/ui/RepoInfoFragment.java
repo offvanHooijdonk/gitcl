@@ -1,12 +1,16 @@
 package com.epam.traing.gitcl.presentation.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.app.SharedElementCallback;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -82,6 +86,8 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     TextView txtUpdateTime;
     @Bind(R.id.txtPushTime)
     TextView txtPushTime;
+    @Bind(R.id.fabEditRepo)
+    FloatingActionButton fabEditRepo;
 
     public static RepoInfoFragment getInstance(RepoModel repoModel) {
         RepoInfoFragment fragment = new RepoInfoFragment();
@@ -144,6 +150,8 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         setDateText(txtUpdateTime, repoModel.getUpdateDate());
         setDateText(txtPushTime, repoModel.getPushDate());
 
+        fabEditRepo.setOnClickListener(v1 -> fabEditRepo.hide());
+
         presenter.onViewCreated(repoModel);
         revealNonTransitionViews(false);
     }
@@ -188,6 +196,13 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
                 for (int i = 0; i < nonTransitionViews.size(); i++) {
                     animBuilder.with(ObjectAnimator.ofFloat(nonTransitionViews.get(i), ALPHA, 1.0f));
                 }
+                set.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        new Handler().postDelayed(() -> fabEditRepo.show(), 50);
+                    }
+                });
                 set.setStartDelay(InfoTransition.DURATION + 50);
                 set.start();
             }
@@ -195,6 +210,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             for (View v : nonTransitionViews) {
                 v.setAlpha(0.0f);
             }
+            fabEditRepo.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -202,6 +218,5 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         Application.getRepositoryComponent().inject(this);
         presenter.attachView(this);
     }
-
 
 }
