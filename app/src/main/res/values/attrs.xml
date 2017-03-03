@@ -11,4 +11,15 @@
         <attr name="isOwn" format="boolean"/>
     </declare-styleable>
 
+    <declare-styleable name="BadgeNumbersView">
+        <attr name="src" format="reference"/>
+        <attr name="imageSize" format="dimension"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="numberValue" format="string"/>
+        <attr name="state" format="enum">
+            <enum name="inactive" value="0"/>
+            <enum name="active" value="1"/>
+        </attr>
+    </declare-styleable>
+
 </resources>

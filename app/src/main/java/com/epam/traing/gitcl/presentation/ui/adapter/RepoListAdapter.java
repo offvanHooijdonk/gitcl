@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView;
 import com.epam.traing.gitcl.presentation.ui.view.RepoIconView;
 
 import java.util.List;
@@ -61,9 +62,12 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
             vh.repoIcon.setIsOwn(false);
         }
         vh.txtLanguage.setText(model.getLanguage());
-        vh.txtForksCount.setText(transformNumbers(model.getForksCount()));
-        vh.txtStarsCount.setText(transformNumbers(model.getStargazersCount()));
-        vh.txtWatchCount.setText(transformNumbers(model.getWatchersCount()));
+        vh.txtForksCount.setText(new BadgeNumbersView.NumberFormatter(ctx).formatNumber(model.getForksCount()));
+        /*vh.txtStarsCount.setText(transformNumbers(model.getStargazersCount()));*/
+        //vh.txtWatchCount.setText(transformNumbers(model.getWatchersCount()));
+        vh.badgeStar.setNumberValue(model.getStargazersCount());
+        vh.badgeStar.setNumberValue(model.getWatchersCount());
+
         vh.itemRoot.setOnClickListener(view -> {
             if (listener != null) {
                 listener.onRepoClick(vh, position);
@@ -89,10 +93,14 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
         TextView txtLanguage;
         @Bind(R.id.txtForksCount)
         TextView txtForksCount;
-        @Bind(R.id.txtStarsCount)
-        TextView txtStarsCount;
-        @Bind(R.id.txtWatchCount)
-        TextView txtWatchCount;
+        @Bind(R.id.badgeWatch)
+        BadgeNumbersView badgeWatch;
+        @Bind(R.id.badgeStar)
+        BadgeNumbersView badgeStar;
+        /*@Bind(R.id.txtStarsCount)
+        TextView txtStarsCount;*/
+        /*@Bind(R.id.txtWatchCount)
+        TextView txtWatchCount;*/
 
         RepoViewHolder(View v) {
             super(v);
@@ -103,40 +111,6 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
 
     public void setClickListener(RepoClickListener l) {
         this.listener = l;
-    }
-
-    private static String transformNumbers(long number) {
-        int grade = (String.valueOf(number).length() - 1) / 3;
-        int topGradeNumber = (int) (number / Math.pow(10, 3 * grade));
-
-        String result = String.valueOf(topGradeNumber);
-        if (result.length() == 1 && grade > 0) {
-            int subTopNumber = (int) (number % Math.pow(10, 3 * grade) / Math.pow(10, 3 * grade - 1));
-            if (subTopNumber > 0) {
-                result += "." + String.valueOf(subTopNumber);
-            }
-        }
-
-        String gradeSign;
-        switch (grade) {
-            case 1:
-                gradeSign = "k";
-                break;
-            case 2:
-                gradeSign = "m";
-                break;
-            case 3:
-                gradeSign = "b";
-                break;
-            case 4:
-                gradeSign = "t";
-                break;
-            default:
-                gradeSign = "";
-        }
-        result += gradeSign;
-
-        return result;
     }
 
     public interface RepoClickListener {

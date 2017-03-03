@@ -8,7 +8,6 @@ import android.app.Fragment;
 import android.app.SharedElementCallback;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.transition.Fade;
@@ -196,14 +195,14 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
                 for (int i = 0; i < nonTransitionViews.size(); i++) {
                     animBuilder.with(ObjectAnimator.ofFloat(nonTransitionViews.get(i), ALPHA, 1.0f));
                 }
+                set.setStartDelay(InfoTransition.DURATION + 50);
                 set.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        new Handler().postDelayed(() -> fabEditRepo.show(), 50);
+                        fabEditRepo.show();
                     }
                 });
-                set.setStartDelay(InfoTransition.DURATION + 50);
                 set.start();
             }
         } else {

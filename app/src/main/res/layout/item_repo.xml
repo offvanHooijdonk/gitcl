@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/repoIcon"
         android:layout_toEndOf="@id/repoIcon"
-        android:layout_toStartOf="@+id/blockStar"
+        android:layout_toStartOf="@+id/badgeStar"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Repo name and so goes it further"
@@ -76,7 +76,7 @@
         android:text="2,4k"
         android:textSize="12sp"/>
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/blockWatch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_watch_24"
-            android:tint="@color/badge_disabled"/>
+            android:tint="@color/badge_inactive"/>
 
         <TextView
             android:id="@+id/txtWatchCount"
@@ -98,11 +98,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="120k"
-            android:textColor="@color/badge_disabled"
+            android:textColor="@color/badge_inactive"
             android:textSize="12sp"/>
-    </LinearLayout>
+    </LinearLayout>-->
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/blockStar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -128,6 +128,32 @@
             android:text="23"
             android:textColor="@color/badge_disabled"
             android:textSize="12sp"/>
-    </LinearLayout>
+    </LinearLayout>-->
+
+    <com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView
+        android:id="@+id/badgeWatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/txtOwnerName"
+        android:layout_alignParentEnd="true"
+        app:imageSize="20dp"
+        app:src="@drawable/ic_watch_24"
+        app:state="inactive"
+        app:textSize="12sp"
+        app:numberValue="0"/>
+
+    <com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView
+        android:id="@+id/badgeStar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/txtOwnerName"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_toStartOf="@id/badgeWatch"
+        app:imageSize="20dp"
+        app:src="@drawable/ic_star_24dp"
+        app:state="inactive"
+        app:textSize="12sp"
+        app:numberValue="0"/>
 
 </RelativeLayout>

@@ -13,7 +13,7 @@ import android.util.AttributeSet;
  */
 
 public class InfoTransition extends TransitionSet {
-    public static final int DURATION = 500;
+    public static final int DURATION = 350;
 
     public InfoTransition() {
         init();

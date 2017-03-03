@@ -33,4 +33,9 @@
     <string name="repo_info_update_date">Updated</string>
     <string name="repo_info_push_date">Last pushed</string>
     <string name="repo_info_date_empty"> -</string>
+
+    <string name="sign_thousand">k</string>
+    <string name="sign_million">m</string>
+    <string name="sign_billion">b</string>
+    <string name="sign_trillion">t</string>
 </resources>
