@@ -12,8 +12,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:clipToPadding="false"
+            android:orientation="vertical"
             android:paddingBottom="4dp">
 
             <android.support.v7.widget.CardView
@@ -114,10 +114,10 @@
                         android:id="@+id/dividerMain"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:layout_marginBottom="24dp"
                         android:layout_marginEnd="-16dp"
                         android:layout_marginStart="-16dp"
                         android:layout_marginTop="@dimen/activity_vertical_margin"
-                        android:layout_marginBottom="24dp"
                         android:background="@color/divider"/>
 
                     <RelativeLayout
@@ -183,17 +183,48 @@
                 android:elevation="@dimen/cardview_default_elevation">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:paddingBottom="@dimen/activity_vertical_margin"
                     android:paddingEnd="@dimen/activity_horizontal_margin"
                     android:paddingStart="@dimen/activity_horizontal_margin"
                     android:paddingTop="@dimen/activity_vertical_margin">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Badges here"/>
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView
+                            style="@style/BadgeAligned"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:src="@drawable/ic_star_24dp"
+                            app:state="inactive"/>
+
+                        <com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView
+                            style="@style/BadgeAligned"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:src="@drawable/ic_watch_24"
+                            app:state="inactive"/>
+
+                        <com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView
+                            style="@style/BadgeAligned"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:src="@drawable/ic_group_24dp"
+                            app:state="inactive"/>
+
+                        <com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView
+                            style="@style/BadgeAligned"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:src="@drawable/ic_fork_32"
+                            app:state="inactive"/>
+                    </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>

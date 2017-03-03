@@ -21,4 +21,6 @@
     <dimen name="repo_list_private">14dp</dimen>
     <dimen name="repo_info_icon">40dp</dimen>
     <dimen name="repo_info_private">14dp</dimen>
+
+    <dimen name="badge_align_margin">24dp</dimen>
 </resources>

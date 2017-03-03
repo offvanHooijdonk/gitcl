@@ -44,4 +44,9 @@
         <item name="android:textColor">@color/btn_material_text</item>
     </style>
 
+    <style name="BadgeAligned">
+        <item name="android:layout_marginStart">@dimen/badge_align_margin</item>
+        <item name="android:layout_marginEnd">@dimen/badge_align_margin</item>
+    </style>
+
 </resources>
