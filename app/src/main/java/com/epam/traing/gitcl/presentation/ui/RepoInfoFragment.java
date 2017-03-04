@@ -120,6 +120,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         ButterKnife.bind(this, v);
 
         getActivity().setTitle(String.format("%s/%s", repoModel.getOwnerName(), repoModel.getName()));
+        setHasOptionsMenu(true);
 
         ctx = getActivity();
         df = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT, Locale.getDefault());
