@@ -77,6 +77,8 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     TextView txtOwnerFullName;
     @Bind(R.id.txtLanguage)
     TextView txtLanguage;
+    @Bind(R.id.dividerMain)
+    View dividerMain;
     @Bind(R.id.blockDates)
     View blockDates;
     @Bind(R.id.txtCreateTime)
@@ -124,7 +126,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
 
         ctx = getActivity();
         df = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT, Locale.getDefault());
-        nonTransitionViews = Arrays.asList(txtLanguage, blockOwner, blockDates);
+        nonTransitionViews = Arrays.asList(txtLanguage, blockOwner, blockDates, dividerMain);
 
         return v;
     }
