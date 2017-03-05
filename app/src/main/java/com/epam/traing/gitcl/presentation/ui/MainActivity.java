@@ -1,18 +1,26 @@
 package com.epam.traing.gitcl.presentation.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,7 +37,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements IMainView, NavigationView.OnNavigationItemSelectedListener {
+        implements IMainView, IArrowToggleAnimator, NavigationView.OnNavigationItemSelectedListener {
     private static final String FRAG_REPO_LIST = "repo_list";
 
     @Bind(R.id.toolbar)
@@ -40,12 +48,18 @@ public class MainActivity extends AppCompatActivity
     private TextView txtDrawerAccountName;
     private ImageView imgAvatar;
 
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle toggle;
+    private DrawerArrowDrawable arrowDrawable;
     private AlertDialog logoutDialog;
 
     @Inject
     IMainPresenter presenter;
     @Inject
     SessionHelper session;
+
+    private ValueAnimator animToArrow;
+    private ValueAnimator animFromArrow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +73,14 @@ public class MainActivity extends AppCompatActivity
 
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+
+        };
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        arrowDrawable = toggle.getDrawerArrowDrawable();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -162,6 +179,63 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void animateToArrow() {
+        if (arrowDrawable != null) {
+            if (animToArrow == null) {
+                animToArrow = initArrowAnim(true);
+            }
+            animToArrow.start();
+        }
+    }
+
+    @Override
+    public void animateFromArrow() {
+        if (arrowDrawable != null) {
+            if (animFromArrow == null) {
+                animFromArrow = initArrowAnim(false);
+            }
+
+            animFromArrow.start();
+        }
+    }
+
+    private ValueAnimator initArrowAnim(boolean toArrow) {
+        float valueFrom = toArrow ? 0 : 1;
+        float valueTo = toArrow ? 1 : 0;
+
+        ValueAnimator anim = ValueAnimator.ofFloat(valueFrom, valueTo).setDuration(ARROW_ANIM_DEFAULT_DURATION);
+        anim.addUpdateListener(a -> {
+            float position = (Float) a.getAnimatedValue();
+            if (position == 1f) {
+                arrowDrawable.setVerticalMirror(true);
+            } else if (position == 0f) {
+                arrowDrawable.setVerticalMirror(false);
+            }
+            arrowDrawable.setProgress(position);
+        });
+        if (toArrow) {
+            anim.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    toolbar.setNavigationOnClickListener(v -> getFragmentManager().popBackStack());
+                }
+            });
+        } else {
+            anim.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    toggle.syncState();
+                    toolbar.setNavigationOnClickListener(v -> drawer.openDrawer(GravityCompat.START));
+                }
+            });
+        }
+
+        return anim;
+    }
+
+    @Override
     public void startLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -172,4 +246,5 @@ public class MainActivity extends AppCompatActivity
     private void loadFragment(Fragment fragment, String tag) {
         getFragmentManager().beginTransaction().replace(R.id.content_main, fragment, tag).commit();
     }
+
 }

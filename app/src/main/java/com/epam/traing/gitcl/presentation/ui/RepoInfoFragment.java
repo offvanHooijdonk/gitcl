@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,6 +63,8 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     // TODO move to a helper
     private DateFormat df;
     private List<View> nonTransitionViews;
+    private IArrowToggleAnimator animatorArrow;
+    private boolean isEnterAnimationEnded = false;
 
     @Bind(R.id.txtRepoName)
     TextView txtRepoName;
@@ -81,6 +84,8 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     View dividerMain;
     @Bind(R.id.blockDates)
     View blockDates;
+    @Bind(R.id.blockBadges)
+    View blockBadges;
     @Bind(R.id.txtCreateTime)
     TextView txtCreateTime;
     @Bind(R.id.txtUpdateTime)
@@ -101,7 +106,15 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             @Override
             public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
                 super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
-                fragment.revealNonTransitionViews(true);
+                if (!fragment.isEnterAnimationEnded) {
+                    fragment.revealNonTransitionViews(true);
+                    if (fragment.animatorArrow != null) {
+                        fragment.animatorArrow.animateToArrow();
+                    }
+                    fragment.isEnterAnimationEnded = true;
+                } else {
+                    fragment.revealNonTransitionViews(false);
+                }
             }
         });
         //fragment.setExitTransition(new Fade());
@@ -126,7 +139,9 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
 
         ctx = getActivity();
         df = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT, Locale.getDefault());
-        nonTransitionViews = Arrays.asList(txtLanguage, blockOwner, blockDates, dividerMain);
+        nonTransitionViews = Arrays.asList(txtLanguage, blockOwner, dividerMain, blockDates, blockBadges);
+
+        setupArrowAnimation();
 
         return v;
     }
@@ -139,7 +154,6 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         repoIcon.setPrivateRepo(repoModel.isPrivateRepo());
         repoIcon.setRepoType(repoModel.isFork() ? TYPE_FORK : TYPE_REPO);
         repoIcon.setIsOwn(repoModel.getOwnerName().equalsIgnoreCase(session.getCurrentAccount().getAccountName()));
-        // TODO load owner data
         txtOwnerAccount.setText(repoModel.getOwnerName());
         txtOwnerFullName.setText(null);
         if (repoModel.getLanguage() != null) {
@@ -178,6 +192,19 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (animatorArrow != null) {
+            animatorArrow.animateFromArrow();
+        }
+    }
+
     private void setRepoModel(RepoModel repoModel) {
         this.repoModel = repoModel;
     }
@@ -187,6 +214,12 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             txt.setText(df.format(new Date(dateMillis)));
         } else {
             txt.setText(ctx.getString(R.string.repo_info_date_empty));
+        }
+    }
+
+    private void setupArrowAnimation() {
+        if (getActivity() instanceof IArrowToggleAnimator) {
+            animatorArrow = (IArrowToggleAnimator) getActivity();
         }
     }
 
