@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pref_repo_update_time_key">pref_repo_update_time</string>
-    <string name="pref_repo_update_time_title">Repo list update interval</string>
-    <string name="pref_repo_update_time_summary">Time from last update when repositories should be updated again</string>
-    <array name="pref_repo_update_time_entries">
-        <item>10m</item>
-        <item>15m</item>
-        <item>30m</item>
-        <item>1h</item>
-        <item>3h</item>
-        <item>6h</item>
-        <item>Never</item>
+    <string name="pref_repos_update_time_title">Iнтырвал абнаўленьня рэпазiторый</string>
+    <string name="pref_repos_update_time_summary">Час з апошняга абнаўленьня рэпазiторый</string>
+    <array name="pref_repos_update_time_entries">
+        <item>10 хвiлiн</item>
+        <item>15 хвiлiн</item>
+        <item>30 хвiлiн</item>
+        <item>1 гадзiна</item>
+        <item>3 гадзiны</item>
+        <item>6 гадзiна</item>
+        <item>Нiколi</item>
     </array>
+
+    <string name="pref_repo_info_update_time_title">Iнтырвал абнаўленьня iнфармацыi аб рэпазiторыi</string>
+    <string name="pref_repo_info_update_time_summary">Час з апошняга абнаўленьня гэтага рэпазiторыя</string>
+    <string-array name="pref_repo_info_update_time_entries">
+        <item>5 хвiлiн</item>
+        <item>10 хвiлiн</item>
+        <item>20 хвiлiн</item>
+        <item>30 хвiлiн</item>
+        <item>1 гадзiна</item>
+        <item>Нiколi</item>
+    </string-array>
 </resources>

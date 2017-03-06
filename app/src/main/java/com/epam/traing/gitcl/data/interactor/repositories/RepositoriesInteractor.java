@@ -7,6 +7,7 @@ import com.epam.traing.gitcl.network.GitHubRepoClient;
 import com.epam.traing.gitcl.network.json.RepoJson;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -47,6 +48,28 @@ public class RepositoriesInteractor implements IRepositoriesInteractor {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(this::convertToModels)
                 .doOnNext(repoDao::saveAll);
+    }
+
+    @Override
+    public Observable<RepoModel> loadVerbose(RepoModel repoModel) {
+        return repoClient.loadRepoInfo(repoModel.getOwnerName(), repoModel.getName())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(modelConverter::toRepoModel)
+                .flatMap(this::loadContributorsInfo)
+                .doOnNext(rm -> rm.setVerboseUpdateDate(new Date().getTime()))
+                .doOnNext(repoDao::save)
+                .flatMap(rm -> repoDao.getById(rm.getId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread()));
+    }
+
+    private Observable<RepoModel> loadContributorsInfo(RepoModel repoModel) {
+        return repoClient.getContributors(repoModel.getOwnerName(), repoModel.getName())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(accountModels -> repoModel.setContributorsCount(accountModels.size()))
+                .map(accountModels -> repoModel);
     }
 
     private List<RepoModel> convertToModels(List<RepoJson> repoJsonList) {

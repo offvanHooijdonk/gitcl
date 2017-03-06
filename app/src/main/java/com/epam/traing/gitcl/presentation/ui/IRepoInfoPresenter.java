@@ -10,4 +10,6 @@ public interface IRepoInfoPresenter {
     void attachView(IRepoInfoView repoInfoView);
 
     void onViewCreated(RepoModel repoModel);
+
+    void onRefreshTriggered();
 }

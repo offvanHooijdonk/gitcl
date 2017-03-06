@@ -13,6 +13,8 @@ import rx.Observable;
 public interface IRepoDao {
     Observable<List<RepoModel>> getRepositories();
 
+    Observable<RepoModel> getById(long id);
+
     void saveAll(List<RepoModel> models);
 
     void save(RepoModel model);

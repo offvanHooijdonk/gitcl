@@ -10,6 +10,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +29,7 @@ import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.presentation.ui.animation.InfoTransition;
+import com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView;
 import com.epam.traing.gitcl.presentation.ui.view.RepoIconView;
 
 import java.text.DateFormat;
@@ -92,6 +95,16 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     TextView txtPushTime;
     @Bind(R.id.fabEditRepo)
     FloatingActionButton fabEditRepo;
+    @Bind(R.id.badgeStars)
+    BadgeNumbersView badgeStars;
+    @Bind(R.id.badgeWatchers)
+    BadgeNumbersView badgeWatchers;
+    @Bind(R.id.badgeContributors)
+    BadgeNumbersView badgeContributors;
+    @Bind(R.id.badgeForks)
+    BadgeNumbersView badgeForks;
+    @Bind(R.id.srlRepoInfo)
+    SwipeRefreshLayout srlRepoInfo;
 
     public static RepoInfoFragment getInstance(RepoModel repoModel) {
         RepoInfoFragment fragment = new RepoInfoFragment();
@@ -112,7 +125,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
                 }
             }
         });
-        //fragment.setExitTransition(new Fade());
+
         return fragment;
     }
 
@@ -143,23 +156,15 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     public void onViewCreated(View v, Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
 
-        txtRepoName.setText(repoModel.getName());
-        repoIcon.setPrivateRepo(repoModel.isPrivateRepo());
-        repoIcon.setRepoType(repoModel.isFork() ? TYPE_FORK : TYPE_REPO);
-        repoIcon.setIsOwn(repoModel.getOwnerName().equalsIgnoreCase(session.getCurrentAccount().getAccountName()));
-        txtOwnerAccount.setText(repoModel.getOwnerName());
         txtOwnerFullName.setText(null);
-        if (repoModel.getLanguage() != null) {
-            txtLanguage.setText(repoModel.getLanguage());
-        } else {
-            txtLanguage.setVisibility(View.GONE);
-        }
+        displayRepoInfo();
 
-        setDateText(txtCreateTime, repoModel.getCreateDate());
-        setDateText(txtUpdateTime, repoModel.getUpdateDate());
-        setDateText(txtPushTime, repoModel.getPushDate());
+        fabEditRepo.setOnClickListener(v1 -> Snackbar.make(fabEditRepo, "Not so fast", Snackbar.LENGTH_SHORT).show());
 
-        fabEditRepo.setOnClickListener(v1 -> fabEditRepo.hide());
+        srlRepoInfo.setColorSchemeColors(ctx.getResources().getColor(R.color.refresh1),
+                ctx.getResources().getColor(R.color.refresh2),
+                ctx.getResources().getColor(R.color.refresh3));
+        srlRepoInfo.setOnRefreshListener(() -> presenter.onRefreshTriggered());
 
         presenter.onViewCreated(repoModel);
         revealNonTransitionViews(false);
@@ -188,6 +193,39 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void displayRepoInfo(RepoModel repoModel) {
+        this.repoModel = repoModel;
+
+        displayRepoInfo();
+    }
+
+    private void displayRepoInfo() {
+        txtRepoName.setText(repoModel.getName());
+        repoIcon.setPrivateRepo(repoModel.isPrivateRepo());
+        repoIcon.setRepoType(repoModel.isFork() ? TYPE_FORK : TYPE_REPO);
+        repoIcon.setIsOwn(repoModel.getOwnerName().equalsIgnoreCase(session.getCurrentAccount().getAccountName()));
+        txtOwnerAccount.setText(repoModel.getOwnerName());
+        if (repoModel.getLanguage() != null) {
+            txtLanguage.setText(repoModel.getLanguage());
+        } else {
+            txtLanguage.setVisibility(View.GONE);
+        }
+
+        setDateText(txtCreateTime, repoModel.getCreateDate());
+        setDateText(txtUpdateTime, repoModel.getUpdateDate());
+        setDateText(txtPushTime, repoModel.getPushDate());
+        badgeStars.setNumberValue(repoModel.getStargazersCount());
+        badgeWatchers.setNumberValue(repoModel.getWatchersCount());
+        badgeForks.setNumberValue(repoModel.getForksCount());
+        badgeContributors.setNumberValue(repoModel.getContributorsCount());
+    }
+
+    @Override
+    public void showRefreshingProcess(boolean show) {
+        srlRepoInfo.setRefreshing(show);
     }
 
     private void setRepoModel(RepoModel repoModel) {

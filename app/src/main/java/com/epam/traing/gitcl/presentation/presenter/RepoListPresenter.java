@@ -36,7 +36,7 @@ public class RepoListPresenter implements IRepoListPresenter {
         getReposFromDB();
         // TODO decide if need update Repos at the moment and update if so
         long currentTimeMillis = new Date().getTime();
-        int repoUpdateMins = prefHelper.getRepoUpdateIntervalMins();
+        int repoUpdateMins = prefHelper.getReposListUpdateIntervalMins();
         if (repoUpdateMins != PrefHelper.VALUE_NEVER &&
                 currentTimeMillis - prefHelper.getReposLastUpdateTime() > repoUpdateMins * 60 * 1000) {
             loadRepositoriesList();

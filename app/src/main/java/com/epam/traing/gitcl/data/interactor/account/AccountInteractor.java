@@ -44,9 +44,11 @@ public class AccountInteractor implements IAccountInteractor {
         return accountDao.findAccountByName(accountName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(accountModel -> {
+                .flatMap(accountModel -> {
                     if (accountModel == null) {
-                        onNoAccountLocal(accountName);
+                        return onNoAccountLocal(accountName);
+                    } else {
+                        return Observable.just(accountModel);
                     }
                 }).filter(accountModel -> accountModel != null);
     }
@@ -69,12 +71,12 @@ public class AccountInteractor implements IAccountInteractor {
         return Observable.empty();
     }
 
-    private void onNoAccountLocal(String accountName) {
-        userClient.getUserInfo(accountName)
+    private Observable<AccountModel> onNoAccountLocal(String accountName) {
+        return userClient.getUserInfo(accountName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(modelConverter::toAccountModel)
-                .subscribe(accountDao::saveAccount);
+                .doOnNext(accountDao::saveAccount);
     }
 
     private void storeCurrentAccount(AccountModel accountModel) {

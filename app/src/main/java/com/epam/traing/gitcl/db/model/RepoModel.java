@@ -36,6 +36,8 @@ public class RepoModel {
     long pushDate;
     @StorIOSQLiteColumn(name = RepoTable.COLUMN_VERBOSE_UPDATE_DATE)
     long verboseUpdateDate;
+    @StorIOSQLiteColumn(name = RepoTable.COLUMN_CONTRIBUTORS_COUNT)
+    long contributorsCount;
 
     public long getId() {
         return id;
@@ -139,5 +141,13 @@ public class RepoModel {
 
     public void setVerboseUpdateDate(long verboseUpdateDate) {
         this.verboseUpdateDate = verboseUpdateDate;
+    }
+
+    public long getContributorsCount() {
+        return contributorsCount;
+    }
+
+    public void setContributorsCount(long contributorsCount) {
+        this.contributorsCount = contributorsCount;
     }
 }

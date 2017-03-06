@@ -203,6 +203,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     }
 
     private void initRefreshLayout(SwipeRefreshLayout srl) {
+        // TODO move to some helper?
         srl.setColorSchemeColors(ctx.getResources().getColor(R.color.refresh1),
                 ctx.getResources().getColor(R.color.refresh2),
                 ctx.getResources().getColor(R.color.refresh3));

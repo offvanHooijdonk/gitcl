@@ -21,7 +21,8 @@ public class PrefHelper {
     private static final String ACCESS_TOKEN = "access_token";
     private static final String ACCOUNT_LAST_UPDATE_TIME = "account_last_update_time";
     private static final String REPOS_LAST_UPDATE_TIME = "repos_last_update_time";
-    private static final int REPO_UPDATE_INTERVAL_DEFAULT = 15;
+    private static final int REPOS_UPDATE_INTERVAL_DEFAULT = 30;
+    private static final int REPO_INFO_UPDATE_INTERVAL_DEFAULT = 20;
 
     private Context ctx;
 
@@ -80,10 +81,16 @@ public class PrefHelper {
         getSharedPreference().edit().putLong(REPOS_LAST_UPDATE_TIME, time).apply();
     }
 
-    public int getRepoUpdateIntervalMins() {
+    public int getReposListUpdateIntervalMins() {
         return parseIntValue(
-                getSharedPreference().getString(ctx.getString(R.string.pref_repo_update_time_key), ctx.getString(R.string.pref_repo_update_time_default)),
-                REPO_UPDATE_INTERVAL_DEFAULT);
+                getSharedPreference().getString(ctx.getString(R.string.pref_repos_update_time_key), ctx.getString(R.string.pref_repos_update_time_default)),
+                REPOS_UPDATE_INTERVAL_DEFAULT);
+    }
+
+    public int getRepoInfoUpdateIntervalMins() {
+        return parseIntValue(
+                getSharedPreference().getString(ctx.getString(R.string.pref_repo_info_update_time_key), ctx.getString(R.string.pref_repo_info_update_time_default)),
+                REPO_INFO_UPDATE_INTERVAL_DEFAULT);
     }
 
     private int parseIntValue(String value, int defaultValue) {

@@ -34,6 +34,14 @@ public class RepoDao implements IRepoDao {
     }
 
     @Override
+    public Observable<RepoModel> getById(long id) {
+        return sqLite.get().object(RepoModel.class)
+                .withQuery(Query.builder()
+                        .table(RepoTable.TABLE).where(RepoTable.COLUMN_ID + "=?").whereArgs(id).build())
+                .prepare().asRxObservable();
+    }
+
+    @Override
     public void saveAll(List<RepoModel> models) {
         Observable.from(models).doOnNext(this::save).subscribe();
     }

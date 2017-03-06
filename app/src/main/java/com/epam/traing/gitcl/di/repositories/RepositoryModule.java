@@ -35,8 +35,8 @@ public class RepositoryModule {
 
     @Provides
     @RepositoryScope
-    IRepoInfoPresenter provideRepoInfoPresenter(IRepositoriesInteractor repositoriesInteractor, IAccountInteractor accountInteractor) {
-        return new RepoInfoPresenter(repositoriesInteractor, accountInteractor);
+    IRepoInfoPresenter provideRepoInfoPresenter(IRepositoriesInteractor repositoriesInteractor, IAccountInteractor accountInteractor, PrefHelper prefHelper) {
+        return new RepoInfoPresenter(repositoriesInteractor, accountInteractor, prefHelper);
     }
 
     @Provides
