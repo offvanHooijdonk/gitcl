@@ -20,4 +20,8 @@ public interface Constants {
         int REFRESH_ACCOUNT_MILLS = 2 * 60 * 60 * 1000;
     }
 
+    interface Animation {
+        int ARROW_ANIM_DEFAULT_DURATION = 450;
+    }
+
 }

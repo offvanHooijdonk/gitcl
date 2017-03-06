@@ -8,19 +8,15 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +25,7 @@ import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.helper.SessionHelper;
+import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.presenter.IMainPresenter;
 
 import javax.inject.Inject;
@@ -37,7 +34,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements IMainView, IArrowToggleAnimator, NavigationView.OnNavigationItemSelectedListener {
+        implements IMainView, NavigationView.OnNavigationItemSelectedListener {
     private static final String FRAG_REPO_LIST = "repo_list";
 
     @Bind(R.id.toolbar)
@@ -52,6 +49,8 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     private DrawerArrowDrawable arrowDrawable;
     private AlertDialog logoutDialog;
+
+    private int prevBackStackCount = 0;
 
     @Inject
     IMainPresenter presenter;
@@ -90,6 +89,15 @@ public class MainActivity extends AppCompatActivity
         imgAvatar = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.imgAccountAvatar);
 
         updateAccountInfo();
+
+        getFragmentManager().addOnBackStackChangedListener(() -> {
+            if (getFragmentManager().getBackStackEntryCount() == 0) {
+                animateFromArrow();
+            } else if (prevBackStackCount == 0) {
+                animateToArrow();
+            }
+            prevBackStackCount = getFragmentManager().getBackStackEntryCount();
+        });
 
         navigationView.setCheckedItem(R.id.nav_repo_list);
         loadFragment(new RepoListFragment(), FRAG_REPO_LIST);
@@ -178,7 +186,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
     public void animateToArrow() {
         if (arrowDrawable != null) {
             if (animToArrow == null) {
@@ -188,7 +195,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
     public void animateFromArrow() {
         if (arrowDrawable != null) {
             if (animFromArrow == null) {
@@ -203,7 +209,7 @@ public class MainActivity extends AppCompatActivity
         float valueFrom = toArrow ? 0 : 1;
         float valueTo = toArrow ? 1 : 0;
 
-        ValueAnimator anim = ValueAnimator.ofFloat(valueFrom, valueTo).setDuration(ARROW_ANIM_DEFAULT_DURATION);
+        ValueAnimator anim = ValueAnimator.ofFloat(valueFrom, valueTo).setDuration(Constants.Animation.ARROW_ANIM_DEFAULT_DURATION);
         anim.addUpdateListener(a -> {
             float position = (Float) a.getAnimatedValue();
             if (position == 1f) {

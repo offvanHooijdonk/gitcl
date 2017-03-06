@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.transition.Fade;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,7 +62,6 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     // TODO move to a helper
     private DateFormat df;
     private List<View> nonTransitionViews;
-    private IArrowToggleAnimator animatorArrow;
     private boolean isEnterAnimationEnded = false;
 
     @Bind(R.id.txtRepoName)
@@ -108,9 +106,6 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
                 super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
                 if (!fragment.isEnterAnimationEnded) {
                     fragment.revealNonTransitionViews(true);
-                    if (fragment.animatorArrow != null) {
-                        fragment.animatorArrow.animateToArrow();
-                    }
                     fragment.isEnterAnimationEnded = true;
                 } else {
                     fragment.revealNonTransitionViews(false);
@@ -140,8 +135,6 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         ctx = getActivity();
         df = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT, Locale.getDefault());
         nonTransitionViews = Arrays.asList(txtLanguage, blockOwner, dividerMain, blockDates, blockBadges);
-
-        setupArrowAnimation();
 
         return v;
     }
@@ -197,14 +190,6 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (animatorArrow != null) {
-            animatorArrow.animateFromArrow();
-        }
-    }
-
     private void setRepoModel(RepoModel repoModel) {
         this.repoModel = repoModel;
     }
@@ -214,12 +199,6 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             txt.setText(df.format(new Date(dateMillis)));
         } else {
             txt.setText(ctx.getString(R.string.repo_info_date_empty));
-        }
-    }
-
-    private void setupArrowAnimation() {
-        if (getActivity() instanceof IArrowToggleAnimator) {
-            animatorArrow = (IArrowToggleAnimator) getActivity();
         }
     }
 
