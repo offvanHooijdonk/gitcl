@@ -7,6 +7,8 @@ import com.epam.traing.gitcl.db.dao.IAccountDao;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.GitHubUserClient;
+import com.epam.traing.gitcl.presentation.presenter.AccountPresenter;
+import com.epam.traing.gitcl.presentation.presenter.IAccountPresenter;
 import com.epam.traing.gitcl.presentation.presenter.IMainPresenter;
 import com.epam.traing.gitcl.presentation.presenter.MainPresenter;
 
@@ -23,6 +25,12 @@ public class MainFrameModule {
     @MainFrameScope
     IMainPresenter provideMainPresenter(IAccountInteractor accountInteractor, PrefHelper prefHelper) {
         return new MainPresenter(accountInteractor, prefHelper);
+    }
+
+    @Provides
+    @MainFrameScope
+    IAccountPresenter provideAccountPresenter() {
+        return new AccountPresenter();
     }
 
     @Provides

@@ -45,6 +45,11 @@
                 <category android:name="android.intent.category.PREFERENCE"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".presentation.ui.AccountActivity"
+                  android:parentActivityName=".presentation.ui.MainActivity">
+
+        </activity>
     </application>
 
 </manifest>

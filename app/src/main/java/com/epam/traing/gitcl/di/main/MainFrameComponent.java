@@ -2,6 +2,7 @@ package com.epam.traing.gitcl.di.main;
 
 import com.epam.traing.gitcl.di.repositories.RepositoryComponent;
 import com.epam.traing.gitcl.di.repositories.RepositoryModule;
+import com.epam.traing.gitcl.presentation.ui.AccountActivity;
 import com.epam.traing.gitcl.presentation.ui.MainActivity;
 
 import dagger.Subcomponent;
@@ -16,6 +17,7 @@ import dagger.Subcomponent;
 @MainFrameScope
 public interface MainFrameComponent {
     void inject(MainActivity mainActivity);
+    void inject(AccountActivity accountActivity);
 
     RepositoryComponent plusRepositoryComponent(RepositoryModule repositoryModule);
 }

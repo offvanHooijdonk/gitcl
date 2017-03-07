@@ -164,6 +164,11 @@ public class MainActivity extends AppCompatActivity
             if (accountModel.getAvatar() != null) {
                 Glide.with(this).load(accountModel.getAvatar()).into(imgAvatar);
             }
+
+            imgAvatar.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+                startActivity(intent);
+            });
         }
     }
 
