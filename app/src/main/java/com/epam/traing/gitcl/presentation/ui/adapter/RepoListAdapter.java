@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.presentation.ui.helper.DateHelper;
 import com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView;
 import com.epam.traing.gitcl.presentation.ui.view.RepoIconView;
 
@@ -30,6 +31,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
     private List<RepoModel> repositories;
     private AccountModel accountModel;
     private RepoClickListener listener;
+    private DateHelper dateHelper = new DateHelper();
 
 
     public RepoListAdapter(Context context, List<RepoModel> repositories, AccountModel accountModel) {
@@ -61,10 +63,12 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
         } else {
             vh.repoIcon.setIsOwn(false);
         }
-        vh.txtLanguage.setText(model.getLanguage());
+        if (model.getPushDate() > 0) {
+            vh.txtLastPushed.setText(dateHelper.formatDateTimeShort(model.getPushDate()));
+        } else {
+            vh.txtLastPushed.setText(ctx.getString(R.string.repo_list_push_date_empty));
+        }
         vh.txtForksCount.setText(new BadgeNumbersView.NumberFormatter(ctx).formatNumber(model.getForksCount()));
-        /*vh.txtStarsCount.setText(transformNumbers(model.getStargazersCount()));*/
-        //vh.txtWatchCount.setText(transformNumbers(model.getWatchersCount()));
         vh.badgeStar.setNumberValue(model.getStargazersCount());
         vh.badgeStar.setNumberValue(model.getWatchersCount());
 
@@ -89,18 +93,14 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
         public TextView txtRepoName;
         @Bind(R.id.txtOwnerName)
         TextView txtOwnerName;
-        @Bind(R.id.txtLanguage)
-        TextView txtLanguage;
+        @Bind(R.id.txtLastPushed)
+        TextView txtLastPushed;
         @Bind(R.id.txtForksCount)
         TextView txtForksCount;
         @Bind(R.id.badgeWatch)
         BadgeNumbersView badgeWatch;
         @Bind(R.id.badgeStar)
         BadgeNumbersView badgeStar;
-        /*@Bind(R.id.txtStarsCount)
-        TextView txtStarsCount;*/
-        /*@Bind(R.id.txtWatchCount)
-        TextView txtWatchCount;*/
 
         RepoViewHolder(View v) {
             super(v);

@@ -29,15 +29,12 @@ import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.presentation.ui.animation.InfoTransition;
+import com.epam.traing.gitcl.presentation.ui.helper.DateHelper;
 import com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView;
 import com.epam.traing.gitcl.presentation.ui.view.RepoIconView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -63,9 +60,9 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     private Context ctx;
 
     // TODO move to a helper
-    private DateFormat df;
     private List<View> nonTransitionViews;
     private boolean isEnterAnimationEnded = false;
+    private DateHelper dateHelper = new DateHelper();
 
     @Bind(R.id.txtRepoName)
     TextView txtRepoName;
@@ -146,7 +143,6 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         setHasOptionsMenu(true);
 
         ctx = getActivity();
-        df = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT, Locale.getDefault());
         nonTransitionViews = Arrays.asList(txtLanguage, blockOwner, dividerMain, blockDates, blockBadges);
 
         return v;
@@ -234,7 +230,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
 
     private void setDateText(TextView txt, long dateMillis) {
         if (dateMillis != 0) {
-            txt.setText(df.format(new Date(dateMillis)));
+            txt.setText(dateHelper.formatDateTimeMedium(dateMillis));
         } else {
             txt.setText(ctx.getString(R.string.repo_info_date_empty));
         }
