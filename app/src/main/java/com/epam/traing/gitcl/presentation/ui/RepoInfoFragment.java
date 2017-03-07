@@ -232,7 +232,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         if (dateMillis != 0) {
             txt.setText(dateHelper.formatDateTimeMedium(dateMillis));
         } else {
-            txt.setText(ctx.getString(R.string.repo_info_date_empty));
+            txt.setText(R.string.repo_info_date_empty);
         }
     }
 

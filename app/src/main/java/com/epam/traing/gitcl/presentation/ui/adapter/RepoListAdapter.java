@@ -66,7 +66,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
         if (model.getPushDate() > 0) {
             vh.txtLastPushed.setText(dateHelper.formatDateTimeShort(model.getPushDate()));
         } else {
-            vh.txtLastPushed.setText(ctx.getString(R.string.repo_list_push_date_empty));
+            vh.txtLastPushed.setText(R.string.repo_list_push_date_empty);
         }
         vh.txtForksCount.setText(new BadgeNumbersView.NumberFormatter(ctx).formatNumber(model.getForksCount()));
         vh.badgeStar.setNumberValue(model.getStargazersCount());
