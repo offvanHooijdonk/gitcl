@@ -41,16 +41,24 @@ public class RepoInfoPresenter implements IRepoInfoPresenter {
     public void onViewCreated(RepoModel repoModel) {
         this.repoModel = repoModel;
 
+        getRepoInfoFromDB();
         loadAccountInfo();
         if (new Date().getTime() - repoModel.getVerboseUpdateDate() > prefHelper.getRepoInfoUpdateIntervalMins() * 60 * 1000) {
             loadRepoInfo();
         }
     }
 
+
+
     @Override
     public void onRefreshTriggered() {
         loadAccountInfo();
         loadRepoInfo();
+    }
+
+    private void getRepoInfoFromDB() {
+        repoInteractor.getRepoInfo(repoModel.getId())
+                .subscribe(this::onRepoLoaded, this::onError);
     }
 
     private void loadAccountInfo() {
@@ -62,6 +70,7 @@ public class RepoInfoPresenter implements IRepoInfoPresenter {
         view.showRefreshingProcess(true);
         repoInteractor.loadVerbose(repoModel)
                 .subscribe(this::onRepoLoaded, this::onError);
+        // TODO need to fire logic here if already subscribed in .getRepoInfoFromDB()?
     }
 
     private void onAccountLoaded(AccountModel accountModel) {
@@ -69,6 +78,7 @@ public class RepoInfoPresenter implements IRepoInfoPresenter {
     }
 
     private void onRepoLoaded(RepoModel repoModel) {
+        this.repoModel = repoModel;
         view.displayRepoInfo(repoModel);
         view.showRefreshingProcess(false);
     }

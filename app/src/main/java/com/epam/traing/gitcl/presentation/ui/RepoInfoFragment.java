@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.epam.traing.gitcl.R;
@@ -50,6 +51,7 @@ import static com.epam.traing.gitcl.presentation.ui.view.RepoIconView.TYPE_REPO;
  */
 
 public class RepoInfoFragment extends Fragment implements IRepoInfoView {
+    private static final String ARG_REPO_MODEL = "ARG_REPO_MODEL";
 
     @Inject
     IRepoInfoPresenter presenter;
@@ -107,7 +109,9 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
 
     public static RepoInfoFragment getInstance(RepoModel repoModel) {
         RepoInfoFragment fragment = new RepoInfoFragment();
-        fragment.setRepoModel(repoModel);
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_REPO_MODEL, repoModel);
+        fragment.setArguments(args);
 
         fragment.setSharedElementEnterTransition(new InfoTransition());
         fragment.setSharedElementReturnTransition(new InfoTransition());
@@ -140,11 +144,17 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             v = inflater.inflate(R.layout.frag_repo_info, container, false);
         }
         ButterKnife.bind(this, v);
+        ctx = getActivity();
+
+        repoModel = getArguments().getParcelable(ARG_REPO_MODEL);
+        if (repoModel == null) {
+            Toast.makeText(ctx, "Repository not selected!", Toast.LENGTH_LONG).show();
+            getFragmentManager().popBackStack();
+        }
 
         getActivity().setTitle(String.format("%s/%s", repoModel.getOwnerName(), repoModel.getName()));
         setHasOptionsMenu(true);
 
-        ctx = getActivity();
         nonTransitionViews = Arrays.asList(txtLanguage, txtDefaultBranch, blockOwner, dividerMain, blockDates, blockBadges);
 
         return v;
@@ -155,7 +165,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         super.onViewCreated(v, savedInstanceState);
 
         txtOwnerFullName.setText(null);
-        displayRepoInfo();
+        displayRepoInfoMain();
 
         fabEditRepo.setOnClickListener(v1 -> Snackbar.make(fabEditRepo, "Not so fast", Snackbar.LENGTH_SHORT).show());
 
@@ -200,7 +210,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         displayRepoInfo();
     }
 
-    private void displayRepoInfo() {
+    private void displayRepoInfoMain() {
         txtRepoName.setText(repoModel.getName());
         repoIcon.setPrivateRepo(repoModel.isPrivateRepo());
         repoIcon.setRepoType(repoModel.isFork() ? TYPE_FORK : TYPE_REPO);
@@ -216,6 +226,10 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         } else {
             txtDefaultBranch.setVisibility(View.GONE);
         }
+    }
+
+    private void displayRepoInfo() {
+        displayRepoInfoMain();
 
         setDateText(txtCreateTime, repoModel.getCreateDate());
         setDateText(txtUpdateTime, repoModel.getUpdateDate());
@@ -229,10 +243,6 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     @Override
     public void showRefreshingProcess(boolean show) {
         srlRepoInfo.setRefreshing(show);
-    }
-
-    private void setRepoModel(RepoModel repoModel) {
-        this.repoModel = repoModel;
     }
 
     private void setDateText(TextView txt, long dateMillis) {

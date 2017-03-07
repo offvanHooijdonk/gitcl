@@ -51,6 +51,13 @@ public class RepositoriesInteractor implements IRepositoriesInteractor {
     }
 
     @Override
+    public Observable<RepoModel> getRepoInfo(long id) {
+        return repoDao.getById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
     public Observable<RepoModel> loadVerbose(RepoModel repoModel) {
         return repoClient.loadRepoInfo(repoModel.getOwnerName(), repoModel.getName())
                 .subscribeOn(Schedulers.io())

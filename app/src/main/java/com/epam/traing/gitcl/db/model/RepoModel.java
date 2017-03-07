@@ -1,5 +1,8 @@
 package com.epam.traing.gitcl.db.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.epam.traing.gitcl.db.tables.RepoTable;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
@@ -9,7 +12,7 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
  */
 
 @StorIOSQLiteType(table = RepoTable.TABLE)
-public class RepoModel {
+public class RepoModel implements Parcelable {
     @StorIOSQLiteColumn(name = RepoTable.COLUMN_ID, key = true)
     long id;
     @StorIOSQLiteColumn(name = RepoTable.COLUMN_NAME)
@@ -40,6 +43,9 @@ public class RepoModel {
     long contributorsCount;
     @StorIOSQLiteColumn(name = RepoTable.COLUMN_DEFAULT_BRANCH)
     String defaultBranch;
+
+    public RepoModel() {
+    }
 
     public String getDefaultBranch() {
         return defaultBranch;
@@ -159,5 +165,42 @@ public class RepoModel {
 
     public void setContributorsCount(long contributorsCount) {
         this.contributorsCount = contributorsCount;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    /*
+      list is limited to the main section on Repo Info view
+     */
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(ownerName);
+        dest.writeString(language);
+        dest.writeString(defaultBranch);
+    }
+
+    public static final Parcelable.Creator<RepoModel> CREATOR = new Creator<RepoModel>() {
+        @Override
+        public RepoModel createFromParcel(Parcel source) {
+            return null;
+        }
+
+        @Override
+        public RepoModel[] newArray(int size) {
+            return new RepoModel[size];
+        }
+    };
+
+    private RepoModel(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        ownerName = in.readString();
+        language = in.readString();
+        defaultBranch = in.readString();
     }
 }

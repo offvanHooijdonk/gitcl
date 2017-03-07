@@ -15,5 +15,7 @@ public interface IRepositoriesInteractor {
 
     Observable<List<RepoModel>> loadRepositories();
 
+    Observable<RepoModel> getRepoInfo(long id);
+
     Observable<RepoModel> loadVerbose(RepoModel repoModel);
 }

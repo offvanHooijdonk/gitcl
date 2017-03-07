@@ -115,7 +115,7 @@ public class GitAuthenticator implements IAuthenticator {
                         session.setCurrentAccount(accountModel);
                         prefHelper.setAccessToken(accountModel.getAccessToken());
                     } else {
-                        throw new AccountNotFoundException(accountName[0]);
+                        throw new AccountNotFoundException("");
                     }
                 });
     }
