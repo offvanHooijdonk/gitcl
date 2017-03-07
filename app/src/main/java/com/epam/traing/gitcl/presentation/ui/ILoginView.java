@@ -10,6 +10,8 @@ public interface ILoginView {
 
     void showAuthErrorMessage(Throwable e);
 
+    void showAuthRequestedMessage();
+
     void startMainView();
 
     void showLoginScreen();

@@ -38,6 +38,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     TextView txtSkipLogin;
     @Bind(R.id.imgLogo)
     ImageView imgLogo;
+    @Bind(R.id.txtErrMsg)
+    TextView txtErrMsg;
 
     private ProgressDialog progressDialog;
 
@@ -52,6 +54,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
         btnLogin.setAlpha(0f);
         txtSkipLogin.setAlpha(0f);
+        txtErrMsg.setVisibility(View.GONE);
     }
 
     @Override
@@ -95,6 +98,12 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         Log.e(Application.LOG, "Error handled.", th);
         showLoginScreen();
         Toast.makeText(this, th.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showAuthRequestedMessage() {
+        txtErrMsg.setText(R.string.error_msg_account_not_found);
+        txtErrMsg.setVisibility(View.VISIBLE);
     }
 
     @Override

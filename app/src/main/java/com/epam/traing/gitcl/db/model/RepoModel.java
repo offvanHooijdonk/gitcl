@@ -38,6 +38,16 @@ public class RepoModel {
     long verboseUpdateDate;
     @StorIOSQLiteColumn(name = RepoTable.COLUMN_CONTRIBUTORS_COUNT)
     long contributorsCount;
+    @StorIOSQLiteColumn(name = RepoTable.COLUMN_DEFAULT_BRANCH)
+    String defaultBranch;
+
+    public String getDefaultBranch() {
+        return defaultBranch;
+    }
+
+    public void setDefaultBranch(String defaultBranch) {
+        this.defaultBranch = defaultBranch;
+    }
 
     public long getId() {
         return id;

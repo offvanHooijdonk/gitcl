@@ -12,6 +12,7 @@
     <color name="btn_material_text">@android:color/white</color>
     <color name="logo_color">@color/colorPrimary</color>
     <color name="divider">#1F000000</color>
+    <color name="error_msg">@color/md_red_500</color>
 
     <color name="refresh1">@color/colorAccent</color>
     <color name="refresh2">@color/colorAccentDark</color>

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.data.interactor.authenticate.AccountNotFoundException;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.data.interactor.authenticate.IAuthenticator;
@@ -108,5 +109,11 @@ public class LoginPresenter implements ILoginPresenter {
         // TODO show error message
         loginView.showLoginProgress(false);
         loginView.showAuthErrorMessage(th);
+        if (th instanceof AccountNotFoundException) {
+            // assume information lost and new auth required
+            prefHelper.setLoggedAccountName(null);
+            loginView.showAuthErrorMessage(th);
+
+        }
     }
 }

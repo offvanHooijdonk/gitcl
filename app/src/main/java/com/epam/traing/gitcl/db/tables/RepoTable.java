@@ -20,6 +20,7 @@ public class RepoTable {
     public static final String COLUMN_PUSH_DATE = "push_date";
     public static final String COLUMN_VERBOSE_UPDATE_DATE = "verbose_update_date";
     public static final String COLUMN_CONTRIBUTORS_COUNT = "contributors_count";
+    public static final String COLUMN_DEFAULT_BRANCH = "default_branch";
 
     public static String getCreateTableQuery() {
         return "CREATE TABLE " + TABLE + "(" +
@@ -36,7 +37,8 @@ public class RepoTable {
                 COLUMN_UPDATE_DATE + " NUMBER," +
                 COLUMN_PUSH_DATE + " NUMBER," +
                 COLUMN_VERBOSE_UPDATE_DATE + " NUMBER, " +
-                COLUMN_CONTRIBUTORS_COUNT + " NUMBER DEFAULT 0" +
+                COLUMN_CONTRIBUTORS_COUNT + " NUMBER DEFAULT 0," +
+                COLUMN_DEFAULT_BRANCH + " TEXT" +
                 ")";
     }
 

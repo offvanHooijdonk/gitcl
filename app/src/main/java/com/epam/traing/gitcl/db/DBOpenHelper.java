@@ -12,7 +12,7 @@ import com.epam.traing.gitcl.db.tables.RepoTable;
  */
 
 public class DBOpenHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 14;
+    private static final int DB_VERSION = 15;
     private static final String DB_NAME = "github_db";
 
     public DBOpenHelper(Context context) {

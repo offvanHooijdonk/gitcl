@@ -78,6 +78,8 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     TextView txtOwnerFullName;
     @Bind(R.id.txtLanguage)
     TextView txtLanguage;
+    @Bind(R.id.txtDefaultBranch)
+    TextView txtDefaultBranch;
     @Bind(R.id.dividerMain)
     View dividerMain;
     @Bind(R.id.blockDates)
@@ -143,7 +145,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         setHasOptionsMenu(true);
 
         ctx = getActivity();
-        nonTransitionViews = Arrays.asList(txtLanguage, blockOwner, dividerMain, blockDates, blockBadges);
+        nonTransitionViews = Arrays.asList(txtLanguage, txtDefaultBranch, blockOwner, dividerMain, blockDates, blockBadges);
 
         return v;
     }
@@ -208,6 +210,11 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             txtLanguage.setText(repoModel.getLanguage());
         } else {
             txtLanguage.setVisibility(View.GONE);
+        }
+        if (repoModel.getDefaultBranch() != null) {
+            txtDefaultBranch.setText(repoModel.getDefaultBranch());
+        } else {
+            txtDefaultBranch.setVisibility(View.GONE);
         }
 
         setDateText(txtCreateTime, repoModel.getCreateDate());

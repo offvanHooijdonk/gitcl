@@ -49,4 +49,14 @@
         <item name="android:layout_marginEnd">@dimen/badge_align_margin</item>
     </style>
 
+    <style name="BranchLabel">
+        <item name="android:paddingStart">@dimen/branch_label_padding_horiz</item>
+        <item name="android:paddingEnd">@dimen/branch_label_padding_horiz</item>
+        <item name="android:paddingTop">@dimen/branch_label_padding_top</item>
+        <item name="android:paddingBottom">@dimen/branch_label_padding_bottom</item>
+        <item name="android:background">@drawable/rounded_corners</item>
+        <item name="android:backgroundTint">@color/md_deep_purple_A200</item>
+        <item name="android:textColor">@color/md_white_1000</item>
+    </style>
+
 </resources>

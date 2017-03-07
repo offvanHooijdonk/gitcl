@@ -31,6 +31,8 @@ public class RepoJson {
     private String updateDate;
     @SerializedName("pushed_at")
     private String pushDate;
+    @SerializedName("default_branch")
+    private String defaultBranch;
 
     public long getId() {
         return id;
@@ -126,6 +128,14 @@ public class RepoJson {
 
     public void setPushDate(String pushDate) {
         this.pushDate = pushDate;
+    }
+
+    public String getDefaultBranch() {
+        return defaultBranch;
+    }
+
+    public void setDefaultBranch(String defaultBranch) {
+        this.defaultBranch = defaultBranch;
     }
 
     public class Owner {

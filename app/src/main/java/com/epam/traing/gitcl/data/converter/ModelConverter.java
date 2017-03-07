@@ -42,6 +42,7 @@ public class ModelConverter {
         model.setCreateDate(parseDateString(json.getCreateDate()));
         model.setUpdateDate(parseDateString(json.getUpdateDate()));
         model.setPushDate(parseDateString(json.getPushDate()));
+        model.setDefaultBranch(json.getDefaultBranch());
         return model;
     }
 
