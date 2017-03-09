@@ -1,5 +1,8 @@
 package com.epam.traing.gitcl.db.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.epam.traing.gitcl.db.tables.AccountTable;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
@@ -9,7 +12,7 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
  */
 
 @StorIOSQLiteType(table = AccountTable.TABLE)
-public class AccountModel {
+public class AccountModel implements Parcelable {
     @StorIOSQLiteColumn(name = AccountTable.COLUMN_ACCOUNT_NAME, key = true)
     String accountName;
     @StorIOSQLiteColumn(name = AccountTable.COLUMN_PERSON_NAME)
@@ -20,6 +23,11 @@ public class AccountModel {
     String avatar;
     @StorIOSQLiteColumn(name = AccountTable.COLUMN_EMAIL)
     String email;
+    @StorIOSQLiteColumn(name = AccountTable.COLUMN_LOCATION)
+    String location;
+
+    public AccountModel() {
+    }
 
     public String getPersonName() {
         return personName;
@@ -59,5 +67,44 @@ public class AccountModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(accountName);
+        dest.writeString(personName);
+        dest.writeString(avatar);
+    }
+
+    public static final Parcelable.Creator<AccountModel> CREATOR = new Creator<AccountModel>() {
+        @Override
+        public AccountModel createFromParcel(Parcel source) {
+            return new AccountModel(source);
+        }
+
+        @Override
+        public AccountModel[] newArray(int size) {
+            return new AccountModel[size];
+        }
+    };
+
+
+    private AccountModel(Parcel in) {
+        accountName = in.readString();
+        personName = in.readString();
+        avatar = in.readString();
     }
 }

@@ -11,6 +11,7 @@ public class AccountTable {
     public static final String COLUMN_ACCESS_TOKEN = "access_token";
     public static final String COLUMN_AVATAR_FILE_NAME = "avatar_file_name";
     public static final String COLUMN_EMAIL = "email";
+    public static final String COLUMN_LOCATION = "location";
 
     public static String getCreateTableQuery() {
         return "CREATE TABLE " + TABLE + "(" +
@@ -18,7 +19,8 @@ public class AccountTable {
                 COLUMN_PERSON_NAME + " TEXT," +
                 COLUMN_ACCESS_TOKEN + " TEXT," +
                 COLUMN_EMAIL + " TEXT," +
-                COLUMN_AVATAR_FILE_NAME + " TEXT" +
+                COLUMN_AVATAR_FILE_NAME + " TEXT, " +
+                COLUMN_LOCATION + " TEXT" +
                 ")";
     }
 }

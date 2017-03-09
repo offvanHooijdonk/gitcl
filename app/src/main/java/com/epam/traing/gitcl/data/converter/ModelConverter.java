@@ -25,6 +25,7 @@ public class ModelConverter {
         model.setPersonName(json.getPersonName());
         model.setAvatar(json.getAvatarUrl());
         model.setEmail(json.getEmail());
+        model.setLocation(json.getLocation());
         return model;
     }
 

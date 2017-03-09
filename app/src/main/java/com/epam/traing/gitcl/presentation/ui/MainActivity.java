@@ -141,10 +141,6 @@ public class MainActivity extends AppCompatActivity
             loadFragment(new RepoListFragment(), FRAG_REPO_LIST);
         } else if (id == R.id.nav_starred) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_logout) {
             presenter.onLogoutSelected();
         }
@@ -167,6 +163,7 @@ public class MainActivity extends AppCompatActivity
 
             imgAvatar.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+                intent.putExtra(AccountActivity.EXTRA_ACCOUNT, session.getCurrentAccount());
                 startActivity(intent);
             });
         }

@@ -166,7 +166,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     public void onViewCreated(View v, Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
 
-        txtOwnerFullName.setText(null);
+        txtOwnerFullName.setVisibility(View.GONE);
         displayRepoInfoMain();
 
         fabEditRepo.setOnClickListener(v1 -> Snackbar.make(fabEditRepo, "Not so fast", Snackbar.LENGTH_SHORT).show());
@@ -184,6 +184,9 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     public void updateOwnerInfo(AccountModel accountModel) {
         if (accountModel.getPersonName() != null) {
             txtOwnerFullName.setText(accountModel.getPersonName());
+            txtOwnerFullName.setVisibility(View.VISIBLE);
+        } else{
+            txtOwnerFullName.setVisibility(View.GONE);
         }
         if (accountModel.getAvatar() != null) {
             Glide.with(this).load(accountModel.getAvatar()).into(imgOwnerPhoto);

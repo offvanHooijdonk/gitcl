@@ -17,6 +17,8 @@ public class AccountJson {
     private String company;
     @SerializedName("email")
     private String email;
+    @SerializedName("location")
+    private String location;
 
     public String getLogin() {
         return login;
@@ -56,5 +58,13 @@ public class AccountJson {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
