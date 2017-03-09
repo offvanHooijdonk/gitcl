@@ -7,7 +7,9 @@ import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.app.SharedElementCallback;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -218,6 +220,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         txtOwnerAccount.setText(repoModel.getOwnerName());
         if (repoModel.getLanguage() != null) {
             txtLanguage.setText(repoModel.getLanguage());
+            txtLanguage.setBackgroundTintList(ColorStateList.valueOf(getLangColor(repoModel.getLanguage())));
         } else {
             txtLanguage.setVisibility(View.GONE);
         }
@@ -277,6 +280,19 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             }
             fabEditRepo.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private int getLangColor(@NonNull String lang) {
+        int colorRes = R.color.label_lang_default;
+        if (lang.equalsIgnoreCase("java")) {
+            colorRes = R.color.label_java;
+        } else if (lang.equalsIgnoreCase("typescript")) {
+            colorRes = R.color.label_typescript;
+        } else if (lang.equalsIgnoreCase("html")) {
+            colorRes = R.color.label_html;
+        }
+
+        return getResources().getColor(colorRes);
     }
 
     private void injectComponent() {

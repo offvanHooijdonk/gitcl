@@ -124,15 +124,18 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="56dp"
                                 android:layout_marginTop="4dp"
+                                style="@style/TextLabelBackground"
+                                android:backgroundTint="@color/label_lang_default"
                                 android:text="Language"/>
 
                             <TextView
                                 android:id="@+id/txtDefaultBranch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="164dp"
+                                android:layout_marginStart="28dp"
+                                android:layout_toEndOf="@id/txtLanguage"
                                 android:layout_alignBaseline="@id/txtLanguage"
-                                style="@style/BranchLabel"
+                                style="@style/TextLabelBackground"
                                 android:text="branch"/>
                         </RelativeLayout>
 
