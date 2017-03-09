@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.app.SharedElementCallback;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -61,6 +62,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     SessionHelper session;
 
     private RepoModel repoModel;
+    private AccountModel accountModel;
     private Context ctx;
 
     // TODO move to a helper
@@ -153,11 +155,18 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             Toast.makeText(ctx, "Repository not selected!", Toast.LENGTH_LONG).show();
             getFragmentManager().popBackStack();
         }
+        accountModel = new AccountModel();
+        accountModel.setAccountName(repoModel.getOwnerName());
 
         getActivity().setTitle(String.format("%s/%s", repoModel.getOwnerName(), repoModel.getName()));
         setHasOptionsMenu(true);
 
         nonTransitionViews = Arrays.asList(txtLanguage, txtDefaultBranch, blockOwner, dividerMain, blockDates, blockBadges);
+        blockOwner.setOnClickListener(v1 -> {
+            Intent intent = new Intent(ctx, AccountActivity.class);
+            intent.putExtra(AccountActivity.EXTRA_ACCOUNT, accountModel);
+            ctx.startActivity(intent);
+        });
 
         return v;
     }
@@ -182,6 +191,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
 
     @Override
     public void updateOwnerInfo(AccountModel accountModel) {
+        this.accountModel = accountModel;
         if (accountModel.getPersonName() != null) {
             txtOwnerFullName.setText(accountModel.getPersonName());
             txtOwnerFullName.setVisibility(View.VISIBLE);
