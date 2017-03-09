@@ -187,7 +187,7 @@ public class RepoModel implements Parcelable {
     public static final Parcelable.Creator<RepoModel> CREATOR = new Creator<RepoModel>() {
         @Override
         public RepoModel createFromParcel(Parcel source) {
-            return null;
+            return new RepoModel(source);
         }
 
         @Override
