@@ -1,6 +1,7 @@
 package com.epam.traing.gitcl.presentation.ui.adapter;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +59,9 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
 
         vh.txtOwnerName.setText(model.getOwnerName());
         if (model.getOwnerName().equalsIgnoreCase(accountModel.getAccountName())) {
-            vh.txtOwnerName.setTextColor(ctx.getResources().getColor(R.color.repo_own) | 0x88000000);
+            if (ctx.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                vh.txtOwnerName.setTextColor(ctx.getResources().getColor(R.color.repo_own) | 0x88000000);
+            }
             vh.repoIcon.setIsOwn(true);
         } else {
             vh.repoIcon.setIsOwn(false);

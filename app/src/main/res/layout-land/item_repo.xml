@@ -24,11 +24,34 @@
         app:privateIconSize="@dimen/repo_list_private"/>
 
     <TextView
-        android:id="@+id/txtRepoName"
+        android:id="@+id/txtOwnerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/repoIcon"
         android:layout_toEndOf="@id/repoIcon"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Ownerwith a long long name letsssss"
+        android:textColor="@color/repo_list_name"
+        android:textSize="@dimen/list_item_primary"/>
+
+    <TextView
+        android:id="@+id/txtRepoNameDivider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/txtOwnerName"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:text="@string/repo_name_divider"
+        android:textColor="@color/repo_list_name"
+        android:textSize="@dimen/list_item_primary"/>
+
+    <TextView
+        android:id="@+id/txtRepoName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/txtRepoName"
+        android:layout_toEndOf="@id/txtRepoNameDivider"
         android:layout_toStartOf="@+id/badgeStar"
         android:ellipsize="end"
         android:maxLines="1"
@@ -37,22 +60,11 @@
         android:textSize="@dimen/list_item_primary"/>
 
     <TextView
-        android:id="@+id/txtOwnerName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/repoIcon"
-        android:layout_alignEnd="@id/txtRepoName"
-        android:layout_alignStart="@id/txtRepoName"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="Ownerwith a long long name letsssss"/>
-
-    <TextView
         android:id="@+id/txtLastPushed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/txtOwnerName"
-        android:layout_below="@id/txtOwnerName"
+        android:layout_alignBottom="@id/repoIcon"
         android:layout_marginTop="6dp"
         android:layout_marginStart="4dp"
         android:text="6/17/2016 2:45 PM"

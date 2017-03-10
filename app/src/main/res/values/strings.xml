@@ -40,4 +40,5 @@
     <string name="sign_million">m</string>
     <string name="sign_billion">b</string>
     <string name="sign_trillion">t</string>
+    <string name="repo_name_divider">/</string>
 </resources>
