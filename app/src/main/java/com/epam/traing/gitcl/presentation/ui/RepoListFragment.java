@@ -3,6 +3,7 @@ package com.epam.traing.gitcl.presentation.ui;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -39,6 +40,7 @@ import butterknife.ButterKnife;
  */
 
 public class RepoListFragment extends Fragment implements IRepoListView, RepoListAdapter.RepoClickListener {
+    private static final String SAVED_LAYOUT_MANAGER = "saved_layout_manager";
 
     @Inject
     IRepoListPresenter presenter;
@@ -46,6 +48,8 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     SessionHelper session;
 
     private Context ctx;
+    private LinearLayoutManager layoutManager;
+    private Parcelable layoutSavedState;
 
     @Bind(R.id.lstRepos)
     RecyclerView lstRepos;
@@ -91,7 +95,8 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         refreshLayoutList.setVisibility(View.VISIBLE);
         refreshLayoutEmpty.setVisibility(View.GONE);
 
-        lstRepos.setLayoutManager(new LinearLayoutManager(ctx));
+        layoutManager = new LinearLayoutManager(ctx);
+        lstRepos.setLayoutManager(layoutManager);
         lstRepos.setHasFixedSize(true);
         repositories.clear();
         repoListAdapter = new RepoListAdapter(ctx, repositories, session.getCurrentAccount());
@@ -129,8 +134,12 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         if (!repoModels.isEmpty()) {
             this.repositories.clear();
             this.repositories.addAll(repoModels);
-            Log.i(Application.LOG, "Updating repos on UI");
             repoListAdapter.notifyDataSetChanged();
+            // set  RecyclerView state if it exists
+            if (layoutSavedState != null) {
+                layoutManager.onRestoreInstanceState(layoutSavedState);
+                //layoutSavedState = null;
+            }
         }
     }
 
@@ -190,6 +199,25 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
             presenter.onRefreshTriggered();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.i(Application.LOG, "onSaveInstanceState");
+        if (outState == null) {
+            outState = new Bundle();
+        }
+        outState.putParcelable(SAVED_LAYOUT_MANAGER, layoutManager.onSaveInstanceState());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        Log.i(Application.LOG, "onViewStateRestored");
+        if (savedInstanceState != null) {
+            layoutSavedState = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER);
+        }
     }
 
     private void showListOrEmptyView(boolean showList) {
