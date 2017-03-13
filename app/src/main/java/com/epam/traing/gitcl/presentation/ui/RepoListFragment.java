@@ -2,8 +2,8 @@ package com.epam.traing.gitcl.presentation.ui;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -40,7 +40,6 @@ import butterknife.ButterKnife;
  */
 
 public class RepoListFragment extends Fragment implements IRepoListView, RepoListAdapter.RepoClickListener {
-    private static final String SAVED_LAYOUT_MANAGER = "saved_layout_manager";
 
     @Inject
     IRepoListPresenter presenter;
@@ -49,7 +48,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
 
     private Context ctx;
     private LinearLayoutManager layoutManager;
-    private Parcelable layoutSavedState;
+    private int recentConfiguration;
 
     @Bind(R.id.lstRepos)
     RecyclerView lstRepos;
@@ -77,6 +76,8 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
             v = inflater.inflate(R.layout.frag_repo_list, container, false);
         }
         ButterKnife.bind(this, v);
+        ctx = getActivity();
+        recentConfiguration = ctx.getResources().getConfiguration().orientation;
 
         setHasOptionsMenu(true);
 
@@ -86,8 +87,6 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        ctx = getActivity();
 
         getActivity().setTitle(getString(R.string.title_repos));
         initRefreshLayout(refreshLayoutList);
@@ -101,6 +100,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         repositories.clear();
         repoListAdapter = new RepoListAdapter(ctx, repositories, session.getCurrentAccount());
         repoListAdapter.setClickListener(this);
+        repoListAdapter.setOrientation(ctx.getResources().getConfiguration().orientation);
         lstRepos.setAdapter(repoListAdapter);
         lstRepos.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -135,11 +135,6 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
             this.repositories.clear();
             this.repositories.addAll(repoModels);
             repoListAdapter.notifyDataSetChanged();
-            // set  RecyclerView state if it exists
-            if (layoutSavedState != null) {
-                layoutManager.onRestoreInstanceState(layoutSavedState);
-                //layoutSavedState = null;
-            }
         }
     }
 
@@ -202,22 +197,18 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Log.i(Application.LOG, "onSaveInstanceState");
-        if (outState == null) {
-            outState = new Bundle();
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (recentConfiguration != newConfig.orientation) {
+            adaptToOrientation(newConfig.orientation);
+
+            recentConfiguration = newConfig.orientation;
         }
-        outState.putParcelable(SAVED_LAYOUT_MANAGER, layoutManager.onSaveInstanceState());
-        super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        Log.i(Application.LOG, "onViewStateRestored");
-        if (savedInstanceState != null) {
-            layoutSavedState = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER);
-        }
+    private void adaptToOrientation(int orientation) {
+        repoListAdapter.setOrientation(orientation);
     }
 
     private void showListOrEmptyView(boolean showList) {

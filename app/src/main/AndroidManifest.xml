@@ -28,7 +28,8 @@
         </activity>
         <activity
             android:name=".presentation.ui.MainActivity"
-            android:label="@string/title_activity_main">
+            android:label="@string/title_activity_main"
+            android:configChanges="orientation|screenSize">
 
             <!--
             <intent-filter>

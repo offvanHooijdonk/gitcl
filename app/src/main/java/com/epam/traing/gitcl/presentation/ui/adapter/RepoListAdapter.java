@@ -33,6 +33,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
     private AccountModel accountModel;
     private RepoClickListener listener;
     private DateHelper dateHelper = new DateHelper();
+    private int orientation = Configuration.ORIENTATION_UNDEFINED;
 
 
     public RepoListAdapter(Context context, List<RepoModel> repositories, AccountModel accountModel) {
@@ -59,7 +60,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
 
         vh.txtOwnerName.setText(model.getOwnerName());
         if (model.getOwnerName().equalsIgnoreCase(accountModel.getAccountName())) {
-            if (ctx.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 vh.txtOwnerName.setTextColor(ctx.getResources().getColor(R.color.repo_own) | 0x88000000);
             }
             vh.repoIcon.setIsOwn(true);
@@ -85,6 +86,15 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
     @Override
     public int getItemCount() {
         return repositories.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return orientation;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
     }
 
     public class RepoViewHolder extends RecyclerView.ViewHolder {
