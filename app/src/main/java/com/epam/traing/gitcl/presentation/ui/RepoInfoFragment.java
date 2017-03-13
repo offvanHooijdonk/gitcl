@@ -9,6 +9,7 @@ import android.app.SharedElementCallback;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -64,6 +65,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     private RepoModel repoModel;
     private AccountModel accountModel;
     private Context ctx;
+    private int recentOrientation;
 
     // TODO move to a helper
     private List<View> nonTransitionViews;
@@ -149,6 +151,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         }
         ButterKnife.bind(this, v);
         ctx = getActivity();
+        recentOrientation = ctx.getResources().getConfiguration().orientation;
 
         repoModel = getArguments().getParcelable(ARG_REPO_MODEL);
         if (repoModel == null) {
@@ -223,6 +226,17 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         this.repoModel = repoModel;
 
         displayRepoInfo();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (recentOrientation != newConfig.orientation) {
+            recentOrientation = newConfig.orientation;
+
+            //getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
     }
 
     private void displayRepoInfoMain() {

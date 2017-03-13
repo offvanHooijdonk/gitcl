@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/blockRepo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin">
+
+        <com.epam.traing.gitcl.presentation.ui.view.RepoIconView
+            android:id="@+id/repoIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/list_item_padding_hor"
+            android:transitionName="@string/transit_repo_icon"
+            app:iconSize="@dimen/repo_info_icon"
+            app:isOwn="true"
+            app:privateIconSize="@dimen/repo_info_private"/>
+
+        <TextView
+            android:id="@+id/txtRepoName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Repository"
+            android:textColor="@android:color/primary_text_light"
+            android:textSize="24sp"
+            android:transitionName="@string/transit_repo_name"/>
+    </LinearLayout>
+    <!-- can lesser top margin here -->
+    <LinearLayout
+        android:id="@+id/blockOwner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:clickable="true"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/imgOwnerPhoto"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/list_item_padding_hor"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_account_default_72"
+            app:civ_border="false"/>
+        <!-- Add android:layout_gravity="center_vertical" to image? -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtOwnerAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ownername"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/txtOwnerFullName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="John Doe"
+                android:textSize="14sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/txtLanguage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="4dp"
+            style="@style/TextLabelBackground"
+            android:backgroundTint="@color/label_lang_default"
+            android:text="Language"/>
+
+        <TextView
+            android:id="@+id/txtDefaultBranch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/txtLanguage"
+            android:layout_alignBaseline="@id/txtLanguage"
+            style="@style/TextLabelBackground"
+            android:text="branch"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

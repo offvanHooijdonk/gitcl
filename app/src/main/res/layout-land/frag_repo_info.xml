@@ -74,8 +74,6 @@
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_edit_black_24dp"
             android:tint="#ffffff"
-            app:fabSize="mini"
-            app:layout_anchor="@id/dividerMain"
-            app:layout_anchorGravity="center_vertical|right|end"/>
+            android:layout_gravity="bottom|end"/>
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

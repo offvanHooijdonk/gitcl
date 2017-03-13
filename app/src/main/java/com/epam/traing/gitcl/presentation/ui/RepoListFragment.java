@@ -73,7 +73,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         if (v == null) {
-            v = inflater.inflate(R.layout.frag_repo_list, container, false);
+            v = inflater.inflate(R.layout.frag_repos_list, container, false);
         }
         ButterKnife.bind(this, v);
         ctx = getActivity();

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/blockBadges"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/badge_align_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/badge_align_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView
+            android:id="@+id/badgeStars"
+            style="@style/BadgeAligned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:src="@drawable/ic_star_24dp"
+            app:state="inactive"/>
+
+        <com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView
+            android:id="@+id/badgeWatchers"
+            style="@style/BadgeAligned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:src="@drawable/ic_watch_24"
+            app:state="inactive"/>
+
+        <com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView
+            android:id="@+id/badgeContributors"
+            style="@style/BadgeAligned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:src="@drawable/ic_group_24dp"
+            app:state="inactive"/>
+
+        <com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView
+            android:id="@+id/badgeForks"
+            style="@style/BadgeAligned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:src="@drawable/ic_fork_32"
+            app:state="inactive"/>
+    </LinearLayout>
+</LinearLayout>
