@@ -58,6 +58,7 @@ public class LoginPresenter implements ILoginPresenter {
         Uri uri = intent.getData();
 
         Log.d(Application.LOG, "onResume data: " + (uri != null ? uri.toString() : "null"));
+        // TODO handle reopen App after auth process, which causes excessive auth attempt
         if (uri != null && isCallbackUrl(uri.toString())) {
             Log.d(Application.LOG, "Uri received: " + uri.toString());
 

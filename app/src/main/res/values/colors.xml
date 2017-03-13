@@ -25,7 +25,7 @@
     <color name="badge_inactive">#CC000000</color>
     <color name="badge_active">@color/colorAccent</color>
     <color name="label_branch">@color/md_deep_purple_A200</color>
-    <color name="label_lang_default">@color/md_amber_A400</color>
+    <color name="label_lang_default">@color/md_grey_400</color>
     <color name="label_java">@color/md_orange_A200</color>
     <color name="label_typescript">@color/md_teal_A700</color>
     <color name="label_html">@color/md_deep_orange_A200</color>
