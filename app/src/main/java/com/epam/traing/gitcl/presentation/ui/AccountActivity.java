@@ -34,7 +34,6 @@ public class AccountActivity extends AppCompatActivity implements IAccountView {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.collapsingToolbar)
     CollapsingToolbarLayout collapsingToolbar;
     @Bind(R.id.imgAccountAvatar)
     ImageView imgAccountAvatar;
@@ -42,6 +41,8 @@ public class AccountActivity extends AppCompatActivity implements IAccountView {
     TextView txtFullName;
     @Bind(R.id.txtLocation)
     TextView txtLocation;
+    @Bind(R.id.txtEmail)
+    TextView txtEmail;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +58,12 @@ public class AccountActivity extends AppCompatActivity implements IAccountView {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_24);
-        collapsingToolbar.setTitle(account.getAccountName());
+        getSupportActionBar().setTitle(account.getAccountName());
+
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbar);
+        if (collapsingToolbar != null) {
+            collapsingToolbar.setTitle(account.getAccountName());
+        }
         if (account.getAvatar() != null) {
             Glide.with(this).load(account.getAvatar()).into(imgAccountAvatar);
         }
@@ -71,6 +77,12 @@ public class AccountActivity extends AppCompatActivity implements IAccountView {
             txtLocation.setText(account.getLocation());
         } else {
             txtLocation.setVisibility(View.GONE);
+        }
+
+        if (account.getEmail() != null) {
+            txtEmail.setText(account.getEmail());
+        } else {
+            txtEmail.setVisibility(View.GONE);
         }
     }
 }
