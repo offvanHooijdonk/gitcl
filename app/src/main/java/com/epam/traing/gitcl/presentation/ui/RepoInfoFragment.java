@@ -251,7 +251,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         if (recentOrientation != newConfig.orientation) {
             recentOrientation = newConfig.orientation;
             layoutRevealRequired = true;
-            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+            getFragmentManager().beginTransaction().detach(this).attach(this).commitAllowingStateLoss();
         }
     }
 

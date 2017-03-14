@@ -47,8 +47,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.AccountActivity"
-                  android:parentActivityName=".presentation.ui.MainActivity">
+        <activity android:name=".presentation.ui.AccountActivity">
 
         </activity>
     </application>
