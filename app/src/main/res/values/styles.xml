@@ -54,8 +54,10 @@
     </style>
 
     <style name="BadgeAligned">
-        <item name="android:layout_marginStart">@dimen/badge_align_margin</item>
-        <item name="android:layout_marginEnd">@dimen/badge_align_margin</item>
+        <item name="android:layout_marginStart">@dimen/badge_align_margin_horiz</item>
+        <item name="android:layout_marginEnd">@dimen/badge_align_margin_horiz</item>
+        <item name="android:layout_marginTop">@dimen/badge_align_margin_vert</item>
+        <item name="android:layout_marginBottom">@dimen/badge_align_margin_vert</item>
     </style>
 
     <style name="TextLabelBackground">
@@ -72,7 +74,6 @@
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textSize">14sp</item>
         <item name="android:layout_marginTop">8dp</item>
-        <!--<item name="android:layout_marginStart">6sp</item>-->
     </style>
 
     <style name="TextRepoDateInfo">

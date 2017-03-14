@@ -24,7 +24,8 @@
 
     <dimen name="card_margin">16dp</dimen>
 
-    <dimen name="badge_align_margin">24dp</dimen>
+    <dimen name="badge_align_margin_horiz">24dp</dimen>
+    <dimen name="badge_align_margin_vert">0dp</dimen>
     <dimen name="branch_label_padding_top">1dp</dimen>
     <dimen name="branch_label_padding_bottom">3dp</dimen>
     <dimen name="branch_label_padding_horiz">6dp</dimen>
