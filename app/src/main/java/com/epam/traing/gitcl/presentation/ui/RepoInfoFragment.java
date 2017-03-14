@@ -17,6 +17,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -66,10 +67,10 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     private AccountModel accountModel;
     private Context ctx;
     private int recentOrientation;
+    private boolean layoutRevealRequired = false;
 
     // TODO move to a helper
     private List<View> nonTransitionViews;
-    private boolean isEnterAnimationEnded = false;
     private DateHelper dateHelper = new DateHelper();
 
     @Bind(R.id.txtRepoName)
@@ -114,11 +115,13 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     SwipeRefreshLayout srlRepoInfo;
 
     public static RepoInfoFragment getInstance(RepoModel repoModel) {
+        Log.i(Application.LOG, "Constructor");
         RepoInfoFragment fragment = new RepoInfoFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_REPO_MODEL, repoModel);
         fragment.setArguments(args);
 
+        fragment.layoutRevealRequired = true;
         fragment.setSharedElementEnterTransition(new InfoTransition());
         fragment.setSharedElementReturnTransition(new InfoTransition());
         fragment.setEnterTransition(new Fade());
@@ -126,9 +129,9 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             @Override
             public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
                 super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
-                if (!fragment.isEnterAnimationEnded) {
+                if (fragment.layoutRevealRequired) {
                     fragment.revealNonTransitionViews(true);
-                    fragment.isEnterAnimationEnded = true;
+                    fragment.layoutRevealRequired = false;
                 } else {
                     fragment.revealNonTransitionViews(false);
                 }
@@ -149,6 +152,8 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         if (v == null) {
             v = inflater.inflate(R.layout.frag_repo_info, container, false);
         }
+
+        Log.i(Application.LOG, "onCreateView");
         ButterKnife.bind(this, v);
         ctx = getActivity();
         recentOrientation = ctx.getResources().getConfiguration().orientation;
@@ -158,18 +163,24 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             Toast.makeText(ctx, "Repository not selected!", Toast.LENGTH_LONG).show();
             getFragmentManager().popBackStack();
         }
-        accountModel = new AccountModel();
-        accountModel.setAccountName(repoModel.getOwnerName());
 
         getActivity().setTitle(String.format("%s/%s", repoModel.getOwnerName(), repoModel.getName()));
         setHasOptionsMenu(true);
 
         nonTransitionViews = Arrays.asList(txtLanguage, txtDefaultBranch, blockOwner, dividerMain, blockDates, blockBadges);
+
+        srlRepoInfo.setColorSchemeColors(ctx.getResources().getColor(R.color.refresh1),
+                ctx.getResources().getColor(R.color.refresh2),
+                ctx.getResources().getColor(R.color.refresh3));
+        srlRepoInfo.setOnRefreshListener(() -> presenter.onRefreshTriggered());
+
         blockOwner.setOnClickListener(v1 -> {
             Intent intent = new Intent(ctx, AccountActivity.class);
             intent.putExtra(AccountActivity.EXTRA_ACCOUNT, accountModel);
             ctx.startActivity(intent);
         });
+
+        fabEditRepo.setOnClickListener(v1 -> Snackbar.make(fabEditRepo, "Not so fast", Snackbar.LENGTH_SHORT).show());
 
         return v;
     }
@@ -177,19 +188,24 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
+        Log.i(Application.LOG, "onViewCreated");
 
-        txtOwnerFullName.setVisibility(View.GONE);
+        if (accountModel == null) {
+            accountModel = new AccountModel();
+            accountModel.setAccountName(repoModel.getOwnerName());
+            txtOwnerFullName.setVisibility(View.GONE);
+        } else {
+            updateOwnerInfo(accountModel);
+        }
         displayRepoInfoMain();
 
-        fabEditRepo.setOnClickListener(v1 -> Snackbar.make(fabEditRepo, "Not so fast", Snackbar.LENGTH_SHORT).show());
-
-        srlRepoInfo.setColorSchemeColors(ctx.getResources().getColor(R.color.refresh1),
-                ctx.getResources().getColor(R.color.refresh2),
-                ctx.getResources().getColor(R.color.refresh3));
-        srlRepoInfo.setOnRefreshListener(() -> presenter.onRefreshTriggered());
-
         presenter.onViewCreated(repoModel);
-        revealNonTransitionViews(false);
+        if (layoutRevealRequired) {
+            revealNonTransitionViews(true);
+            layoutRevealRequired = false;
+        } else {
+            revealNonTransitionViews(false);
+        }
     }
 
     @Override
@@ -231,11 +247,11 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-
+        Log.i(Application.LOG, "onConfigurationChanged");
         if (recentOrientation != newConfig.orientation) {
             recentOrientation = newConfig.orientation;
-
-            //getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+            layoutRevealRequired = true;
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
         }
     }
 
@@ -309,6 +325,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         }
     }
 
+    // TODO move to helper
     private int getLangColor(@NonNull String lang) {
         int colorRes = R.color.label_lang_default;
         if (lang.equalsIgnoreCase("java")) {
