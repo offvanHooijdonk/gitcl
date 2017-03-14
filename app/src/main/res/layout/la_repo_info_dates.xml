@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
         android:text="02/16/2017 2:40 PM"
-        android:textSize="12sp"/>
+        style="@style/TextRepoDateInfo"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
         android:layout_below="@id/txtCreateTime"
         android:layout_marginTop="8dp"
         android:text="02/19/2017 5:24 PM"
-        android:textSize="12sp"/>
+        style="@style/TextRepoDateInfo"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
         android:layout_below="@id/txtUpdateTime"
         android:layout_marginTop="8dp"
         android:text="02/26/2017 10:37 AM"
-        android:textSize="12sp"/>
+        style="@style/TextRepoDateInfo"/>
 
     <TextView
         android:layout_width="wrap_content"

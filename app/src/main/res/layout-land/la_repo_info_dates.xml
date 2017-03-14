@@ -7,42 +7,42 @@
     android:orientation="vertical">
 
     <TextView
+        style="@style/LabelRepoInfoDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/LabelDate"
         android:text="@string/repo_info_create_date"/>
 
     <TextView
         android:id="@+id/txtCreateTime"
+        style="@style/TextRepoDateInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="02/16/2017 2:40 PM"
-        android:textSize="12sp"/>
+        android:text="02/16/2017 2:40 PM"/>
 
     <TextView
+        style="@style/LabelRepoInfoDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/LabelDate"
         android:text="@string/repo_info_update_date"/>
 
     <TextView
         android:id="@+id/txtUpdateTime"
+        style="@style/TextRepoDateInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="02/19/2017 5:24 PM"
-        android:textSize="12sp"/>
+        android:text="02/19/2017 5:24 PM"/>
 
     <TextView
+        style="@style/LabelRepoInfoDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/LabelDate"
         android:text="@string/repo_info_push_date"/>
 
     <TextView
         android:id="@+id/txtPushTime"
+        style="@style/TextRepoDateInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="02/26/2017 10:37 AM"
-        android:textSize="12sp"/>
+        android:text="02/26/2017 10:37 AM"/>
 
 </LinearLayout>
