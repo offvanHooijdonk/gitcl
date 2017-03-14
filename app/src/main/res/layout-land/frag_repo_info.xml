@@ -13,55 +13,74 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:orientation="vertical"
                 android:paddingBottom="4dp">
 
                 <android.support.v7.widget.CardView
-                    android:id="@+id/blockMainInfo"
+                    android:id="@+id/cardMainInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:elevation="@dimen/cardview_default_elevation">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        android:orientation="vertical"
-                        android:paddingBottom="@dimen/activity_vertical_margin"
-                        android:paddingEnd="@dimen/activity_horizontal_margin"
-                        android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:paddingTop="@dimen/activity_vertical_margin">
+                        android:layout_height="wrap_content">
 
-                        <include layout="@layout/la_repo_info_main"/>
-
-                        <View
-                            android:id="@+id/dividerMain"
+                        <FrameLayout
+                            android:id="@+id/blockMainInfo"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginBottom="24dp"
-                            android:layout_marginEnd="-16dp"
-                            android:layout_marginStart="-16dp"
-                            android:layout_marginTop="24dp"
-                            android:background="@color/divider"/>
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@+id/blockDatesPlaceholder"
+                            android:paddingBottom="@dimen/double_padding"
+                            android:paddingEnd="@dimen/double_padding"
+                            android:paddingStart="@dimen/double_padding"
+                            android:paddingTop="@dimen/double_padding">
 
-                        <include layout="@layout/la_repo_info_dates"/>
-                    </LinearLayout>
+                            <include layout="@layout/la_repo_info_main"/>
+
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:id="@+id/blockDatesPlaceholder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:paddingBottom="@dimen/activity_vertical_margin"
+                            android:paddingEnd="@dimen/double_padding"
+                            android:paddingStart="@dimen/activity_horizontal_margin"
+                            android:paddingTop="@dimen/double_padding">
+
+                            <include
+                                android:id="@+id/blockDates"
+                                layout="@layout/la_repo_info_dates"/>
+                        </FrameLayout>
+
+                    </RelativeLayout>
                 </android.support.v7.widget.CardView>
+
+                <!-- this left for ButterKnife compatibility between the layout versions -->
+                <View
+                    android:id="@+id/dividerMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_below="@id/cardMainInfo"
+                    android:layout_marginTop="@dimen/card_margin"
                     android:elevation="@dimen/cardview_default_elevation">
 
                     <include layout="@layout/la_repo_info_badges"/>
                 </android.support.v7.widget.CardView>
-            </LinearLayout>
-
+            </RelativeLayout>
 
         </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>

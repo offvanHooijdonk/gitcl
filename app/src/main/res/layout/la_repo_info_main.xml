@@ -9,9 +9,7 @@
     <LinearLayout
         android:id="@+id/blockRepo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin">
+        android:layout_height="wrap_content">
 
         <com.epam.traing.gitcl.presentation.ui.view.RepoIconView
             android:id="@+id/repoIcon"
@@ -30,7 +28,7 @@
             android:layout_gravity="center_vertical"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Repository"
+            android:text="Repository long name hello yeah"
             android:textColor="@android:color/primary_text_light"
             android:textSize="24sp"
             android:transitionName="@string/transit_repo_name"/>
@@ -42,7 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="?android:attr/selectableItemBackground"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:clickable="true"
         android:paddingBottom="8dp"
         android:paddingTop="8dp">
@@ -83,8 +80,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="@dimen/activity_horizontal_margin">
+        android:layout_marginTop="8dp">
 
         <TextView
             android:id="@+id/txtLanguage"

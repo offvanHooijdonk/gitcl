@@ -22,8 +22,11 @@
     <dimen name="repo_info_icon">40dp</dimen>
     <dimen name="repo_info_private">14dp</dimen>
 
+    <dimen name="card_margin">16dp</dimen>
+
     <dimen name="badge_align_margin">24dp</dimen>
     <dimen name="branch_label_padding_top">1dp</dimen>
-    <dimen name="branch_label_padding_bottom">2dp</dimen>
+    <dimen name="branch_label_padding_bottom">3dp</dimen>
     <dimen name="branch_label_padding_horiz">6dp</dimen>
+    <dimen name="double_padding">32dp</dimen>
 </resources>

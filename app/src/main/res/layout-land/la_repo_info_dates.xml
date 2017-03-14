@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/blockDates"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/LabelDate"
+        android:text="@string/repo_info_create_date"/>
+
+    <TextView
+        android:id="@+id/txtCreateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="02/16/2017 2:40 PM"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/LabelDate"
+        android:text="@string/repo_info_update_date"/>
+
+    <TextView
+        android:id="@+id/txtUpdateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="02/19/2017 5:24 PM"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/LabelDate"
+        android:text="@string/repo_info_push_date"/>
+
+    <TextView
+        android:id="@+id/txtPushTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="02/26/2017 10:37 AM"
+        android:textSize="12sp"/>
+
+</LinearLayout>

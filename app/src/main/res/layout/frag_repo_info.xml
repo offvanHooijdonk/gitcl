@@ -38,7 +38,14 @@
                         android:paddingStart="@dimen/activity_horizontal_margin"
                         android:paddingTop="@dimen/activity_vertical_margin">
 
-                        <include layout="@layout/la_repo_info_main"/>
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                            <include layout="@layout/la_repo_info_main"/>
+                        </FrameLayout>
 
                         <View
                             android:id="@+id/dividerMain"
@@ -50,7 +57,9 @@
                             android:layout_marginTop="24dp"
                             android:background="@color/divider"/>
 
-                        <include layout="@layout/la_repo_info_dates"/>
+                        <include
+                            android:id="@+id/blockDates"
+                            layout="@layout/la_repo_info_dates"/>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
