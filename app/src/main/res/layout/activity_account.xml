@@ -58,5 +58,4 @@
             <include layout="@layout/la_account_info"/>
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
-</android.support.design.widget.CoordinatorLayout
-    >
+</android.support.design.widget.CoordinatorLayout>
