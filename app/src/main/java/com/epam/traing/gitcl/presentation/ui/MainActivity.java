@@ -27,6 +27,7 @@ import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.presenter.IMainPresenter;
+import com.epam.traing.gitcl.presentation.ui.view.search.SearchDialogFragment;
 
 import javax.inject.Inject;
 
@@ -117,6 +118,24 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        /*SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("Search repos 'n' users");*/
+
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });*/
+
         return true;
     }
 
@@ -126,6 +145,10 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, PreferenceActivity.class));
+        } if (id == R.id.action_search) {
+            SearchDialogFragment searchFragment = SearchDialogFragment.newInstance();
+
+            searchFragment.show(getFragmentManager(), "searchDialog");
         }
 
         return super.onOptionsItemSelected(item);

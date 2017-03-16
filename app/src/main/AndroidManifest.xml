@@ -23,25 +23,22 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="githubcloauth" android:scheme="githubcl"/>
+
+                <data
+                    android:host="githubcloauth"
+                    android:scheme="githubcl"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".presentation.ui.MainActivity"
-            android:label="@string/title_activity_main"
-            android:configChanges="orientation|screenSize">
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-            -->
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_main">
         </activity>
 
-        <activity android:name=".presentation.ui.PreferenceActivity"
-                  android:theme="@style/AppBaseTheme.Preferences"
-            android:parentActivityName=".presentation.ui.MainActivity">
+        <activity
+            android:name=".presentation.ui.PreferenceActivity"
+            android:parentActivityName=".presentation.ui.MainActivity"
+            android:theme="@style/AppBaseTheme.Preferences">
             <intent-filter>
                 <category android:name="android.intent.category.PREFERENCE"/>
             </intent-filter>

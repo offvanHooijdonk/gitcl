@@ -41,4 +41,5 @@
     <string name="sign_billion">b</string>
     <string name="sign_trillion">t</string>
     <string name="repo_name_divider">/</string>
+    <string name="search_input_hint"><![CDATA[Search repos & users]]></string>
 </resources>
