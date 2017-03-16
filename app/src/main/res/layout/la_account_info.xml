@@ -2,27 +2,28 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/txtFullName"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Full Name"
+        android:textIsSelectable="true"
         android:textSize="24sp"/>
 
     <TextView
         android:id="@+id/txtLocation"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:textSize="18sp"
-        android:text="Location"/>
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/txtEmail"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="sample@test.net"/>
 </LinearLayout>
