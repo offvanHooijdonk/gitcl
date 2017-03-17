@@ -15,8 +15,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -146,7 +148,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, PreferenceActivity.class));
         } if (id == R.id.action_search) {
-            SearchDialogFragment searchFragment = SearchDialogFragment.newInstance();
+            View itemView  = findViewById(R.id.action_search);
+            Log.i("LOG", String.valueOf(itemView != null));
+            SearchDialogFragment searchFragment = SearchDialogFragment.newInstance(itemView);
 
             searchFragment.show(getFragmentManager(), "searchDialog");
         }
