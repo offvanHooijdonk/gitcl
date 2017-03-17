@@ -3,6 +3,7 @@ package com.epam.traing.gitcl.presentation.ui;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import com.epam.traing.gitcl.R;
 
@@ -30,6 +31,15 @@ public class PreferenceActivity extends AppCompatActivity {
 
             addPreferencesFromResource(R.xml.pref);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

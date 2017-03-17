@@ -19,7 +19,7 @@
             android:transitionName="@string/transit_repo_icon"
             app:iconSize="@dimen/repo_info_icon"
             app:isOwn="true"
-            app:privateIconSize="@dimen/repo_info_private"/>
+            app:privateIconSize="@dimen/repo_info_private" />
 
         <TextView
             android:id="@+id/txtRepoName"
@@ -30,9 +30,8 @@
             android:maxLines="1"
             android:text="Repository long name hello yeah"
             android:textColor="@android:color/primary_text_light"
-            android:textIsSelectable="true"
             android:textSize="24sp"
-            android:transitionName="@string/transit_repo_name"/>
+            android:transitionName="@string/transit_repo_name" />
     </LinearLayout>
     <!-- can lesser top margin here -->
     <LinearLayout
