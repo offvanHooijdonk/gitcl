@@ -2,9 +2,13 @@ package com.epam.traing.gitcl.presentation.ui.view.search;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 
 /**
@@ -12,8 +16,8 @@ import android.view.animation.DecelerateInterpolator;
  */
 
 public class SearchRevealAnim {
-    private static final int DURATION_IN = 225;
-    private static final int DURATION_OUT = 195;
+    private static final int DURATION_IN = 325;
+    private static final int DURATION_OUT = 295;
 
     private AnimationListener listener;
     private View animView;
@@ -27,8 +31,6 @@ public class SearchRevealAnim {
     }
 
     public void animate(boolean isShow) {
-
-
         int[] animViewLocation = new int[2];
         animView.getLocationInWindow(animViewLocation);
         int avX = animViewLocation[0] + animView.getWidth() / 2;
@@ -41,6 +43,8 @@ public class SearchRevealAnim {
 
         float startRadius = isShow ? 0 : maxRadius;
         float endRadius = isShow ? maxRadius : 0;
+
+        Log.i("LOG", startRadius + " | " + endRadius + " | "  + maxRadius);
 
         Animator anim = ViewAnimationUtils.createCircularReveal(animView, startX, startY, startRadius, endRadius);
         animView.setVisibility(View.VISIBLE);

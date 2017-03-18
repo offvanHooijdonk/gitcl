@@ -27,10 +27,14 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     private static final String EXTRA_ANIM_Y = "extra_anim_y";
 
     private Context ctx;
+    private InputMethodManager imm;
     private SearchRevealAnim revealAnim;
 
-    private ImageView imgClose;
+    private View rootView;
+    private ImageView imgBack;
+    private ImageView imgSearch;
     private EditText inputSearch;
+    private View viewBackOverlay;
 
     public static SearchDialogFragment newInstance(View animateOverView) {
         int[] centerLocation = SearchRevealAnim.getViewCenterLocation(animateOverView);
@@ -52,7 +56,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
 
         setStyle(android.support.v4.app.DialogFragment.STYLE_NO_FRAME, R.style.AppBaseTheme_SearchDialog);
         ctx = getActivity();
-        setHasOptionsMenu(true);
+        imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Nullable
@@ -60,21 +64,8 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_search, container, false);
 
-        int startX = getArguments().getInt(EXTRA_ANIM_X);
-        int startY = getArguments().getInt(EXTRA_ANIM_Y);
-        revealAnim = new SearchRevealAnim(view, startX, startY);
-        revealAnim.setListener(new SearchRevealAnim.AnimationListener() {
-            @Override
-            public void onShowAnimationEnd() {
-                showKeyBoard(true);
-            }
-            @Override
-            public void onHideAnimationEnd() {
-
-            }
-        });
-
-        setupLayout(view);
+        rootView = view;
+        setupLayout();
 
         return view;
     }
@@ -104,27 +95,51 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
 
     }
 
-    private void setupLayout(View root) {
-        imgClose = (ImageView) root.findViewById(R.id.imgClose);
-        inputSearch = (EditText) root.findViewById(R.id.inputSearch);
-
-        imgClose.getViewTreeObserver().addOnPreDrawListener(this);
-
-    }
-
     @Override
     public boolean onPreDraw() {
-        imgClose.getViewTreeObserver().removeOnPreDrawListener(this);
+        imgSearch.getViewTreeObserver().removeOnPreDrawListener(this);
+        int startX = getArguments().getInt(EXTRA_ANIM_X);
+        int startY = SearchRevealAnim.getViewCenterLocation(imgSearch)[1];
+        revealAnim = new SearchRevealAnim(rootView, startX, startY);
+        revealAnim.setListener(new SearchRevealAnim.AnimationListener() {
+            @Override
+            public void onShowAnimationEnd() {
+                showKeyBoard(true);
+            }
+            @Override
+            public void onHideAnimationEnd() {
+                closeDialog();
+            }
+        });
+
         revealAnim.animate(true);
 
         return true;
     }
 
+    private void setupLayout() {
+        imgBack = (ImageView) rootView.findViewById(R.id.imgBack);
+        imgSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
+        inputSearch = (EditText) rootView.findViewById(R.id.inputSearch);
+        viewBackOverlay = rootView.findViewById(R.id.viewBackgroundOverlay);
+
+        imgBack.setOnClickListener(v -> closeDialog());
+        imgSearch.getViewTreeObserver().addOnPreDrawListener(this);
+        imgSearch.setOnClickListener(v -> Toast.makeText(ctx, "Will search", Toast.LENGTH_LONG).show());
+        viewBackOverlay.setOnClickListener(v -> revealAnim.animate(false));
+    }
+
+    private void closeDialog() {
+        showKeyBoard(false);
+        this.dismiss();
+    }
+
     private void showKeyBoard(boolean isShow) {
         if (isShow) {
-            InputMethodManager imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(inputSearch, InputMethodManager.RESULT_SHOWN);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        } else {
+            imm.hideSoftInputFromWindow(inputSearch.getWindowToken(), 0);
         }
     }
 }
