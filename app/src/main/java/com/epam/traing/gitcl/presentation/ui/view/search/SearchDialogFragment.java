@@ -162,6 +162,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         viewBackOverlay.setOnClickListener(v -> revealAnim.animate(false));
 
         listView.setLayoutManager(new LinearLayoutManager(ctx));
+        listView.setAdapter(adapter);
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
