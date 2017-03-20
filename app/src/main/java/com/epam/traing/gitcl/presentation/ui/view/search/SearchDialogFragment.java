@@ -4,7 +4,12 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +23,12 @@ import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import rx.Observable;
+import rx.subjects.PublishSubject;
+
 /**
  * Created by Yahor_Fralou on 3/16/2017 12:47 PM.
  */
@@ -29,12 +40,17 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     private Context ctx;
     private InputMethodManager imm;
     private SearchRevealAnim revealAnim;
+    private SearchListAdapter adapter;
+    private List<SearchListAdapter.ItemWrapper> searchResults;
+    private PublishSubject<String> obsLiveQuery = PublishSubject.create();
+    private PublishSubject<String> obsFullQuery = PublishSubject.create();
 
     private View rootView;
     private ImageView imgBack;
     private ImageView imgSearch;
     private EditText inputSearch;
     private View viewBackOverlay;
+    private RecyclerView listView;
 
     public static SearchDialogFragment newInstance(View animateOverView) {
         int[] centerLocation = SearchRevealAnim.getViewCenterLocation(animateOverView);
@@ -57,6 +73,9 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         setStyle(android.support.v4.app.DialogFragment.STYLE_NO_FRAME, R.style.AppBaseTheme_SearchDialog);
         ctx = getActivity();
         imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        searchResults = new ArrayList<>();
+        adapter = new SearchListAdapter(ctx, searchResults);
     }
 
     @Nullable
@@ -78,21 +97,18 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         setupDialog();
     }
 
-    private void setupDialog() {
-        Window window = getDialog().getWindow();
-        if (window != null) {
-            //window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-            window.setGravity(Gravity.TOP);
-            setCancelable(true);
-            getDialog().setCancelable(true);
-            getDialog().setCanceledOnTouchOutside(true);
-            window.setWindowAnimations(R.style.DialogEmptyAnimation);
+    public Observable<String> observeLiveQuery() {
+        return obsLiveQuery;
+    }
 
-        } else {
-            Toast.makeText(ctx, "Error creating search dialog", Toast.LENGTH_LONG).show();
-        }
+    public Observable<String> observeFullQuery() {
+        return obsFullQuery;
+    }
 
+    public void updateResults(List<SearchListAdapter.ItemWrapper> results) {
+        searchResults.clear();
+        searchResults.addAll(results);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -100,12 +116,13 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         imgSearch.getViewTreeObserver().removeOnPreDrawListener(this);
         int startX = getArguments().getInt(EXTRA_ANIM_X);
         int startY = SearchRevealAnim.getViewCenterLocation(imgSearch)[1];
-        revealAnim = new SearchRevealAnim(rootView, startX, startY);
+        revealAnim = new SearchRevealAnim(rootView, startX, startY); // TODO add flag for this
         revealAnim.setListener(new SearchRevealAnim.AnimationListener() {
             @Override
             public void onShowAnimationEnd() {
                 showKeyBoard(true);
             }
+
             @Override
             public void onHideAnimationEnd() {
                 closeDialog();
@@ -117,20 +134,78 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         return true;
     }
 
+    private void setupDialog() {
+        Window window = getDialog().getWindow();
+        if (window != null) {
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setGravity(Gravity.TOP);
+            setCancelable(true);
+            getDialog().setCancelable(true);
+            getDialog().setCanceledOnTouchOutside(true);
+            window.setWindowAnimations(R.style.DialogEmptyAnimation);
+
+        } else {
+            Toast.makeText(ctx, "Error creating search dialog", Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void setupLayout() {
         imgBack = (ImageView) rootView.findViewById(R.id.imgBack);
         imgSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
         inputSearch = (EditText) rootView.findViewById(R.id.inputSearch);
         viewBackOverlay = rootView.findViewById(R.id.viewBackgroundOverlay);
+        listView = new RecyclerView(ctx);
 
         imgBack.setOnClickListener(v -> closeDialog());
         imgSearch.getViewTreeObserver().addOnPreDrawListener(this);
-        imgSearch.setOnClickListener(v -> Toast.makeText(ctx, "Will search", Toast.LENGTH_LONG).show());
+        imgSearch.setOnClickListener(v -> searchByClick());
         viewBackOverlay.setOnClickListener(v -> revealAnim.animate(false));
+
+        listView.setLayoutManager(new LinearLayoutManager(ctx));
+        inputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                search(false);
+            }
+        });
+
+        getDialog().setOnKeyListener((dialog, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                closeDialog();
+            } else if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                searchByClick();
+            }
+            return false;
+        });
+    }
+
+    private void searchByClick() {
+        showKeyBoard(false);
+        // TODO save to history here ?
+
+        search(true);
+    }
+
+    private void search(boolean isFull) {
+        String queryText = inputSearch.getText().toString();
+        if (queryText == null || queryText.isEmpty()) return;
+        if (isFull) {
+            obsFullQuery.onNext(queryText);
+        } else {
+            obsLiveQuery.onNext(queryText);
+        }
     }
 
     private void closeDialog() {
         showKeyBoard(false);
+
+        obsFullQuery.onCompleted();
+        obsLiveQuery.onCompleted();
+
         this.dismiss();
     }
 

@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.epam.traing.gitcl.db.DBOpenHelper;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.AccountModelSQLiteTypeMapping;
+import com.epam.traing.gitcl.db.model.HistoryModel;
+import com.epam.traing.gitcl.db.model.HistoryModelSQLiteTypeMapping;
 import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.db.model.RepoModelSQLiteTypeMapping;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
@@ -30,6 +32,7 @@ public class DBModule {
                 .sqliteOpenHelper(sqLiteOpenHelper)
                 .addTypeMapping(AccountModel.class, new AccountModelSQLiteTypeMapping())
                 .addTypeMapping(RepoModel.class, new RepoModelSQLiteTypeMapping())
+                .addTypeMapping(HistoryModel.class, new HistoryModelSQLiteTypeMapping())
                 .build();
     }
 

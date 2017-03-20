@@ -30,6 +30,9 @@ import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.presenter.IMainPresenter;
 import com.epam.traing.gitcl.presentation.ui.view.search.SearchDialogFragment;
+import com.epam.traing.gitcl.presentation.ui.view.search.SearchListAdapter;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -42,8 +45,6 @@ public class MainActivity extends AppCompatActivity
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    /*@Bind(R.id.fab)
-    FloatingActionButton fab;*/
     private TextView txtDrawerAccountUserName;
     private TextView txtDrawerAccountName;
     private ImageView imgAvatar;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     private DrawerArrowDrawable arrowDrawable;
     private AlertDialog logoutDialog;
+    private SearchDialogFragment searchFragment;
 
     private int prevBackStackCount = 0;
 
@@ -121,23 +123,6 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-        /*SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setQueryHint("Search repos 'n' users");*/
-
-        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
-        });*/
-
         return true;
     }
 
@@ -150,7 +135,10 @@ public class MainActivity extends AppCompatActivity
         } if (id == R.id.action_search) {
             View itemView  = findViewById(R.id.action_search);
             Log.i("LOG", String.valueOf(itemView != null));
-            SearchDialogFragment searchFragment = SearchDialogFragment.newInstance(itemView);
+            searchFragment = SearchDialogFragment.newInstance(itemView);
+
+            presenter.subscribeFullQuery(searchFragment.observeFullQuery());
+            presenter.subscribeLiveQuery(searchFragment.observeLiveQuery());
 
             searchFragment.show(getFragmentManager(), "searchDialog");
         }
@@ -215,6 +203,21 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void startLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        overridePendingTransition(R.anim.activity_slide_lr_enter, R.anim.activity_slide_lr_leave);
+    }
+
+    @Override
+    public void updateSearchResults(List<SearchListAdapter.ItemWrapper> historyModels) {
+        if (searchFragment != null) {
+            searchFragment.updateResults(historyModels);
+        }
+    }
+
     public void animateToArrow() {
         if (arrowDrawable != null) {
             if (animToArrow == null) {
@@ -268,14 +271,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return anim;
-    }
-
-    @Override
-    public void startLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        overridePendingTransition(R.anim.activity_slide_lr_enter, R.anim.activity_slide_lr_leave);
     }
 
     private void loadFragment(Fragment fragment, String tag) {

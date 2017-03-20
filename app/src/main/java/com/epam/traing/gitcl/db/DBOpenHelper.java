@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.epam.traing.gitcl.db.tables.AccountTable;
+import com.epam.traing.gitcl.db.tables.HistoryTable;
 import com.epam.traing.gitcl.db.tables.RepoTable;
 
 /**
@@ -12,7 +13,7 @@ import com.epam.traing.gitcl.db.tables.RepoTable;
  */
 
 public class DBOpenHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 16;
+    private static final int DB_VERSION = 17;
     private static final String DB_NAME = "github_db";
 
     public DBOpenHelper(Context context) {
@@ -23,12 +24,14 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(AccountTable.getCreateTableQuery());
         db.execSQL(RepoTable.getCreateTableQuery());
+        db.execSQL(HistoryTable.getCreateTableQuery());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE " + AccountTable.TABLE + ";");
         db.execSQL("DROP TABLE " + RepoTable.TABLE + ";");
+        db.execSQL("DROP TABLE " + HistoryTable.TABLE + ";");
         onCreate(db);
     }
 

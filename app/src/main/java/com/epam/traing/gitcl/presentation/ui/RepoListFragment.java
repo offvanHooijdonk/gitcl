@@ -192,6 +192,8 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         int itemId = item.getItemId();
         if (itemId == R.id.action_refresh) {
             presenter.onRefreshTriggered();
+        } else if (itemId == R.id.action_search) {
+            fab.hide();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -22,7 +22,7 @@
 
     <color name="repo_own">@color/colorPrimary</color>
     <color name="repo_not_own">#CC000000</color>
-    <color name="repo_list_name">@android:color/primary_text_light</color>
+    <color name="list_item_primary">@android:color/primary_text_light</color>
     <color name="badge_inactive">#CC000000</color>
     <color name="badge_active">@color/colorAccent</color>
     <color name="label_branch">@color/md_deep_purple_A200</color>

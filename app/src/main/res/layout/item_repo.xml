@@ -33,7 +33,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Repo name and so goes it further"
-        android:textColor="@color/repo_list_name"
+        android:textColor="@color/list_item_primary"
         android:textSize="@dimen/list_item_primary"/>
 
     <TextView
