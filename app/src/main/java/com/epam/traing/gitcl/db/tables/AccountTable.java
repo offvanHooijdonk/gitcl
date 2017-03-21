@@ -15,7 +15,7 @@ public class AccountTable {
 
     public static String getCreateTableQuery() {
         return "CREATE TABLE " + TABLE + "(" +
-                COLUMN_ACCOUNT_NAME + " TEXT NOT NULL PRIMARY KEY," +
+                COLUMN_ACCOUNT_NAME + " TEXT NOT NULL COLLATE NOCASE PRIMARY KEY," +
                 COLUMN_PERSON_NAME + " TEXT," +
                 COLUMN_ACCESS_TOKEN + " TEXT," +
                 COLUMN_EMAIL + " TEXT," +

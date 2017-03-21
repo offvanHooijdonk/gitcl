@@ -1,7 +1,9 @@
 package com.epam.traing.gitcl.data.interactor.search;
 
 import com.epam.traing.gitcl.db.dao.IHistoryDao;
+import com.epam.traing.gitcl.db.dao.IRepoDao;
 import com.epam.traing.gitcl.db.model.HistoryModel;
+import com.epam.traing.gitcl.db.model.RepoModel;
 
 import java.util.List;
 
@@ -16,9 +18,11 @@ import rx.schedulers.Schedulers;
 public class SearchInteractor implements ISearchIntercator {
 
     private IHistoryDao historyDao;
+    private IRepoDao repoDao;
 
-    public SearchInteractor(IHistoryDao historyDao) {
+    public SearchInteractor(IHistoryDao historyDao, IRepoDao repoDao) {
         this.historyDao = historyDao;
+        this.repoDao = repoDao;
     }
 
     @Override
@@ -34,4 +38,12 @@ public class SearchInteractor implements ISearchIntercator {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    @Override
+    public Observable<List<RepoModel>> findReposLocal(String queryText) {
+        if (queryText == null || queryText.isEmpty()) {
+            return Observable.empty();
+        } else {
+            return repoDao.findRepos(queryText);
+        }
+    }
 }

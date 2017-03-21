@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
+import com.epam.traing.gitcl.db.model.AccountModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +56,9 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     private EditText inputSearch;
     private View viewBackOverlay;
     private RecyclerView listView;
+    private AccountModel user;
 
-    public static SearchDialogFragment newInstance(View animateOverView) {
+    public static SearchDialogFragment newInstance(View animateOverView, AccountModel user) {
         int[] centerLocation = SearchRevealAnim.getViewCenterLocation(animateOverView);
         int startX = centerLocation[0];
         int startY = centerLocation[1];
@@ -66,6 +68,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         bundle.putInt(EXTRA_ANIM_Y, startY);
         SearchDialogFragment fragment = new SearchDialogFragment();
         fragment.setArguments(bundle);
+        fragment.user = user;
 
         return fragment;
     }
@@ -84,7 +87,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         searchResults = new ArrayList<>();
-        adapter = new SearchListAdapter(ctx, searchResults);
+        adapter = new SearchListAdapter(ctx, searchResults, user);
     }
 
     @Nullable
@@ -119,6 +122,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     public void updateResults(List<SearchListAdapter.ItemWrapper> results) {
         searchResults.clear();
         searchResults.addAll(results);
+        adapter.setSearchText(inputSearch.getText().toString());
         adapter.notifyDataSetChanged();
     }
 

@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity
         } if (id == R.id.action_search) {
             View itemView  = findViewById(R.id.action_search);
             Log.i("LOG", String.valueOf(itemView != null));
-            searchFragment = SearchDialogFragment.newInstance(itemView);
+            searchFragment = SearchDialogFragment.newInstance(itemView, session.getCurrentAccount());
 
             presenter.subscribeFullQuery(searchFragment.observeFullQuery());
             presenter.subscribeLiveQuery(searchFragment.observeLiveQuery());

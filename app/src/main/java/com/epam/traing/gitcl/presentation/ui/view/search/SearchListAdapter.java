@@ -1,16 +1,31 @@
 package com.epam.traing.gitcl.presentation.ui.view.search;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.epam.traing.gitcl.R;
+import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.HistoryModel;
+import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.presentation.ui.helper.DateHelper;
+import com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView;
+import com.epam.traing.gitcl.presentation.ui.view.RepoIconView;
 
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+import static com.epam.traing.gitcl.presentation.ui.view.RepoIconView.TYPE_FORK;
+import static com.epam.traing.gitcl.presentation.ui.view.RepoIconView.TYPE_REPO;
 
 /**
  * Created by Yahor_Fralou on 3/20/2017 3:45 PM.
@@ -20,10 +35,15 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
     private Context ctx;
     private List<ItemWrapper> items;
+    private String searchText;
+    private AccountModel accountModel;
+    private DateHelper dateHelper = new DateHelper();
+    private int orientation = Configuration.ORIENTATION_UNDEFINED;
 
-    public SearchListAdapter(Context ctx, List<ItemWrapper> items) {
+    public SearchListAdapter(Context ctx, List<ItemWrapper> items, AccountModel accountModel) {
         this.ctx = ctx;
         this.items = items;
+        this.accountModel = accountModel;
     }
 
     @Override
@@ -38,6 +58,8 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         ItemWrapper wrapper = items.get(position);
         if (wrapper.getType() == ItemWrapper.HISTORY) {
             showHistory((HistoryModel) wrapper.getItem(), holder);
+        } else if (wrapper.getType() == ItemWrapper.REPOSITORY) {
+            showRepository((RepoModel) wrapper.getItem(), holder);
         }
     }
 
@@ -51,27 +73,97 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         return items.get(position).getType();
     }
 
+    public void setSearchText(String searchText) {
+        this.searchText = searchText;
+    }
+
     private void showHistory(HistoryModel model, ViewHolder vh) {
         vh.itemHistoryView.setVisibility(View.VISIBLE);
         vh.itemAccountView.setVisibility(View.GONE);
         vh.itemRepoView.setVisibility(View.GONE);
 
-        vh.txtHistory.setText(model.getText());
+        vh.txtHistory.setText(styleStringWithSearch(model.getText(), searchText));
+    }
+
+    private void showRepository(RepoModel model, ViewHolder vh) {
+        vh.itemHistoryView.setVisibility(View.GONE);
+        vh.itemAccountView.setVisibility(View.GONE);
+        vh.itemRepoView.setVisibility(View.VISIBLE);
+
+        vh.txtRepoName.setText(model.getName());
+        //vh.txtRepoName.setTransitionName(ctx.getString(R.string.transit_repo_name) + position);
+
+        vh.repoIcon.setRepoType(model.isFork() ? TYPE_FORK : TYPE_REPO);
+        vh.repoIcon.setPrivateRepo(model.isPrivateRepo());
+        //vh.repoIcon.setTransitionName(ctx.getString(R.string.transit_repo_icon) + position);
+
+        vh.txtOwnerName.setText(model.getOwnerName());
+        if (model.getOwnerName().equalsIgnoreCase(accountModel.getAccountName())) {
+            if (orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                vh.txtOwnerName.setTextColor(ctx.getResources().getColor(R.color.repo_own) | 0x88000000);
+            }
+            vh.repoIcon.setIsOwn(true);
+        } else {
+            vh.repoIcon.setIsOwn(false);
+        }
+        if (model.getPushDate() > 0) {
+            vh.txtLastPushed.setText(dateHelper.formatDateTimeShort(model.getPushDate()));
+        } else {
+            vh.txtLastPushed.setText(R.string.repo_list_push_date_empty);
+        }
+        vh.txtForksCount.setText(new BadgeNumbersView.NumberFormatter(ctx).formatNumber(model.getForksCount()));
+        vh.badgeStar.setNumberValue(model.getStargazersCount());
+        vh.badgeStar.setNumberValue(model.getWatchersCount());
+
+        /*vh.itemRoot.setOnClickListener(view -> {
+            if (listener != null) {
+                listener.onRepoClick(vh, position);
+            }
+        });*/
+    }
+
+    private CharSequence styleStringWithSearch(String text, String search) {
+        if (search == null || search.isEmpty()) return text;
+
+        SpannableStringBuilder ssb = new SpannableStringBuilder(text);
+
+        int lastFound = 0;
+        while((lastFound = text.toLowerCase().indexOf(search.toLowerCase(), lastFound)) != -1) {
+            ssb.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), lastFound, lastFound + search.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            lastFound += search.length();
+        }
+
+        return ssb;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.itemHistory)
         View itemHistoryView;
+        @Bind(R.id.itemAccount)
         View itemAccountView;
+        @Bind(R.id.itemRepository)
         View itemRepoView;
+        @Bind(R.id.txtHistoryEntry)
         TextView txtHistory;
+        @Bind(R.id.repoIcon)
+        public RepoIconView repoIcon;
+        @Bind(R.id.txtRepoName)
+        public TextView txtRepoName;
+        @Bind(R.id.txtOwnerName)
+        TextView txtOwnerName;
+        @Bind(R.id.txtLastPushed)
+        TextView txtLastPushed;
+        @Bind(R.id.txtForksCount)
+        TextView txtForksCount;
+        @Bind(R.id.badgeWatch)
+        BadgeNumbersView badgeWatch;
+        @Bind(R.id.badgeStar)
+        BadgeNumbersView badgeStar;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
 
-            itemHistoryView = v.findViewById(R.id.itemHistory);
-            itemAccountView = v.findViewById(R.id.itemAccount);
-            itemRepoView = v.findViewById(R.id.itemRepository);
-            txtHistory = (TextView) v.findViewById(R.id.txtHistoryEntry);
+            ButterKnife.bind(ViewHolder.this, v);
         }
     }
 

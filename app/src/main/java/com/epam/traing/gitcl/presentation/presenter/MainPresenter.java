@@ -4,7 +4,9 @@ import android.util.Log;
 
 import com.epam.traing.gitcl.data.interactor.account.IAccountInteractor;
 import com.epam.traing.gitcl.data.interactor.search.ISearchIntercator;
+import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.HistoryModel;
+import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.ui.IMainView;
@@ -79,11 +81,17 @@ public class MainPresenter implements IMainPresenter {
 
     @Override
     public void subscribeLiveQuery(Observable<String> observableLiveQuery) {
+        searchResults.clear();
         observableLiveQuery
                 .doOnNext(s -> Log.i("LOG", "Search LIVE: " + s))
                 .flatMap(s -> searchIntercator.findHistoryEntries(s, SearchDialogFragment.HISTORY_SHOW_MAX))
-                .doOnNext(models -> Log.i("LOG", "Searched LIVE: " + models.size()))
-                .subscribe(this::onHistoryReceived);
+                .map(this::onSearchResults)
+                .doOnNext(models -> Log.i("LOG", "History LIVE: " + models.size()))
+                .mergeWith(observableLiveQuery
+                        .flatMap(s -> searchIntercator.findReposLocal(s))
+                        .map(this::onSearchResults)
+                )
+                .subscribe(itemWrappers -> onLiveSearchFinished());
     }
 
     private void updateAccountInfo() {
@@ -110,12 +118,20 @@ public class MainPresenter implements IMainPresenter {
         searchIntercator.saveHistoryEntry(historyModel);
     }
 
-    private void onHistoryReceived(List<HistoryModel> historyModels) {
-        searchResults.clear();
+    private List<SearchListAdapter.ItemWrapper> onSearchResults(List<?> historyModels) {
         Observable.from(historyModels)
-                .map(model -> new SearchListAdapter.ItemWrapper(SearchListAdapter.ItemWrapper.HISTORY, model))
+                .map(model -> new SearchListAdapter.ItemWrapper(
+                        model instanceof AccountModel ? SearchListAdapter.ItemWrapper.ACCOUNT:
+                                model instanceof RepoModel ? SearchListAdapter.ItemWrapper.REPOSITORY :
+                                        SearchListAdapter.ItemWrapper.HISTORY
+                        , model))
                 .doOnNext(searchResults::add).subscribe();
         Log.i("LOG", "Result items: " + searchResults.size());
+        return searchResults;
+    }
+
+    private void onLiveSearchFinished() {
         view.updateSearchResults(searchResults);
     }
+
 }

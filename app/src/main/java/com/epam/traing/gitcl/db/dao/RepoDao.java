@@ -34,6 +34,18 @@ public class RepoDao implements IRepoDao {
     }
 
     @Override
+    public Observable<List<RepoModel>> findRepos(String queryText) {
+        return sqLite.get()
+                .listOfObjects(RepoModel.class)
+                .withQuery(Query.builder()
+                        .table(RepoTable.TABLE)
+                        .where(RepoTable.COLUMN_NAME + " like ?")
+                        .whereArgs("%" + queryText + "%")
+                        .orderBy(RepoTable.COLUMN_NAME).build())
+                .prepare().asRxObservable();
+    }
+
+    @Override
     public Observable<RepoModel> getById(long id) {
         return sqLite.get().object(RepoModel.class)
                 .withQuery(Query.builder()

@@ -25,7 +25,7 @@ public class RepoTable {
     public static String getCreateTableQuery() {
         return "CREATE TABLE " + TABLE + "(" +
                 COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY," +
-                COLUMN_NAME + " TEXT NOT NULL," +
+                COLUMN_NAME + " TEXT NOT NULL COLLATE NOCASE," +
                 COLUMN_OWNER_NAME + " TEXT NOT NULL," +
                 COLUMN_IS_PRIVATE + " INTEGER NOT NULL," +
                 COLUMN_IS_FORK + " INTEGER NOT NULL," +

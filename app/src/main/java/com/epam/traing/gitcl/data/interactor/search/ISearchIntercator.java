@@ -1,6 +1,7 @@
 package com.epam.traing.gitcl.data.interactor.search;
 
 import com.epam.traing.gitcl.db.model.HistoryModel;
+import com.epam.traing.gitcl.db.model.RepoModel;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface ISearchIntercator {
     void saveHistoryEntry(HistoryModel model);
 
     Observable<List<HistoryModel>> findHistoryEntries(String queryText, int limit);
+
+    Observable<List<RepoModel>> findReposLocal(String queryText);
 }

@@ -24,7 +24,8 @@ import dagger.Component;
         AppModule.class,
         DBModule.class,
         NetworkModule.class,
-        AccountModule.class
+        AccountModule.class,
+        SearchModule.class
 })
 @Singleton
 public interface AppComponent {

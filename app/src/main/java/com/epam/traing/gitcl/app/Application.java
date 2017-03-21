@@ -8,6 +8,7 @@ import com.epam.traing.gitcl.di.AppModule;
 import com.epam.traing.gitcl.di.DBModule;
 import com.epam.traing.gitcl.di.DaggerAppComponent;
 import com.epam.traing.gitcl.di.NetworkModule;
+import com.epam.traing.gitcl.di.SearchModule;
 import com.epam.traing.gitcl.di.login.AuthApiModule;
 import com.epam.traing.gitcl.di.login.AuthenticatorModule;
 import com.epam.traing.gitcl.di.login.LoginComponent;
@@ -38,6 +39,7 @@ public class Application extends android.app.Application {
                 .networkModule(new NetworkModule())
                 .dBModule(new DBModule())
                 .accountModule(new AccountModule())
+                .searchModule(new SearchModule())
                 .build();
 
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
