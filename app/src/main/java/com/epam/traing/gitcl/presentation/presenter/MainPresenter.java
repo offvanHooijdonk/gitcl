@@ -1,11 +1,14 @@
 package com.epam.traing.gitcl.presentation.presenter;
 
+import android.util.Log;
+
 import com.epam.traing.gitcl.data.interactor.account.IAccountInteractor;
 import com.epam.traing.gitcl.data.interactor.search.ISearchIntercator;
 import com.epam.traing.gitcl.db.model.HistoryModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.ui.IMainView;
+import com.epam.traing.gitcl.presentation.ui.view.search.SearchDialogFragment;
 import com.epam.traing.gitcl.presentation.ui.view.search.SearchListAdapter;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ public class MainPresenter implements IMainPresenter {
     private IAccountInteractor accountInteractor;
     private PrefHelper prefHelper;
     private ISearchIntercator searchIntercator;
+    private List<SearchListAdapter.ItemWrapper> searchResults = new ArrayList<>();
 
     @Inject
     public MainPresenter(IAccountInteractor accountInteractor, PrefHelper prefHelper, ISearchIntercator searchIntercator) {
@@ -69,14 +73,16 @@ public class MainPresenter implements IMainPresenter {
     public void subscribeFullQuery(Observable<String> observableFullQuery) {
         observableFullQuery
                 .doOnNext(this::saveHistoryEntry)
-                .flatMap(searchIntercator::findHistoryEntries)
-                .subscribe(this::onHistoryReceived);
+                //.flatMap(searchIntercator::findHistoryEntries)
+                .subscribe();
     }
 
     @Override
     public void subscribeLiveQuery(Observable<String> observableLiveQuery) {
         observableLiveQuery
-                .flatMap(searchIntercator::findHistoryEntries)
+                .doOnNext(s -> Log.i("LOG", "Search LIVE: " + s))
+                .flatMap(s -> searchIntercator.findHistoryEntries(s, SearchDialogFragment.HISTORY_SHOW_MAX))
+                .doOnNext(models -> Log.i("LOG", "Searched LIVE: " + models.size()))
                 .subscribe(this::onHistoryReceived);
     }
 
@@ -105,10 +111,11 @@ public class MainPresenter implements IMainPresenter {
     }
 
     private void onHistoryReceived(List<HistoryModel> historyModels) {
-        List<SearchListAdapter.ItemWrapper> items = new ArrayList<>();
+        searchResults.clear();
         Observable.from(historyModels)
                 .map(model -> new SearchListAdapter.ItemWrapper(SearchListAdapter.ItemWrapper.HISTORY, model))
-                .doOnNext(items::add);
-        view.updateSearchResults(items);
+                .doOnNext(searchResults::add).subscribe();
+        Log.i("LOG", "Result items: " + searchResults.size());
+        view.updateSearchResults(searchResults);
     }
 }

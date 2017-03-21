@@ -26,13 +26,14 @@ public class HistoryDao implements IHistoryDao {
     }
 
     @Override
-    public Observable<List<HistoryModel>> findWithText(String text) {
+    public Observable<List<HistoryModel>> findWithText(String text, int limit) {
         return storIOSQLite.get().listOfObjects(HistoryModel.class)
                 .withQuery(Query.builder()
                         .table(HistoryTable.TABLE)
                         .where(HistoryTable.COLUMN_TEXT + " like ?")
                         .whereArgs("%" + text + "%")
                         .orderBy(HistoryTable.COLUMN_SEARCH_DATE + " desc")
+                        .limit(limit)
                         .build()
                 ).prepare().asRxObservable();
     }

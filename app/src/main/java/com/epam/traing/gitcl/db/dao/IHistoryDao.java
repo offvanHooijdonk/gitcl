@@ -13,5 +13,5 @@ import rx.Observable;
 public interface IHistoryDao {
     void save(HistoryModel model);
 
-    Observable<List<HistoryModel>> findWithText(String text);
+    Observable<List<HistoryModel>> findWithText(String text, int limit);
 }

@@ -27,9 +27,9 @@ public class SearchInteractor implements ISearchIntercator {
     }
 
     @Override
-    public Observable<List<HistoryModel>> findHistoryEntries(String queryText) {
+    public Observable<List<HistoryModel>> findHistoryEntries(String queryText, int limit) {
         return historyDao.
-                findWithText(queryText)
+                findWithText(queryText, limit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

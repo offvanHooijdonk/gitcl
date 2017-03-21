@@ -4,10 +4,12 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -34,6 +36,8 @@ import rx.subjects.PublishSubject;
  */
 
 public class SearchDialogFragment extends DialogFragment implements ViewTreeObserver.OnPreDrawListener {
+    public static final int HISTORY_SHOW_MAX = 3;
+
     private static final String EXTRA_ANIM_X = "extra_anim_x";
     private static final String EXTRA_ANIM_Y = "extra_anim_y";
 
@@ -42,8 +46,8 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     private SearchRevealAnim revealAnim;
     private SearchListAdapter adapter;
     private List<SearchListAdapter.ItemWrapper> searchResults;
-    private PublishSubject<String> obsLiveQuery = PublishSubject.create();
-    private PublishSubject<String> obsFullQuery = PublishSubject.create();
+    private PublishSubject<String> obsLiveQuery;
+    private PublishSubject<String> obsFullQuery;
 
     private View rootView;
     private ImageView imgBack;
@@ -64,6 +68,11 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         fragment.setArguments(bundle);
 
         return fragment;
+    }
+
+    public SearchDialogFragment() {
+        obsLiveQuery = PublishSubject.create();
+        obsFullQuery = PublishSubject.create();
     }
 
     @Override
@@ -95,6 +104,8 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         super.onStart();
 
         setupDialog();
+
+        search(false);
     }
 
     public Observable<String> observeLiveQuery() {
@@ -125,7 +136,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
 
             @Override
             public void onHideAnimationEnd() {
-                closeDialog();
+                performCloseActions();
             }
         });
 
@@ -154,15 +165,18 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         imgSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
         inputSearch = (EditText) rootView.findViewById(R.id.inputSearch);
         viewBackOverlay = rootView.findViewById(R.id.viewBackgroundOverlay);
-        listView = new RecyclerView(ctx);
+        listView = (RecyclerView) rootView.findViewById(R.id.listSearchResults);
 
-        imgBack.setOnClickListener(v -> closeDialog());
+        imgBack.setOnClickListener(v -> revealAnim.animate(false));
         imgSearch.getViewTreeObserver().addOnPreDrawListener(this);
         imgSearch.setOnClickListener(v -> searchByClick());
         viewBackOverlay.setOnClickListener(v -> revealAnim.animate(false));
 
         listView.setLayoutManager(new LinearLayoutManager(ctx));
+        listView.setItemAnimator(new DefaultItemAnimator());
+        listView.setHasFixedSize(true);
         listView.setAdapter(adapter);
+
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -176,9 +190,12 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
 
         getDialog().setOnKeyListener((dialog, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                closeDialog();
+                Log.i("LOG", "Backk pressed");
+                revealAnim.animate(false);
+                return true;
             } else if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                 searchByClick();
+                return true;
             }
             return false;
         });
@@ -193,7 +210,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
 
     private void search(boolean isFull) {
         String queryText = inputSearch.getText().toString();
-        if (queryText == null || queryText.isEmpty()) return;
+        Log.i("LOG", "Query text: " + queryText);
         if (isFull) {
             obsFullQuery.onNext(queryText);
         } else {
@@ -201,7 +218,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         }
     }
 
-    private void closeDialog() {
+    private void performCloseActions() {
         showKeyBoard(false);
 
         obsFullQuery.onCompleted();

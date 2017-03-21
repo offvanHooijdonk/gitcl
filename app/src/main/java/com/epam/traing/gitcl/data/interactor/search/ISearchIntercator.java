@@ -13,5 +13,5 @@ import rx.Observable;
 public interface ISearchIntercator {
     void saveHistoryEntry(HistoryModel model);
 
-    Observable<List<HistoryModel>> findHistoryEntries(String queryText);
+    Observable<List<HistoryModel>> findHistoryEntries(String queryText, int limit);
 }
