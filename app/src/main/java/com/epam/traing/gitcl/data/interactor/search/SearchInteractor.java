@@ -43,7 +43,10 @@ public class SearchInteractor implements ISearchIntercator {
         if (queryText == null || queryText.isEmpty()) {
             return Observable.empty();
         } else {
-            return repoDao.findRepos(queryText);
+            return repoDao.
+                    findRepos(queryText)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
         }
     }
 }
