@@ -51,8 +51,8 @@ public class MainFrameModule {
 
     @Provides
     @MainFrameScope
-    public ISearchIntercator provideSearchIntercator(IHistoryDao historyDao, IRepoDao repoDao) {
-        return new SearchInteractor(historyDao, repoDao);
+    public ISearchIntercator provideSearchIntercator(IHistoryDao historyDao, IRepoDao repoDao, IAccountDao accountDao) {
+        return new SearchInteractor(historyDao, repoDao, accountDao);
     }
 
     @Provides

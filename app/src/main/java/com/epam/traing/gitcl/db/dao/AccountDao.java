@@ -5,6 +5,8 @@ import com.epam.traing.gitcl.db.tables.AccountTable;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -30,6 +32,17 @@ public class AccountDao implements IAccountDao {
     @Override
     public void saveAccount(AccountModel accountModel) {
         storIOSQLite.put().object(accountModel).prepare().executeAsBlocking();
+    }
+
+    @Override
+    public Observable<List<AccountModel>> findAccounts(String queryText) {
+        return storIOSQLite.get().listOfObjects(AccountModel.class)
+                .withQuery(Query.builder()
+                        .table(AccountTable.TABLE)
+                        .where(AccountTable.COLUMN_ACCOUNT_NAME + " like ? OR " +
+                                AccountTable.COLUMN_PERSON_NAME + " like ?")
+                        .whereArgs("%" + queryText + "%", "%" + queryText + "%").build())
+                .prepare().asRxObservable();
     }
 
 }

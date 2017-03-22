@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:orientation="vertical">
@@ -47,12 +48,12 @@
         android:paddingStart="@dimen/list_item_padding_hor"
         android:paddingTop="@dimen/list_item_padding_vert">
 
-        <ImageView
+        <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/imgAccount"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_account_default_72"
-            android:tint="@color/badge_inactive"/>
+            app:civ_border="false"/>
 
         <LinearLayout
             android:layout_width="match_parent"

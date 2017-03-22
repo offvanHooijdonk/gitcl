@@ -9,8 +9,10 @@ import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.HistoryModel;
@@ -60,6 +62,8 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
             showHistory((HistoryModel) wrapper.getItem(), holder);
         } else if (wrapper.getType() == ItemWrapper.REPOSITORY) {
             showRepository((RepoModel) wrapper.getItem(), holder);
+        } else if (wrapper.getType() == ItemWrapper.ACCOUNT) {
+            showAccount((AccountModel) wrapper.getItem(), holder);
         }
     }
 
@@ -83,6 +87,26 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         vh.itemRepoView.setVisibility(View.GONE);
 
         vh.txtHistory.setText(styleStringWithSearch(model.getText(), searchText));
+    }
+
+    private void showAccount(AccountModel model, ViewHolder vh) {
+        vh.itemHistoryView.setVisibility(View.GONE);
+        vh.itemAccountView.setVisibility(View.VISIBLE);
+        vh.itemRepoView.setVisibility(View.GONE);
+
+        if (model.getAvatar() != null) {
+            Glide.with(ctx).load(model.getAvatar()).into(vh.imgAccount);
+        } else {
+            vh.imgAccount.setImageResource(R.drawable.ic_account_default_72);
+        }
+
+        vh.txtAccountName.setText(styleStringWithSearch(model.getAccountName(), searchText));
+        if (model.getPersonName() != null) {
+            vh.txtFullName.setText(styleStringWithSearch(model.getPersonName(), searchText));
+        } else {
+            vh.txtFullName.setVisibility(View.GONE);
+        }
+
     }
 
     private void showRepository(RepoModel model, ViewHolder vh) {
@@ -143,8 +167,17 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         View itemAccountView;
         @Bind(R.id.itemRepository)
         View itemRepoView;
+
         @Bind(R.id.txtHistoryEntry)
         TextView txtHistory;
+
+        @Bind(R.id.imgAccount)
+        ImageView imgAccount;
+        @Bind(R.id.txtAccountName)
+        TextView txtAccountName;
+        @Bind(R.id.txtFullName)
+        TextView txtFullName;
+
         @Bind(R.id.repoIcon)
         public RepoIconView repoIcon;
         @Bind(R.id.txtRepoName)
