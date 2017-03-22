@@ -90,7 +90,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         vh.itemAccountView.setVisibility(View.GONE);
         vh.itemRepoView.setVisibility(View.VISIBLE);
 
-        vh.txtRepoName.setText(model.getName());
+        vh.txtRepoName.setText(styleStringWithSearch(model.getName(), searchText));
         //vh.txtRepoName.setTransitionName(ctx.getString(R.string.transit_repo_name) + position);
 
         vh.repoIcon.setRepoType(model.isFork() ? TYPE_FORK : TYPE_REPO);
@@ -100,7 +100,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         vh.txtOwnerName.setText(model.getOwnerName());
         if (model.getOwnerName().equalsIgnoreCase(accountModel.getAccountName())) {
             if (orientation != Configuration.ORIENTATION_LANDSCAPE) {
-                vh.txtOwnerName.setTextColor(ctx.getResources().getColor(R.color.repo_own) | 0x88000000);
+                vh.txtOwnerName.setTextColor(ctx.getResources().getColor(R.color.repo_own) | 0x66000000);
             }
             vh.repoIcon.setIsOwn(true);
         } else {

@@ -81,8 +81,8 @@ public class MainPresenter implements IMainPresenter {
 
     @Override
     public void subscribeLiveQuery(Observable<String> observableLiveQuery) {
-        searchResults.clear();
         observableLiveQuery
+                .doOnNext(s -> searchResults.clear())
                 .doOnNext(s -> Log.i("LOG", "Search LIVE: " + s))
                 .flatMap(s -> searchIntercator.findHistoryEntries(s, SearchDialogFragment.HISTORY_SHOW_MAX))
                 .map(this::onSearchResults)

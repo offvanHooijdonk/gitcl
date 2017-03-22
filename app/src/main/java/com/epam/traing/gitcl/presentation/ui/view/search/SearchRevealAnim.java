@@ -13,8 +13,8 @@ import android.view.animation.DecelerateInterpolator;
  */
 
 public class SearchRevealAnim {
-    private static final int DURATION_IN = 325;
-    private static final int DURATION_OUT = 295;
+    private static final int DURATION_IN = 225;
+    private static final int DURATION_OUT = 195;
 
     private AnimationListener listener;
     private View animView;

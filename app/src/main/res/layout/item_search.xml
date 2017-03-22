@@ -5,22 +5,22 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/itemHistory"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/list_item_padding_vert"
+        android:paddingEnd="@dimen/list_item_padding_hor"
+        android:paddingStart="@dimen/list_item_padding_hor"
+        android:paddingTop="@dimen/list_item_padding_vert">
 
         <ImageView
             android:id="@+id/imgHistory"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:padding="4dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
             android:src="@drawable/ic_history_40"
             android:tint="@color/dialog_controls"/>
 
@@ -29,20 +29,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_toEndOf="@id/imgHistory"
+            android:layout_marginStart="56dp"
             android:ellipsize="end"
-            android:textSize="@dimen/list_item_primary"
-            android:textColor="@color/dialog_controls"
             android:maxLines="1"
-            android:text="history text"/>
+            android:text="history text"
+            android:textColor="@color/dialog_controls"
+            android:textSize="@dimen/list_item_primary"/>
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/itemAccount"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/list_item_padding_vert"
+        android:paddingEnd="@dimen/list_item_padding_hor"
+        android:paddingStart="@dimen/list_item_padding_hor"
+        android:paddingTop="@dimen/list_item_padding_vert">
 
         <ImageView
             android:id="@+id/imgAccount"
@@ -54,9 +57,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_alignTop="@id/imgAccount"
             android:layout_alignBottom="@id/imgAccount"
+            android:layout_alignTop="@id/imgAccount"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_toEndOf="@id/imgAccount"
             android:gravity="center_vertical"
             android:orientation="vertical">

@@ -1,5 +1,8 @@
 package com.epam.traing.gitcl.presentation.ui.view.search;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -50,6 +53,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     private PublishSubject<String> obsLiveQuery;
     private PublishSubject<String> obsFullQuery;
 
+    private View viewSearchBar;
     private View rootView;
     private ImageView imgBack;
     private ImageView imgSearch;
@@ -101,14 +105,11 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         return view;
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
 
         setupDialog();
-
-        search(false);
     }
 
     public Observable<String> observeLiveQuery() {
@@ -122,6 +123,11 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     public void updateResults(List<SearchListAdapter.ItemWrapper> results) {
         searchResults.clear();
         searchResults.addAll(results);
+        if (searchResults.isEmpty()) {
+            listView.setVisibility(View.GONE);
+        } else {
+            listView.setVisibility(View.VISIBLE);
+        }
         adapter.setSearchText(inputSearch.getText().toString());
         adapter.notifyDataSetChanged();
     }
@@ -131,10 +137,11 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         imgSearch.getViewTreeObserver().removeOnPreDrawListener(this);
         int startX = getArguments().getInt(EXTRA_ANIM_X);
         int startY = SearchRevealAnim.getViewCenterLocation(imgSearch)[1];
-        revealAnim = new SearchRevealAnim(rootView, startX, startY); // TODO add flag for this
+        revealAnim = new SearchRevealAnim(viewSearchBar, startX, startY); // TODO reveal around search view, not the whole dialog. Set animation to hide recycler view!
         revealAnim.setListener(new SearchRevealAnim.AnimationListener() {
             @Override
             public void onShowAnimationEnd() {
+                search(false);
                 showKeyBoard(true);
             }
 
@@ -170,16 +177,18 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         inputSearch = (EditText) rootView.findViewById(R.id.inputSearch);
         viewBackOverlay = rootView.findViewById(R.id.viewBackgroundOverlay);
         listView = (RecyclerView) rootView.findViewById(R.id.listSearchResults);
+        viewSearchBar = rootView.findViewById(R.id.blockSearchBar);
 
-        imgBack.setOnClickListener(v -> revealAnim.animate(false));
+        imgBack.setOnClickListener(v -> closeSearchDialog());
         imgSearch.getViewTreeObserver().addOnPreDrawListener(this);
         imgSearch.setOnClickListener(v -> searchByClick());
-        viewBackOverlay.setOnClickListener(v -> revealAnim.animate(false));
+        viewBackOverlay.setOnClickListener(v -> closeSearchDialog());
 
         listView.setLayoutManager(new LinearLayoutManager(ctx));
         listView.setItemAnimator(new DefaultItemAnimator());
         listView.setHasFixedSize(true);
         listView.setAdapter(adapter);
+        listView.setVisibility(View.GONE);
 
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -195,7 +204,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         getDialog().setOnKeyListener((dialog, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
                 Log.i("LOG", "Backk pressed");
-                revealAnim.animate(false);
+                closeSearchDialog();
                 return true;
             } else if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                 searchByClick();
@@ -205,9 +214,23 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         });
     }
 
+    private void closeSearchDialog() {
+        if (!searchResults.isEmpty()) {
+            Animator a = ObjectAnimator.ofFloat(listView, View.ALPHA, 1, 0).setDuration(200);
+            a.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    revealAnim.animate(false);
+                }
+            });
+            a.start();
+        } else {
+            revealAnim.animate(false);
+        }
+    }
+
     private void searchByClick() {
         showKeyBoard(false);
-        // TODO save to history here ?
 
         search(true);
     }
