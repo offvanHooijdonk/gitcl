@@ -19,6 +19,8 @@ public class AccountJson {
     private String email;
     @SerializedName("location")
     private String location;
+    @SerializedName("score")
+    private float searchScore;
 
     public String getLogin() {
         return login;
@@ -66,5 +68,13 @@ public class AccountJson {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public float getSearchScore() {
+        return searchScore;
+    }
+
+    public void setSearchScore(float searchScore) {
+        this.searchScore = searchScore;
     }
 }

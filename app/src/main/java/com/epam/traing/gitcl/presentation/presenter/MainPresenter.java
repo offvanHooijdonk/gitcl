@@ -128,11 +128,18 @@ public class MainPresenter implements IMainPresenter {
 
     private List<SearchListAdapter.ItemWrapper> collectSearchResults(List<?> historyModels) {
         Observable.from(historyModels)
-                .map(model -> new SearchListAdapter.ItemWrapper(
-                        model instanceof AccountModel ? SearchListAdapter.ItemWrapper.ACCOUNT :
-                                model instanceof RepoModel ? SearchListAdapter.ItemWrapper.REPOSITORY :
-                                        SearchListAdapter.ItemWrapper.HISTORY
-                        , model))
+                .map(model -> {
+                    int type = SearchListAdapter.ItemWrapper.HISTORY;
+                    float score = 0;
+                    if (model instanceof AccountModel) {
+                        type = SearchListAdapter.ItemWrapper.ACCOUNT;
+                        score = ((AccountModel) model).getSearchScore();
+                    } else if (model instanceof RepoModel) {
+                        type = SearchListAdapter.ItemWrapper.REPOSITORY;
+                        score = ((RepoModel) model).getSearchScore();
+                    }
+                    return new SearchListAdapter.ItemWrapper(type, model, score);
+                })
                 .doOnNext(searchResults::add).subscribe();
         Log.i("LOG", "Result items: " + searchResults.size());
         return searchResults;
@@ -144,8 +151,11 @@ public class MainPresenter implements IMainPresenter {
     }
 
     private void onFullSearchFinished() {
-        // TODO sort by score only
-        Collections.sort(searchResults);
+        Collections.sort(searchResults, (o1, o2) -> {
+            int result = o1.getSearchScore().compareTo(o2.getSearchScore());
+            result = -result; // We need bigger score go first
+            return result != 0 ? result : o1.compareTo(o2);
+        });
         view.updateSearchResults(searchResults);
     }
 

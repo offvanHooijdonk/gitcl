@@ -43,6 +43,7 @@ public class RepoModel implements Parcelable {
     long contributorsCount;
     @StorIOSQLiteColumn(name = RepoTable.COLUMN_DEFAULT_BRANCH)
     String defaultBranch;
+    float searchScore;
 
     public RepoModel() {
     }
@@ -165,6 +166,14 @@ public class RepoModel implements Parcelable {
 
     public void setContributorsCount(long contributorsCount) {
         this.contributorsCount = contributorsCount;
+    }
+
+    public float getSearchScore() {
+        return searchScore;
+    }
+
+    public void setSearchScore(float searchScore) {
+        this.searchScore = searchScore;
     }
 
     @Override

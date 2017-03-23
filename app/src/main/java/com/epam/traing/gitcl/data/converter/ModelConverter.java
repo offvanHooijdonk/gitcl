@@ -28,6 +28,7 @@ public class ModelConverter {
         model.setAvatar(json.getAvatarUrl());
         model.setEmail(json.getEmail());
         model.setLocation(json.getLocation());
+        model.setSearchScore(json.getSearchScore());
         return model;
     }
 
@@ -55,6 +56,7 @@ public class ModelConverter {
         model.setUpdateDate(parseDateString(json.getUpdateDate()));
         model.setPushDate(parseDateString(json.getPushDate()));
         model.setDefaultBranch(json.getDefaultBranch());
+        model.setSearchScore(json.getSearchScore());
         return model;
     }
 

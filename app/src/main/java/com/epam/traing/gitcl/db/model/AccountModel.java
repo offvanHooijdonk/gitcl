@@ -25,6 +25,7 @@ public class AccountModel implements Parcelable {
     String email;
     @StorIOSQLiteColumn(name = AccountTable.COLUMN_LOCATION)
     String location;
+    float searchScore;
 
     public AccountModel() {
     }
@@ -80,6 +81,14 @@ public class AccountModel implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public float getSearchScore() {
+        return searchScore;
+    }
+
+    public void setSearchScore(float searchScore) {
+        this.searchScore = searchScore;
     }
 
     @Override

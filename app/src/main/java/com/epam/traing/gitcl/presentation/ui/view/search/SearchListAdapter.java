@@ -239,10 +239,12 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
         private Integer type;
         private Object item;
+        private Float searchScore = 0.0f;
 
-        public ItemWrapper(int type, Object item) {
+        public ItemWrapper(int type, Object item, float searchScore) {
             this.type = type;
             this.item = item;
+            this.searchScore = searchScore;
         }
 
         public Object getItem() {
@@ -259,6 +261,14 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
         public void setType(Integer type) {
             this.type = type;
+        }
+
+        public Float getSearchScore() {
+            return searchScore;
+        }
+
+        public void setSearchScore(Float searchScore) {
+            this.searchScore = searchScore;
         }
 
         @Override

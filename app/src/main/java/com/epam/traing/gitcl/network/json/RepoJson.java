@@ -33,6 +33,8 @@ public class RepoJson {
     private String pushDate;
     @SerializedName("default_branch")
     private String defaultBranch;
+    @SerializedName("score")
+    private float searchScore;
 
     public long getId() {
         return id;
@@ -136,6 +138,14 @@ public class RepoJson {
 
     public void setDefaultBranch(String defaultBranch) {
         this.defaultBranch = defaultBranch;
+    }
+
+    public float getSearchScore() {
+        return searchScore;
+    }
+
+    public void setSearchScore(float searchScore) {
+        this.searchScore = searchScore;
     }
 
     public class Owner {
