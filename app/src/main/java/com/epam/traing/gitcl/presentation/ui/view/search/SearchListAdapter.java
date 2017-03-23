@@ -2,6 +2,7 @@ package com.epam.traing.gitcl.presentation.ui.view.search;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -200,12 +201,12 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         }
     }
 
-    public static class ItemWrapper {
+    public static class ItemWrapper implements Comparable<ItemWrapper> {
         public static final int HISTORY = 0;
         public static final int ACCOUNT = 1;
         public static final int REPOSITORY = 2;
 
-        private int type;
+        private Integer type;
         private Object item;
 
         public ItemWrapper(int type, Object item) {
@@ -221,12 +222,17 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
             this.item = item;
         }
 
-        public int getType() {
+        public Integer getType() {
             return type;
         }
 
-        public void setType(int type) {
+        public void setType(Integer type) {
             this.type = type;
+        }
+
+        @Override
+        public int compareTo(@NonNull ItemWrapper iw) {
+            return getType().compareTo(iw.getType());
         }
     }
 }

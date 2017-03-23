@@ -14,9 +14,9 @@ import com.epam.traing.gitcl.presentation.ui.view.search.SearchDialogFragment;
 import com.epam.traing.gitcl.presentation.ui.view.search.SearchListAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -83,20 +83,16 @@ public class MainPresenter implements IMainPresenter {
     @Override
     public void subscribeLiveQuery(Observable<String> observableLiveQuery) {
         observableLiveQuery
-                // TODO move time to constant or move to the Search Dialog
-                .throttleLast(200, TimeUnit.MILLISECONDS)
                 .doOnNext(s -> searchResults.clear())
                 .doOnNext(s -> Log.i("LOG", "Search LIVE: " + s))
                 .flatMap(s -> searchIntercator.findHistoryEntries(s, SearchDialogFragment.HISTORY_SHOW_MAX))
                 .map(this::onSearchResults)
                 .doOnNext(models -> Log.i("LOG", "History LIVE: " + models.size()))
                 .mergeWith(observableLiveQuery
-                        .throttleLast(200, TimeUnit.MILLISECONDS)
                         .flatMap(s -> searchIntercator.findReposLocal(s))
                         .map(this::onSearchResults)
                 )
                 .mergeWith(observableLiveQuery
-                        .throttleLast(200, TimeUnit.MILLISECONDS)
                         .flatMap(s -> searchIntercator.findAccountsLocal(s))
                         .map(this::onSearchResults))
                 .subscribe(itemWrappers -> onLiveSearchFinished());
@@ -139,6 +135,7 @@ public class MainPresenter implements IMainPresenter {
     }
 
     private void onLiveSearchFinished() {
+        Collections.sort(searchResults);
         view.updateSearchResults(searchResults);
     }
 

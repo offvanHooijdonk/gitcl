@@ -31,6 +31,7 @@ import com.epam.traing.gitcl.db.model.AccountModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.subjects.PublishSubject;
@@ -44,6 +45,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
 
     private static final String EXTRA_ANIM_X = "extra_anim_x";
     private static final String EXTRA_ANIM_Y = "extra_anim_y";
+    private static final int LIVE_SEARCH_THROTTLE = 250;
 
     private Context ctx;
     private InputMethodManager imm;
@@ -113,7 +115,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     }
 
     public Observable<String> observeLiveQuery() {
-        return obsLiveQuery;
+        return obsLiveQuery.throttleLast(LIVE_SEARCH_THROTTLE, TimeUnit.MILLISECONDS);
     }
 
     public Observable<String> observeFullQuery() {
