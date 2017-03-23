@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity
             presenter.subscribeFullQuery(searchFragment.observeFullQuery());
             presenter.subscribeLiveQuery(searchFragment.observeLiveQuery());
 
+            searchFragment.setMinCharsForFullSearch(SearchDialogFragment.DEFAULT_MIN_CHARS_FOR_FULL_SEARCH);
             searchFragment.show(getFragmentManager(), "searchDialog");
         }
 

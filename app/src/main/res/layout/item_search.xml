@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/itemRoot"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:orientation="vertical">
@@ -29,14 +30,27 @@
             android:id="@+id/txtHistoryEntry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="56dp"
+            android:layout_toStartOf="@+id/imgToSearchBar"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="history text"
             android:textColor="@color/dialog_controls"
             android:textSize="@dimen/list_item_primary"/>
 
+        <ImageView
+            android:id="@+id/imgToSearchBar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            android:clickable="true"
+            android:rotation="45"
+            android:src="@drawable/ic_arrow_24"
+            android:tint="@color/dialog_controls"/>
     </RelativeLayout>
 
     <RelativeLayout

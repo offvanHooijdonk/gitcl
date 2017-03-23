@@ -41,5 +41,6 @@
     <string name="sign_billion">b</string>
     <string name="sign_trillion">t</string>
     <string name="repo_name_divider">/</string>
-    <string name="search_input_hint"><![CDATA[Search repos & users]]></string>
+    <string name="search_input_hint">Search repos &amp; users</string>
+    <string name="search_input_less_than">Please, input at least %s characters</string>
 </resources>

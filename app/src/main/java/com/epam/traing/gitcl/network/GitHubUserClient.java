@@ -1,9 +1,11 @@
 package com.epam.traing.gitcl.network;
 
 import com.epam.traing.gitcl.network.json.AccountJson;
+import com.epam.traing.gitcl.network.json.AccountSearchResults;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -16,4 +18,7 @@ public interface GitHubUserClient {
 
     @GET("/users/{userName}")
     Observable<AccountJson> getUserInfo(@Path("userName") String userName);
+
+    @GET("/search/users")
+    Observable<AccountSearchResults> searchUsers(@Query("q") String queryText, @Query("page") int page);
 }

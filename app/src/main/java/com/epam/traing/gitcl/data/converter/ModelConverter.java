@@ -10,6 +10,8 @@ import com.epam.traing.gitcl.network.json.RepoJson;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -27,6 +29,15 @@ public class ModelConverter {
         model.setEmail(json.getEmail());
         model.setLocation(json.getLocation());
         return model;
+    }
+
+    public List<AccountModel> toAccountModelList(List<AccountJson> jsonList) {
+        List<AccountModel> models = new ArrayList<>();
+        for (AccountJson json : jsonList) {
+            models.add(toAccountModel(json));
+        }
+
+        return models;
     }
 
     public RepoModel toRepoModel(RepoJson json) {
@@ -47,7 +58,18 @@ public class ModelConverter {
         return model;
     }
 
+    public List<RepoModel> toRepoModelList(List<RepoJson> jsonList) {
+        List<RepoModel> models = new ArrayList<>();
+
+        for (RepoJson json : jsonList) {
+            models.add(toRepoModel(json));
+        }
+
+        return models;
+    }
+
     private long parseDateString(String dateString) {
+        if (dateString == null) return 0;
         long timeMillis;
         dateString = dateString.replace("T", " ");
         dateString = dateString.replace("Z", "");

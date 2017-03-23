@@ -5,8 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,10 +26,12 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.db.model.HistoryModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +44,9 @@ import rx.subjects.PublishSubject;
  * Created by Yahor_Fralou on 3/16/2017 12:47 PM.
  */
 
-public class SearchDialogFragment extends DialogFragment implements ViewTreeObserver.OnPreDrawListener {
-    public static final int HISTORY_SHOW_MAX = 3;
+public class SearchDialogFragment extends DialogFragment implements ViewTreeObserver.OnPreDrawListener, SearchListAdapter.ItemClickListener {
+    public static final int HISTORY_SHOW_MAX = 5;
+    public static final int DEFAULT_MIN_CHARS_FOR_FULL_SEARCH = 3;
 
     private static final String EXTRA_ANIM_X = "extra_anim_x";
     private static final String EXTRA_ANIM_Y = "extra_anim_y";
@@ -58,11 +63,16 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     private View viewSearchBar;
     private View rootView;
     private ImageView imgBack;
+    private ImageView imgClear;
     private ImageView imgSearch;
     private EditText inputSearch;
     private View viewBackOverlay;
     private RecyclerView listView;
+    private ProgressBar progressSearch;
+
     private AccountModel user;
+    private int minCharsForFullSearch = DEFAULT_MIN_CHARS_FOR_FULL_SEARCH;
+    private boolean isLiveSearchEnabled = true;
 
     public static SearchDialogFragment newInstance(View animateOverView, AccountModel user) {
         int[] centerLocation = SearchRevealAnim.getViewCenterLocation(animateOverView);
@@ -104,6 +114,9 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         rootView = view;
         setupLayout();
 
+        adapter.setHistoryPickListener(text -> inputSearch.setText(text));
+        adapter.setItemClickListener(this);
+
         return view;
     }
 
@@ -132,6 +145,8 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         }
         adapter.setSearchText(inputSearch.getText().toString());
         adapter.notifyDataSetChanged();
+
+        showSearchProgress(false);
     }
 
     @Override
@@ -158,6 +173,33 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         return true;
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (adapter != null) {
+            adapter.setOrientation(newConfig.orientation);
+        }
+    }
+
+    @Override
+    public void onSearchItemClick(SearchListAdapter.ItemWrapper itemWrapper) {
+        if (itemWrapper.getType() == SearchListAdapter.ItemWrapper.HISTORY) {
+            HistoryModel historyModel = (HistoryModel) itemWrapper.getItem();
+            // TODO fix - history entries should not be displayed despite search input text change
+            isLiveSearchEnabled = false;
+            inputSearch.setText(historyModel.getText());
+            listView.setVisibility(View.GONE);
+            isLiveSearchEnabled = true;
+
+            searchByClick();
+        }
+    }
+
+    public void setMinCharsForFullSearch(int minCharsForFullSearch) {
+        this.minCharsForFullSearch = minCharsForFullSearch;
+    }
+
     private void setupDialog() {
         Window window = getDialog().getWindow();
         if (window != null) {
@@ -175,15 +217,20 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
 
     private void setupLayout() {
         imgBack = (ImageView) rootView.findViewById(R.id.imgBack);
+        imgClear = (ImageView) rootView.findViewById(R.id.imgClear);
         imgSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
         inputSearch = (EditText) rootView.findViewById(R.id.inputSearch);
         viewBackOverlay = rootView.findViewById(R.id.viewBackgroundOverlay);
         listView = (RecyclerView) rootView.findViewById(R.id.listSearchResults);
         viewSearchBar = rootView.findViewById(R.id.blockSearchBar);
+        progressSearch = (ProgressBar) rootView.findViewById(R.id.progressSearch);
 
         imgBack.setOnClickListener(v -> closeSearchDialog());
+        imgClear.setOnClickListener(v -> clearSearch());
+        enableClearControls(false);
         imgSearch.getViewTreeObserver().addOnPreDrawListener(this);
         imgSearch.setOnClickListener(v -> searchByClick());
+        enableFullSearchControls(false);
         viewBackOverlay.setOnClickListener(v -> closeSearchDialog());
 
         listView.setLayoutManager(new LinearLayoutManager(ctx));
@@ -194,18 +241,23 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
 
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable s) {
-                search(false);
+                enableFullSearchControls(inputSearch.getText().length() >= minCharsForFullSearch);
+                if (isLiveSearchEnabled) search(false);
+                enableClearControls(inputSearch.getText().length() > 0);
             }
         });
 
         getDialog().setOnKeyListener((dialog, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                Log.i("LOG", "Backk pressed");
                 closeSearchDialog();
                 return true;
             } else if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -232,9 +284,14 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     }
 
     private void searchByClick() {
-        showKeyBoard(false);
+        if (inputSearch.getText().length() >= minCharsForFullSearch) {
+            showKeyBoard(false);
+            showSearchProgress(true);
 
-        search(true);
+            search(true);
+        } else {
+            Toast.makeText(ctx, ctx.getString(R.string.search_input_less_than, String.valueOf(minCharsForFullSearch)), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void search(boolean isFull) {
@@ -245,6 +302,26 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         } else {
             obsLiveQuery.onNext(queryText);
         }
+    }
+
+    private void showSearchProgress(boolean isShowProgress) {
+        imgSearch.setVisibility(isShowProgress ? View.GONE : View.VISIBLE);
+        progressSearch.setVisibility(isShowProgress ? View.VISIBLE : View.GONE);
+    }
+
+    private void clearSearch() {
+        inputSearch.setText("");
+        showKeyBoard(true);
+    }
+
+    private void enableFullSearchControls(boolean isEnable) {
+        imgSearch.setEnabled(isEnable);
+        DrawableCompat.setTint(imgSearch.getDrawable(), ctx.getResources().getColor(isEnable ? R.color.dialog_controls : R.color.divider));
+    }
+
+    private void enableClearControls(boolean isEnable) {
+        imgClear.setEnabled(isEnable);
+        DrawableCompat.setTint(imgClear.getDrawable(), ctx.getResources().getColor(isEnable ? R.color.dialog_controls : R.color.divider));
     }
 
     private void performCloseActions() {
@@ -264,4 +341,6 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
             imm.hideSoftInputFromWindow(inputSearch.getWindowToken(), 0);
         }
     }
+
+
 }

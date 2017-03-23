@@ -4,7 +4,7 @@ import com.epam.traing.gitcl.db.model.HistoryModel;
 
 import java.util.List;
 
-import rx.Observable;
+import rx.Single;
 
 /**
  * Created by Yahor_Fralou on 3/20/2017 6:23 PM.
@@ -15,5 +15,5 @@ public interface IHistoryDao {
 
     void save(HistoryModel model);
 
-    Observable<List<HistoryModel>> findWithText(String text, int limit);
+    Single<List<HistoryModel>> findWithText(String text, int limit);
 }

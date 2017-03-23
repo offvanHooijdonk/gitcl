@@ -1,15 +1,19 @@
 package com.epam.traing.gitcl.data.interactor.search;
 
+import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.db.dao.IAccountDao;
 import com.epam.traing.gitcl.db.dao.IHistoryDao;
 import com.epam.traing.gitcl.db.dao.IRepoDao;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.HistoryModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.network.GitHubRepoClient;
+import com.epam.traing.gitcl.network.GitHubUserClient;
 
 import java.util.List;
 
 import rx.Observable;
+import rx.Single;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -22,11 +26,18 @@ public class SearchInteractor implements ISearchIntercator {
     private IHistoryDao historyDao;
     private IRepoDao repoDao;
     private IAccountDao accountDao;
+    private GitHubRepoClient repoClient;
+    private GitHubUserClient userClient;
+    private ModelConverter modelConverter;
 
-    public SearchInteractor(IHistoryDao historyDao, IRepoDao repoDao, IAccountDao accountDao) {
+    public SearchInteractor(IHistoryDao historyDao, IRepoDao repoDao, IAccountDao accountDao,
+                            GitHubRepoClient repoClient, GitHubUserClient userClient, ModelConverter modelConverter) {
         this.historyDao = historyDao;
         this.repoDao = repoDao;
         this.accountDao = accountDao;
+        this.repoClient = repoClient;
+        this.userClient = userClient;
+        this.modelConverter = modelConverter;
     }
 
     @Override
@@ -35,7 +46,7 @@ public class SearchInteractor implements ISearchIntercator {
     }
 
     @Override
-    public Observable<List<HistoryModel>> findHistoryEntries(String queryText, int limit) {
+    public Single<List<HistoryModel>> findHistoryEntries(String queryText, int limit) {
         return historyDao.
                 findWithText(queryText, limit)
                 .subscribeOn(Schedulers.io())
@@ -63,6 +74,22 @@ public class SearchInteractor implements ISearchIntercator {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
         }
+    }
+
+    @Override
+    public Observable<List<AccountModel>> searchAccountsOnApi(String queryText, int page) {
+        return userClient.searchUsers(queryText, page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(searchResults -> modelConverter.toAccountModelList(searchResults.getItems()));
+    }
+
+    @Override
+    public Observable<List<RepoModel>> searchRepositoriesOnApi(String queryText, int page) {
+        return repoClient.searchRepositories(queryText, page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(searchResults ->  modelConverter.toRepoModelList(searchResults.getItems()));
     }
 
 }

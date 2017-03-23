@@ -74,27 +74,31 @@ public class MainPresenter implements IMainPresenter {
 
     @Override
     public void subscribeFullQuery(Observable<String> observableFullQuery) {
+        // TODO pagination
         observableFullQuery
                 .doOnNext(this::saveHistoryEntry)
-                //.flatMap(searchIntercator::findHistoryEntries)
-                .subscribe();
+                .doOnNext(s -> searchResults.clear())
+                .flatMap(s -> searchIntercator.searchRepositoriesOnApi(s, 1))
+                .map(this::collectSearchResults)
+                .mergeWith(observableFullQuery
+                        .flatMap(s -> searchIntercator.searchAccountsOnApi(s, 1))
+                        .map(this::collectSearchResults))
+                .subscribe(itemWrappers -> onFullSearchFinished());
     }
 
     @Override
     public void subscribeLiveQuery(Observable<String> observableLiveQuery) {
         observableLiveQuery
                 .doOnNext(s -> searchResults.clear())
-                .doOnNext(s -> Log.i("LOG", "Search LIVE: " + s))
-                .flatMap(s -> searchIntercator.findHistoryEntries(s, SearchDialogFragment.HISTORY_SHOW_MAX))
-                .map(this::onSearchResults)
-                .doOnNext(models -> Log.i("LOG", "History LIVE: " + models.size()))
+                .flatMap(s -> searchIntercator.findHistoryEntries(s, SearchDialogFragment.HISTORY_SHOW_MAX).flatMapObservable(Observable::just))
+                .map(this::collectSearchResults)
                 .mergeWith(observableLiveQuery
                         .flatMap(s -> searchIntercator.findReposLocal(s))
-                        .map(this::onSearchResults)
+                        .map(this::collectSearchResults)
                 )
                 .mergeWith(observableLiveQuery
                         .flatMap(s -> searchIntercator.findAccountsLocal(s))
-                        .map(this::onSearchResults))
+                        .map(this::collectSearchResults))
                 .subscribe(itemWrappers -> onLiveSearchFinished());
     }
 
@@ -122,10 +126,10 @@ public class MainPresenter implements IMainPresenter {
         searchIntercator.saveHistoryEntry(historyModel);
     }
 
-    private List<SearchListAdapter.ItemWrapper> onSearchResults(List<?> historyModels) {
+    private List<SearchListAdapter.ItemWrapper> collectSearchResults(List<?> historyModels) {
         Observable.from(historyModels)
                 .map(model -> new SearchListAdapter.ItemWrapper(
-                        model instanceof AccountModel ? SearchListAdapter.ItemWrapper.ACCOUNT:
+                        model instanceof AccountModel ? SearchListAdapter.ItemWrapper.ACCOUNT :
                                 model instanceof RepoModel ? SearchListAdapter.ItemWrapper.REPOSITORY :
                                         SearchListAdapter.ItemWrapper.HISTORY
                         , model))
@@ -135,6 +139,12 @@ public class MainPresenter implements IMainPresenter {
     }
 
     private void onLiveSearchFinished() {
+        Collections.sort(searchResults);
+        view.updateSearchResults(searchResults);
+    }
+
+    private void onFullSearchFinished() {
+        // TODO sort by score only
         Collections.sort(searchResults);
         view.updateSearchResults(searchResults);
     }

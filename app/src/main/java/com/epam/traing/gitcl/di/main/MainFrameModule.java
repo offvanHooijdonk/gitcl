@@ -11,6 +11,7 @@ import com.epam.traing.gitcl.db.dao.IHistoryDao;
 import com.epam.traing.gitcl.db.dao.IRepoDao;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
+import com.epam.traing.gitcl.network.GitHubRepoClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 import com.epam.traing.gitcl.presentation.presenter.AccountPresenter;
 import com.epam.traing.gitcl.presentation.presenter.IAccountPresenter;
@@ -51,8 +52,9 @@ public class MainFrameModule {
 
     @Provides
     @MainFrameScope
-    public ISearchIntercator provideSearchIntercator(IHistoryDao historyDao, IRepoDao repoDao, IAccountDao accountDao) {
-        return new SearchInteractor(historyDao, repoDao, accountDao);
+    public ISearchIntercator provideSearchIntercator(IHistoryDao historyDao, IRepoDao repoDao, IAccountDao accountDao,
+                                                     GitHubRepoClient repoClient, GitHubUserClient userClient, ModelConverter modelConverter) {
+        return new SearchInteractor(historyDao, repoDao, accountDao, repoClient, userClient, modelConverter);
     }
 
     @Provides

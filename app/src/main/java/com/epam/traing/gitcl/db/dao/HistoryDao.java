@@ -7,7 +7,7 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.List;
 
-import rx.Observable;
+import rx.Single;
 
 /**
  * Created by Yahor_Fralou on 3/20/2017 6:23 PM.
@@ -26,7 +26,7 @@ public class HistoryDao implements IHistoryDao {
     }
 
     @Override
-    public Observable<List<HistoryModel>> findWithText(String text, int limit) {
+    public Single<List<HistoryModel>> findWithText(String text, int limit) {
         return storIOSQLite.get().listOfObjects(HistoryModel.class)
                 .withQuery(Query.builder()
                         .table(HistoryTable.TABLE)
@@ -35,6 +35,6 @@ public class HistoryDao implements IHistoryDao {
                         .orderBy(HistoryTable.COLUMN_SEARCH_DATE + " desc")
                         .limit(limit)
                         .build()
-                ).prepare().asRxObservable();
+                ).prepare().asRxSingle();
     }
 }

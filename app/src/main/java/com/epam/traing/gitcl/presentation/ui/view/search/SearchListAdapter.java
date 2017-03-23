@@ -37,6 +37,9 @@ import static com.epam.traing.gitcl.presentation.ui.view.RepoIconView.TYPE_REPO;
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.ViewHolder> {
 
     private Context ctx;
+    private HistoryPickListener historyPickListener;
+    private ItemClickListener itemClickListener;
+
     private List<ItemWrapper> items;
     private String searchText;
     private AccountModel accountModel;
@@ -66,6 +69,12 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         } else if (wrapper.getType() == ItemWrapper.ACCOUNT) {
             showAccount((AccountModel) wrapper.getItem(), holder);
         }
+
+        holder.itemRoot.setOnClickListener(v -> {
+            if (itemClickListener != null) {
+                itemClickListener.onSearchItemClick(wrapper);
+            }
+        });
     }
 
     @Override
@@ -75,11 +84,23 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
     @Override
     public int getItemViewType(int position) {
-        return items.get(position).getType();
+        return items.get(position).getType() + orientation * 10;
     }
 
     public void setSearchText(String searchText) {
         this.searchText = searchText;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
+
+    public void setHistoryPickListener(HistoryPickListener historyPickListener) {
+        this.historyPickListener = historyPickListener;
+    }
+
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
     }
 
     private void showHistory(HistoryModel model, ViewHolder vh) {
@@ -88,6 +109,11 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         vh.itemRepoView.setVisibility(View.GONE);
 
         vh.txtHistory.setText(styleStringWithSearch(model.getText(), searchText));
+        vh.imgToSearchBar.setOnClickListener(v -> {
+            if (historyPickListener != null) {
+                historyPickListener.onHistoryPicked(model.getText());
+            }
+        });
     }
 
     private void showAccount(AccountModel model, ViewHolder vh) {
@@ -162,6 +188,9 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.itemRoot)
+        View itemRoot;
+
         @Bind(R.id.itemHistory)
         View itemHistoryView;
         @Bind(R.id.itemAccount)
@@ -171,6 +200,8 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
         @Bind(R.id.txtHistoryEntry)
         TextView txtHistory;
+        @Bind(R.id.imgToSearchBar)
+        ImageView imgToSearchBar;
 
         @Bind(R.id.imgAccount)
         ImageView imgAccount;
@@ -234,5 +265,13 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         public int compareTo(@NonNull ItemWrapper iw) {
             return getType().compareTo(iw.getType());
         }
+    }
+
+    interface HistoryPickListener {
+        void onHistoryPicked(String text);
+    }
+
+    interface ItemClickListener {
+        void onSearchItemClick(ItemWrapper itemWrapper);
     }
 }
