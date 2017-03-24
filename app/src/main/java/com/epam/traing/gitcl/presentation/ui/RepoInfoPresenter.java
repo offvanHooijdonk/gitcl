@@ -70,7 +70,6 @@ public class RepoInfoPresenter implements IRepoInfoPresenter {
         view.showRefreshingProcess(true);
         repoInteractor.loadVerbose(repoModel)
                 .subscribe(this::onRepoLoaded, this::onError);
-        // TODO need to fire logic here if already subscribed in .getRepoInfoFromDB()?
     }
 
     private void onAccountLoaded(AccountModel accountModel) {

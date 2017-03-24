@@ -16,4 +16,6 @@ public interface IMainView {
     void startLoginActivity();
 
     void updateSearchResults(List<SearchListAdapter.ItemWrapper> historyModels);
+
+    void showError(Throwable th);
 }

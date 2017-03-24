@@ -24,14 +24,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 @Singleton
 public class NetworkModule {
-// TODO setup Scopes
 
     @Provides
+    @Singleton
     public AuthenticationInterceptor getAuthInterceptor(PrefHelper prefHelper) {
         return new AuthenticationInterceptor(prefHelper);
     }
 
     @Provides
+    @Singleton
     public OkHttpClient getHttpClient(AuthenticationInterceptor authenticationInterceptor) {
         return new OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
@@ -41,6 +42,7 @@ public class NetworkModule {
     }
 
     @Provides
+    @Singleton
     @Named("oauthRetrofit")
     public Retrofit getOAuthTokenRetrofit(OkHttpClient httpClient) {
         return new Retrofit.Builder()
@@ -52,6 +54,7 @@ public class NetworkModule {
     }
 
     @Provides
+    @Singleton
     @Named("apiRetrofit")
     public Retrofit getApiRetrofit(OkHttpClient httpClient) {
         return new Retrofit.Builder()

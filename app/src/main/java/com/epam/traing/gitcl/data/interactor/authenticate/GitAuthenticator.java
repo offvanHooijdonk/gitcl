@@ -94,8 +94,6 @@ public class GitAuthenticator implements IAuthenticator {
         prefHelper.setLoggedAccountName(accountModel.getAccountName());
 
         Log.d(Application.LOG, "Account passing to presenter");
-
-        // TODO start avatar loading if not null
     }
 
     @Override

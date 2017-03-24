@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.epam.traing.gitcl.R;
@@ -172,7 +173,6 @@ public class MainActivity extends AppCompatActivity
         if (accountModel != null) {
             txtDrawerAccountUserName.setText(accountModel.getPersonName());
             txtDrawerAccountName.setText(accountModel.getAccountName());
-            // TODO get image
             if (accountModel.getAvatar() != null) {
                 Glide.with(this).load(accountModel.getAvatar()).into(imgAvatar);
             }
@@ -217,6 +217,11 @@ public class MainActivity extends AppCompatActivity
         if (searchFragment != null) {
             searchFragment.updateResults(historyModels);
         }
+    }
+
+    @Override
+    public void showError(Throwable th) {
+        Toast.makeText(this, th.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     public void animateToArrow() {

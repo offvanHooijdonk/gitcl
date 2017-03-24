@@ -26,6 +26,7 @@ import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.presentation.presenter.IRepoListPresenter;
 import com.epam.traing.gitcl.presentation.ui.adapter.RepoListAdapter;
+import com.epam.traing.gitcl.presentation.ui.helper.ColorsHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,8 +90,11 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         super.onViewCreated(view, savedInstanceState);
 
         getActivity().setTitle(getString(R.string.title_repos));
-        initRefreshLayout(refreshLayoutList);
-        initRefreshLayout(refreshLayoutEmpty);
+        ColorsHelper.initRefreshLayout(ctx, refreshLayoutList);
+        ColorsHelper.initRefreshLayout(ctx, refreshLayoutEmpty);
+        refreshLayoutList.setOnRefreshListener(() -> presenter.onRefreshTriggered());
+        refreshLayoutEmpty.setOnRefreshListener(() -> presenter.onRefreshTriggered());
+
         refreshLayoutList.setVisibility(View.VISIBLE);
         refreshLayoutEmpty.setVisibility(View.GONE);
 
@@ -219,14 +223,6 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
             refreshLayoutList.setVisibility(View.GONE);
             refreshLayoutEmpty.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void initRefreshLayout(SwipeRefreshLayout srl) {
-        // TODO move to some helper?
-        srl.setColorSchemeColors(ctx.getResources().getColor(R.color.refresh1),
-                ctx.getResources().getColor(R.color.refresh2),
-                ctx.getResources().getColor(R.color.refresh3));
-        srl.setOnRefreshListener(() -> presenter.onRefreshTriggered());
     }
 
     private void injectComponent() {

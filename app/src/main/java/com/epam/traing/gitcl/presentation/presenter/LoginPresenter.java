@@ -69,7 +69,6 @@ public class LoginPresenter implements ILoginPresenter {
     }
 
     private void onOAuthCallback(String url) {
-        // TODO hide logo here to make layout blank?
         loginView.showLoginProgress(true);
 
         authenticator.authorizeFromCallback(url)
@@ -107,14 +106,12 @@ public class LoginPresenter implements ILoginPresenter {
 
 
     private void onLoginFail(Throwable th) {
-        // TODO show error message
         loginView.showLoginProgress(false);
         loginView.showAuthErrorMessage(th);
         if (th instanceof AccountNotFoundException) {
             // assume information lost and new auth required
             prefHelper.setLoggedAccountName(null);
             loginView.showAuthErrorMessage(th);
-
         }
     }
 }

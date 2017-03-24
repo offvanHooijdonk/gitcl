@@ -154,7 +154,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
         imgSearch.getViewTreeObserver().removeOnPreDrawListener(this);
         int startX = getArguments().getInt(EXTRA_ANIM_X);
         int startY = SearchRevealAnim.getViewCenterLocation(imgSearch)[1];
-        revealAnim = new SearchRevealAnim(viewSearchBar, startX, startY); // TODO reveal around search view, not the whole dialog. Set animation to hide recycler view!
+        revealAnim = new SearchRevealAnim(viewSearchBar, startX, startY);
         revealAnim.setListener(new SearchRevealAnim.AnimationListener() {
             @Override
             public void onShowAnimationEnd() {
@@ -186,7 +186,7 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     public void onSearchItemClick(SearchListAdapter.ItemWrapper itemWrapper) {
         if (itemWrapper.getType() == SearchListAdapter.ItemWrapper.HISTORY) {
             HistoryModel historyModel = (HistoryModel) itemWrapper.getItem();
-            // TODO fix - history entries should not be displayed despite search input text change
+
             isLiveSearchEnabled = false;
             inputSearch.setText(historyModel.getText());
             listView.setVisibility(View.GONE);
@@ -316,12 +316,12 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
 
     private void enableFullSearchControls(boolean isEnable) {
         imgSearch.setEnabled(isEnable);
-        DrawableCompat.setTint(imgSearch.getDrawable(), ctx.getResources().getColor(isEnable ? R.color.dialog_controls : R.color.divider));
+        DrawableCompat.setTint(imgSearch.getDrawable(), ctx.getResources().getColor(isEnable ? R.color.dialog_controls : R.color.dialog_controls_disabled));
     }
 
     private void enableClearControls(boolean isEnable) {
         imgClear.setEnabled(isEnable);
-        DrawableCompat.setTint(imgClear.getDrawable(), ctx.getResources().getColor(isEnable ? R.color.dialog_controls : R.color.divider));
+        DrawableCompat.setTint(imgClear.getDrawable(), ctx.getResources().getColor(isEnable ? R.color.dialog_controls : R.color.dialog_controls_disabled));
     }
 
     private void performCloseActions() {

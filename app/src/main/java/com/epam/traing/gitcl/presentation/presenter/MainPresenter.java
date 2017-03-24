@@ -2,6 +2,7 @@ package com.epam.traing.gitcl.presentation.presenter;
 
 import android.util.Log;
 
+import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.data.interactor.account.IAccountInteractor;
 import com.epam.traing.gitcl.data.interactor.search.ISearchIntercator;
 import com.epam.traing.gitcl.db.model.AccountModel;
@@ -28,7 +29,6 @@ import rx.Observable;
 
 public class MainPresenter implements IMainPresenter {
     private IMainView view;
-    // TODO handle all onErrors !!!
     private IAccountInteractor accountInteractor;
     private PrefHelper prefHelper;
     private ISearchIntercator searchIntercator;
@@ -59,8 +59,7 @@ public class MainPresenter implements IMainPresenter {
     @Override
     public void onLogoutConfirmed() {
         accountInteractor.logOutAccount().subscribe(o -> {
-        }, th -> {
-        }, () -> {
+        }, this::handleError, () -> {
             prefHelper.setShowLogin(true);
             view.showLogoutDialog(false);
             view.startLoginActivity();
@@ -75,6 +74,9 @@ public class MainPresenter implements IMainPresenter {
     @Override
     public void subscribeFullQuery(Observable<String> observableFullQuery) {
         // TODO pagination
+        // Such approach shows a page of Repos and a page of accounts, regardless the score difference between Repos and Accounts
+        // Search API does not let set page size, or limit score vales. Therefore, for omni-search should consider search cache.
+        // Or search Accounts and Repos separately
         observableFullQuery
                 .doOnNext(this::saveHistoryEntry)
                 .doOnNext(s -> searchResults.clear())
@@ -83,7 +85,7 @@ public class MainPresenter implements IMainPresenter {
                 .mergeWith(observableFullQuery
                         .flatMap(s -> searchIntercator.searchAccountsOnApi(s, 1))
                         .map(this::collectSearchResults))
-                .subscribe(itemWrappers -> onFullSearchFinished());
+                .subscribe(itemWrappers -> onFullSearchFinished(), this::handleError);
     }
 
     @Override
@@ -99,7 +101,7 @@ public class MainPresenter implements IMainPresenter {
                 .mergeWith(observableLiveQuery
                         .flatMap(s -> searchIntercator.findAccountsLocal(s))
                         .map(this::collectSearchResults))
-                .subscribe(itemWrappers -> onLiveSearchFinished());
+                .subscribe(itemWrappers -> onLiveSearchFinished(), this::handleError);
     }
 
     private void updateAccountInfo() {
@@ -108,10 +110,9 @@ public class MainPresenter implements IMainPresenter {
         }
     }
 
-
     private void requestAccountInfo() {
         accountInteractor.reloadCurrentAccount()
-                .subscribe(accountModel -> view.updateAccountInfo());
+                .subscribe(accountModel -> view.updateAccountInfo(), this::handleError);
     }
 
     private boolean hasTimePassed(long timeFrom, int timePass) {
@@ -159,4 +160,8 @@ public class MainPresenter implements IMainPresenter {
         view.updateSearchResults(searchResults);
     }
 
+    private void handleError(Throwable th) {
+        Log.e(Application.LOG, "Error.", th);
+        view.showError(th);
+    }
 }

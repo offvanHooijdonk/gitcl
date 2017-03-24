@@ -64,7 +64,6 @@ public class AccountInteractor implements IAccountInteractor {
 
     @Override
     public Observable<Void> logOutAccount() {
-        // TODO move this to presenter?
         sessionHelper.setCurrentAccount(null);
         prefHelper.setLoggedAccountName(null);
 
