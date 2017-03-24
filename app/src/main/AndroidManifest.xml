@@ -47,6 +47,10 @@
         <activity android:name=".presentation.ui.AccountActivity">
 
         </activity>
+
+        <activity android:name=".presentation.ui.CreateRepoActivity">
+
+        </activity>
     </application>
 
 </manifest>

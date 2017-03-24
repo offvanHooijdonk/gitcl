@@ -1,12 +1,15 @@
 package com.epam.traing.gitcl.presentation.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +29,7 @@ import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.presentation.presenter.IRepoListPresenter;
 import com.epam.traing.gitcl.presentation.ui.adapter.RepoListAdapter;
+import com.epam.traing.gitcl.presentation.ui.helper.AnimationHelper;
 import com.epam.traing.gitcl.presentation.ui.helper.ColorsHelper;
 
 import java.util.ArrayList;
@@ -61,6 +65,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     SwipeRefreshLayout refreshLayoutEmpty;
     @Bind(R.id.fabCreateRepo)
     FloatingActionButton fab;
+    private View viewRevealPlaceholder;
 
     private List<RepoModel> repositories = new ArrayList<>();
     private RepoListAdapter repoListAdapter;
@@ -81,6 +86,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         recentConfiguration = ctx.getResources().getConfiguration().orientation;
 
         setHasOptionsMenu(true);
+        viewRevealPlaceholder = getActivity().findViewById(R.id.revealPlaceholder);
 
         return v;
     }
@@ -117,7 +123,26 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
                 }
             }
         });
-        fab.setOnClickListener(fabView -> Snackbar.make(fab, "No", Snackbar.LENGTH_SHORT).show());
+        fab.setOnClickListener(fabView -> {
+            if (viewRevealPlaceholder == null) {
+                startActivity(new Intent(ctx, CreateRepoActivity.class));
+                return;
+            }
+            AnimationHelper.Circle.revealViewWithFAB(viewRevealPlaceholder, fab, null, new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+
+                    Intent intent = new Intent(ctx, CreateRepoActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                    new Handler().postDelayed(() -> {
+                        viewRevealPlaceholder.setVisibility(View.INVISIBLE);
+                        fab.show();
+                    }, 350);
+                }
+            });
+        });
 
         presenter.onViewShows();
 
