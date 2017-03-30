@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -194,6 +195,14 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
 
             searchByClick();
         }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+
+        obsLiveQuery.onCompleted();
+        obsFullQuery.onCompleted();
     }
 
     public void setMinCharsForFullSearch(int minCharsForFullSearch) {
