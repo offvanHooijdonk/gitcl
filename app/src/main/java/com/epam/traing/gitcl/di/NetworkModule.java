@@ -24,6 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 @Singleton
 public class NetworkModule {
+    public static final String RETROFIT_OAUTH = "oauthRetrofit";
+    public static final String RETROFIT_API = "apiRetrofit";
 
     @Provides
     @Singleton
@@ -43,7 +45,7 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    @Named("oauthRetrofit")
+    @Named(RETROFIT_OAUTH)
     public Retrofit getOAuthTokenRetrofit(OkHttpClient httpClient) {
         return new Retrofit.Builder()
                 .baseUrl(Constants.Api.OAUTH_LOGIN_BASE_URL)
@@ -55,7 +57,7 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    @Named("apiRetrofit")
+    @Named(RETROFIT_API)
     public Retrofit getApiRetrofit(OkHttpClient httpClient) {
         return new Retrofit.Builder()
                 .baseUrl(Constants.Api.API_BASE_URL)
@@ -67,7 +69,7 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public GitHubUserClient getUserClient(@Named("apiRetrofit") Retrofit apiRetrofit) {
+    public GitHubUserClient getUserClient(@Named(RETROFIT_API) Retrofit apiRetrofit) {
         return apiRetrofit.create(GitHubUserClient.class);
     }
 

@@ -39,6 +39,11 @@ public class LoginPresenter implements ILoginPresenter {
     }
 
     @Override
+    public void detachView() {
+        this.loginView = null;
+    }
+
+    @Override
     public void onSkipLoginSelected() {
         prefHelper.setShowLogin(false);
         loginView.startMainView();

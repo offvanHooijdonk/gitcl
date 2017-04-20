@@ -2,10 +2,9 @@ package com.epam.traing.gitcl.di;
 
 import android.content.Context;
 
-import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.data.converter.ModelConverter;
-import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.helper.PrefHelper;
+import com.epam.traing.gitcl.helper.SessionHelper;
 
 import javax.inject.Singleton;
 
@@ -18,9 +17,9 @@ import dagger.Provides;
 
 @Module
 public class AppModule {
-    private final Application app;
+    private final Context app;
 
-    public AppModule(Application app) {
+    public AppModule(Context app) {
         this.app = app;
     }
 

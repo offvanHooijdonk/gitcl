@@ -11,6 +11,8 @@ import com.epam.traing.gitcl.presentation.ui.ILoginView;
 public interface ILoginPresenter {
     void attachView(ILoginView loginView);
 
+    void detachView();
+
     void onSkipLoginSelected();
 
     void onLoginSelected();

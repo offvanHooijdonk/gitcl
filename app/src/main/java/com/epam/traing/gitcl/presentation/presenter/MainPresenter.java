@@ -89,7 +89,7 @@ public class MainPresenter implements IMainPresenter {
     }
 
     @Override
-    public void subscribeLiveQuery(Observable<String> observableLiveQuery) {
+    public void subscribeLiveQuery(Observable<String> observableLiveQuery) { // TODO unsubscribe
         observableLiveQuery
                 .doOnNext(s -> searchResults.clear())
                 .flatMap(s -> searchIntercator.findHistoryEntries(s, SearchDialogFragment.HISTORY_SHOW_MAX).flatMapObservable(Observable::just))

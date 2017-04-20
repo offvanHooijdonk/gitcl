@@ -32,6 +32,7 @@ import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.presentation.ui.animation.InfoTransition;
 import com.epam.traing.gitcl.presentation.ui.helper.ColorsHelper;
@@ -141,10 +142,6 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         return fragment;
     }
 
-    public RepoInfoFragment() {
-        injectComponent();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -152,10 +149,11 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         if (v == null) {
             v = inflater.inflate(R.layout.frag_repo_info, container, false);
         }
-
-        Log.i(Application.LOG, "onCreateView");
-        ButterKnife.bind(this, v);
         ctx = getActivity();
+        injectComponent();
+
+        ButterKnife.bind(this, v);
+
         recentOrientation = ctx.getResources().getConfiguration().orientation;
 
         repoModel = getArguments().getParcelable(ARG_REPO_MODEL);
@@ -326,7 +324,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     }
 
     private void injectComponent() {
-        Application.getRepositoryComponent().inject(this);
+        DependencyManager.getRepositoryComponent(ctx).inject(this);
         presenter.attachView(this);
     }
 

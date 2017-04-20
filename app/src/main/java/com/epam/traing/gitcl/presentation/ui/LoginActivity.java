@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.presentation.presenter.ILoginPresenter;
 
 import javax.inject.Inject;
@@ -47,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Application.getLoginComponent().inject(this);
+        DependencyManager.getLoginComponent().inject(this);
         loginPresenter.attachView(this);
 
         ButterKnife.bind(this);

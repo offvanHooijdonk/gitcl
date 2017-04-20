@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.presentation.presenter.IRepoListPresenter;
 import com.epam.traing.gitcl.presentation.ui.adapter.RepoListAdapter;
@@ -70,10 +71,6 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     private List<RepoModel> repositories = new ArrayList<>();
     private RepoListAdapter repoListAdapter;
 
-    public RepoListFragment() {
-        injectComponent();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,8 +78,11 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         if (v == null) {
             v = inflater.inflate(R.layout.frag_repos_list, container, false);
         }
-        ButterKnife.bind(this, v);
         ctx = getActivity();
+        injectComponent();
+
+        ButterKnife.bind(this, v);
+
         recentConfiguration = ctx.getResources().getConfiguration().orientation;
 
         setHasOptionsMenu(true);
@@ -251,7 +251,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     }
 
     private void injectComponent() {
-        Application.getRepositoryComponent().inject(this);
+        DependencyManager.getRepositoryComponent(ctx).inject(this);
         presenter.attachView(this);
     }
 

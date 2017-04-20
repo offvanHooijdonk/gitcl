@@ -25,8 +25,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.presenter.IMainPresenter;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Application.getMainFrameComponent().inject(this);
+        DependencyManager.getMainFrameComponent(this).inject(this);
         presenter.attachView(this);
 
         ButterKnife.bind(this);

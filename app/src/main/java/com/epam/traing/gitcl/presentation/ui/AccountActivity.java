@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.presentation.presenter.IAccountPresenter;
 
 import javax.inject.Inject;
@@ -52,7 +52,7 @@ public class AccountActivity extends AppCompatActivity implements IAccountView {
 
         account = getIntent().getParcelableExtra(EXTRA_ACCOUNT);
 
-        Application.getMainFrameComponent().inject(this);
+        DependencyManager.getMainFrameComponent(this).inject(this);
         ButterKnife.bind(this);
         presenter.attachView(this);
 
