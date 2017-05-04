@@ -33,10 +33,14 @@ import android.widget.Toast;
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.HistoryModel;
+import com.epam.traing.gitcl.di.DependencyManager;
+import com.epam.traing.gitcl.presentation.presenter.ISearchPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import rx.Observable;
 import rx.subjects.PublishSubject;
@@ -45,7 +49,7 @@ import rx.subjects.PublishSubject;
  * Created by Yahor_Fralou on 3/16/2017 12:47 PM.
  */
 
-public class SearchDialogFragment extends DialogFragment implements ViewTreeObserver.OnPreDrawListener, SearchListAdapter.ItemClickListener {
+public class SearchDialogFragment extends DialogFragment implements ISearchView, ViewTreeObserver.OnPreDrawListener, SearchListAdapter.ItemClickListener {
     public static final int HISTORY_SHOW_MAX = 5;
     public static final int DEFAULT_MIN_CHARS_FOR_FULL_SEARCH = 3;
 
@@ -70,6 +74,9 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     private View viewBackOverlay;
     private RecyclerView listView;
     private ProgressBar progressSearch;
+
+    @Inject
+    ISearchPresenter searchPresenter;
 
     private AccountModel user;
     private int minCharsForFullSearch = DEFAULT_MIN_CHARS_FOR_FULL_SEARCH;
@@ -98,6 +105,8 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DependencyManager.getSearchScreenComponent().inject(this);
 
         setStyle(android.support.v4.app.DialogFragment.STYLE_NO_FRAME, R.style.AppBaseTheme_SearchDialog);
         ctx = getActivity();
@@ -203,6 +212,8 @@ public class SearchDialogFragment extends DialogFragment implements ViewTreeObse
 
         obsLiveQuery.onCompleted();
         obsFullQuery.onCompleted();
+
+        searchPresenter.detachView();
     }
 
     public void setMinCharsForFullSearch(int minCharsForFullSearch) {
