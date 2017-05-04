@@ -31,7 +31,7 @@ public class MainScreenModule {
 /*
     @Provides
     @MainScreenScope
-    public ISearchIntercator provideSearchIntercator(IHistoryDao historyDao, IRepoDao repoDao, IAccountDao accountDao,
+    public ISearchInteractor provideSearchInteractor(IHistoryDao historyDao, IRepoDao repoDao, IAccountDao accountDao,
                                                      GitHubRepoClient repoClient, GitHubUserClient userClient, ModelConverter modelConverter) {
         return new SearchInteractor(historyDao, repoDao, accountDao, repoClient, userClient, modelConverter);
     }*/

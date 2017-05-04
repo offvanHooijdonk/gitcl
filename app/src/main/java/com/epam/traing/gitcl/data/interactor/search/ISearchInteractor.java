@@ -13,7 +13,7 @@ import rx.Single;
  * Created by Yahor_Fralou on 3/20/2017 7:07 PM.
  */
 
-public interface ISearchIntercator {
+public interface ISearchInteractor {
     void saveHistoryEntry(HistoryModel model);
 
     Single<List<HistoryModel>> findHistoryEntries(String queryText, int limit);

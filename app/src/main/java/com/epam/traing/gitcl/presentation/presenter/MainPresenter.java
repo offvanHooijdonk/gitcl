@@ -28,12 +28,12 @@ public class MainPresenter implements IMainPresenter {
     private IMainView view;
     private IAccountInteractor accountInteractor;
     private PrefHelper prefHelper;
-    /*private ISearchIntercator searchIntercator;*/
+    /*private ISearchInteractor searchIntercator;*/
     private List<SearchListAdapter.ItemWrapper> searchResults = new ArrayList<>();
     // TODO CompositeSubscription
 
     @Inject
-    public MainPresenter(IAccountInteractor accountInteractor, PrefHelper prefHelper/*, ISearchIntercator searchIntercator*/) {
+    public MainPresenter(IAccountInteractor accountInteractor, PrefHelper prefHelper/*, ISearchInteractor searchIntercator*/) {
         this.accountInteractor = accountInteractor;
         this.prefHelper = prefHelper;
         /*this.searchIntercator = searchIntercator;*/

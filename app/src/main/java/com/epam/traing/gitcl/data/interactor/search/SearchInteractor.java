@@ -21,7 +21,7 @@ import rx.schedulers.Schedulers;
  * Created by Yahor_Fralou on 3/20/2017 7:07 PM.
  */
 
-public class SearchInteractor implements ISearchIntercator {
+public class SearchInteractor implements ISearchInteractor {
 
     private IHistoryDao historyDao;
     private IRepoDao repoDao;

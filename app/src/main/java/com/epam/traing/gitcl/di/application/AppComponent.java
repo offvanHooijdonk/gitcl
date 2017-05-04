@@ -13,6 +13,7 @@ import com.epam.traing.gitcl.di.util.RepoComponent;
 import com.epam.traing.gitcl.di.util.RepoInteractorModule;
 import com.epam.traing.gitcl.di.util.RepoModule;
 import com.epam.traing.gitcl.di.util.SearchComponent;
+import com.epam.traing.gitcl.di.util.SearchInteractorModule;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
 
@@ -35,18 +36,27 @@ import retrofit2.Retrofit;
 public interface AppComponent {
 
     Context getContext();
+
     PrefHelper getPreferenceHelper();
+
     SessionHelper getSession();
+
     @Named(NetworkModule.RETROFIT_OAUTH)
     Retrofit getAuthApi();
+
     @Named(NetworkModule.RETROFIT_API)
     Retrofit getGitApi();
+
     ModelConverter getModelConverter();
 
     AuthenticateComponent plusAuthenticateComponent(AuthModule authModule, AccountModule accountModule);
+
     AccountComponent plusAccountComponent(AccountModule accountModule, AccountInteractorModule accountInteractorModule);
+
     RepoComponent plusRepoComponent(RepoModule repoModule, RepoInteractorModule repoInteractorModule,
                                     AccountModule accountModule, AccountInteractorModule accountInteractorModule);
-    SearchComponent plusSearchComponent(HistoryModule historyModule, RepoModule repoModule, AccountModule accountModule);
+
+    SearchComponent plusSearchComponent(HistoryModule historyModule, RepoModule repoModule, AccountModule accountModule,
+                                        SearchInteractorModule searchInteractorModule);
 
 }

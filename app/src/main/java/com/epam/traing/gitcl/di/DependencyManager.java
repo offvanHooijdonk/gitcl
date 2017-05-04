@@ -14,11 +14,15 @@ import com.epam.traing.gitcl.di.presentation.main.MainScreenComponent;
 import com.epam.traing.gitcl.di.presentation.main.MainScreenModule;
 import com.epam.traing.gitcl.di.presentation.repositories.RepoScreenComponent;
 import com.epam.traing.gitcl.di.presentation.repositories.RepoScreenModule;
+import com.epam.traing.gitcl.di.presentation.search.SearchScreenComponent;
+import com.epam.traing.gitcl.di.presentation.search.SearchScreenModule;
 import com.epam.traing.gitcl.di.util.AccountInteractorModule;
 import com.epam.traing.gitcl.di.util.AccountModule;
 import com.epam.traing.gitcl.di.util.AuthModule;
+import com.epam.traing.gitcl.di.util.HistoryModule;
 import com.epam.traing.gitcl.di.util.RepoInteractorModule;
 import com.epam.traing.gitcl.di.util.RepoModule;
+import com.epam.traing.gitcl.di.util.SearchInteractorModule;
 
 /**
  * Created by Yahor_Fralou on 4/20/2017 12:42 PM.
@@ -29,6 +33,7 @@ public class DependencyManager {
     private static LoginScreenComponent loginScreenComponent;
     private static MainScreenComponent mainScreenComponent;
     private static RepoScreenComponent repoScreenComponent;
+    private static SearchScreenComponent searchScreenComponent;
 
     public static void initAppComponent(Context ctx) {
         if (appComponent == null) {
@@ -77,4 +82,15 @@ public class DependencyManager {
 
         return repoScreenComponent;
     }
+
+    public static SearchScreenComponent getSearchScreenComponent() {
+        if (searchScreenComponent == null) {
+            searchScreenComponent = getAppComponent()
+                    .plusSearchComponent(new HistoryModule(), new RepoModule(), new AccountModule(), new SearchInteractorModule())
+                    .plusSearchScreenComponent(new SearchScreenModule());
+        }
+
+        return searchScreenComponent;
+    }
+
 }
