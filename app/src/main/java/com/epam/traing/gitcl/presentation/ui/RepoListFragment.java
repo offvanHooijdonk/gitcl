@@ -251,7 +251,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
     }
 
     private void injectComponent() {
-        DependencyManager.getRepositoryComponent(ctx).inject(this);
+        DependencyManager.getRepoScreenComponent().inject(this);
         presenter.attachView(this);
     }
 

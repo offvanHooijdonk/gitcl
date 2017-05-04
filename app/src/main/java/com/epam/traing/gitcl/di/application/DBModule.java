@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.di;
+package com.epam.traing.gitcl.di.application;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;

@@ -52,7 +52,7 @@ public class AccountActivity extends AppCompatActivity implements IAccountView {
 
         account = getIntent().getParcelableExtra(EXTRA_ACCOUNT);
 
-        DependencyManager.getMainFrameComponent(this).inject(this);
+        DependencyManager.getMainScreenComponent().inject(this);
         ButterKnife.bind(this);
         presenter.attachView(this);
 

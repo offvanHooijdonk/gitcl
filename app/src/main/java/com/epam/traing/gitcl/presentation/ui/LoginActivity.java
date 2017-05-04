@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        DependencyManager.getLoginComponent().inject(this);
+        DependencyManager.getLoginScreenComponent().inject(this);
         loginPresenter.attachView(this);
 
         ButterKnife.bind(this);

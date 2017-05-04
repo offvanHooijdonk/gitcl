@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.di.login;
+package com.epam.traing.gitcl.di.presentation.login;
 
 import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.data.interactor.authenticate.GitAuthenticator;
@@ -20,7 +20,7 @@ import dagger.Provides;
 public class AuthenticatorModule {
 
     @Provides
-    @LoginScope
+    @LoginScreenScope
     IAuthenticator provideAuthenticator(PrefHelper prefHelper,
                                         GitHubTokenClient tokenClient,
                                         GitHubUserClient userClient,

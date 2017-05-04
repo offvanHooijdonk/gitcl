@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.di.login;
+package com.epam.traing.gitcl.di.presentation.login;
 
 import com.epam.traing.gitcl.data.interactor.authenticate.IAuthenticator;
 import com.epam.traing.gitcl.helper.PrefHelper;
@@ -13,10 +13,10 @@ import dagger.Provides;
  */
 
 @Module()
-public class LoginModule {
+public class LoginScreenModule {
 
     @Provides
-    @LoginScope
+    @LoginScreenScope
     ILoginPresenter provideLoginPresenter(IAuthenticator authenticator, PrefHelper prefHelper) {
         return new LoginPresenter(authenticator, prefHelper);
     }

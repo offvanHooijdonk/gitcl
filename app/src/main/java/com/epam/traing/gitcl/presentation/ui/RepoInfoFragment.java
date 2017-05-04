@@ -324,7 +324,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     }
 
     private void injectComponent() {
-        DependencyManager.getRepositoryComponent(ctx).inject(this);
+        DependencyManager.getRepoScreenComponent().inject(this);
         presenter.attachView(this);
     }
 

@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.di.repositories;
+package com.epam.traing.gitcl.di.presentation.repositories;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,5 +11,5 @@ import javax.inject.Scope;
 
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RepositoryScope {
+public @interface RepoScreenScope {
 }

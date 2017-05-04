@@ -1,9 +1,8 @@
-package com.epam.traing.gitcl.di;
+package com.epam.traing.gitcl.di.application;
 
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.network.AuthenticationInterceptor;
 import com.epam.traing.gitcl.network.Constants;
-import com.epam.traing.gitcl.network.GitHubUserClient;
 
 import java.util.concurrent.TimeUnit;
 
@@ -65,12 +64,6 @@ public class NetworkModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
-    }
-
-    @Provides
-    @Singleton
-    public GitHubUserClient getUserClient(@Named(RETROFIT_API) Retrofit apiRetrofit) {
-        return apiRetrofit.create(GitHubUserClient.class);
     }
 
 }

@@ -1,6 +1,6 @@
-package com.epam.traing.gitcl.di.login;
+package com.epam.traing.gitcl.di.util;
 
-import com.epam.traing.gitcl.di.NetworkModule;
+import com.epam.traing.gitcl.di.application.NetworkModule;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
 
 import javax.inject.Named;
@@ -14,10 +14,10 @@ import retrofit2.Retrofit;
  */
 
 @Module
-public class AuthApiModule {
+public class AuthModule {
 
     @Provides
-    @LoginScope
+    @UtilsScope
     public GitHubTokenClient getTokenClient(@Named(NetworkModule.RETROFIT_OAUTH) Retrofit oauthRetrofit) {
         return oauthRetrofit.create(GitHubTokenClient.class);
     }

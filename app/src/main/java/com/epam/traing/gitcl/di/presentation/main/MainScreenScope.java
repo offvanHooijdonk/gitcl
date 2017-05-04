@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.di.main;
+package com.epam.traing.gitcl.di.presentation.main;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,5 +11,5 @@ import javax.inject.Scope;
 
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MainFrameScope {
+public @interface MainScreenScope {
 }

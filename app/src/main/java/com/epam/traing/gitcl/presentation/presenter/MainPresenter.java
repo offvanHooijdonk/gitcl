@@ -4,14 +4,11 @@ import android.util.Log;
 
 import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.data.interactor.account.IAccountInteractor;
-import com.epam.traing.gitcl.data.interactor.search.ISearchIntercator;
 import com.epam.traing.gitcl.db.model.AccountModel;
-import com.epam.traing.gitcl.db.model.HistoryModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.ui.IMainView;
-import com.epam.traing.gitcl.presentation.ui.view.search.SearchDialogFragment;
 import com.epam.traing.gitcl.presentation.ui.view.search.SearchListAdapter;
 
 import java.util.ArrayList;
@@ -31,14 +28,15 @@ public class MainPresenter implements IMainPresenter {
     private IMainView view;
     private IAccountInteractor accountInteractor;
     private PrefHelper prefHelper;
-    private ISearchIntercator searchIntercator;
+    /*private ISearchIntercator searchIntercator;*/
     private List<SearchListAdapter.ItemWrapper> searchResults = new ArrayList<>();
+    // TODO CompositeSubscription
 
     @Inject
-    public MainPresenter(IAccountInteractor accountInteractor, PrefHelper prefHelper, ISearchIntercator searchIntercator) {
+    public MainPresenter(IAccountInteractor accountInteractor, PrefHelper prefHelper/*, ISearchIntercator searchIntercator*/) {
         this.accountInteractor = accountInteractor;
         this.prefHelper = prefHelper;
-        this.searchIntercator = searchIntercator;
+        /*this.searchIntercator = searchIntercator;*/
     }
 
     @Override
@@ -77,7 +75,7 @@ public class MainPresenter implements IMainPresenter {
         // Such approach shows a page of Repos and a page of accounts, regardless the score difference between Repos and Accounts
         // Search API does not let set page size, or limit score vales. Therefore, for omni-search should consider search cache.
         // Or search Accounts and Repos separately
-        observableFullQuery
+        /*observableFullQuery
                 .doOnNext(this::saveHistoryEntry)
                 .doOnNext(s -> searchResults.clear())
                 .flatMap(s -> searchIntercator.searchRepositoriesOnApi(s, 1))
@@ -85,12 +83,12 @@ public class MainPresenter implements IMainPresenter {
                 .mergeWith(observableFullQuery
                         .flatMap(s -> searchIntercator.searchAccountsOnApi(s, 1))
                         .map(this::collectSearchResults))
-                .subscribe(itemWrappers -> onFullSearchFinished(), this::handleError);
+                .subscribe(itemWrappers -> onFullSearchFinished(), this::handleError);*/
     }
 
     @Override
     public void subscribeLiveQuery(Observable<String> observableLiveQuery) { // TODO unsubscribe
-        observableLiveQuery
+        /*observableLiveQuery
                 .doOnNext(s -> searchResults.clear())
                 .flatMap(s -> searchIntercator.findHistoryEntries(s, SearchDialogFragment.HISTORY_SHOW_MAX).flatMapObservable(Observable::just))
                 .map(this::collectSearchResults)
@@ -101,7 +99,7 @@ public class MainPresenter implements IMainPresenter {
                 .mergeWith(observableLiveQuery
                         .flatMap(s -> searchIntercator.findAccountsLocal(s))
                         .map(this::collectSearchResults))
-                .subscribe(itemWrappers -> onLiveSearchFinished(), this::handleError);
+                .subscribe(itemWrappers -> onLiveSearchFinished(), this::handleError);*/
     }
 
     private void updateAccountInfo() {
@@ -119,13 +117,13 @@ public class MainPresenter implements IMainPresenter {
         return new Date().getTime() - timeFrom >= timePass;
     }
 
-    private void saveHistoryEntry(String s) {
+    /*private void saveHistoryEntry(String s) {
         HistoryModel historyModel = new HistoryModel();
         historyModel.setText(s);
         historyModel.setSearchDate(new Date().getTime());
 
         searchIntercator.saveHistoryEntry(historyModel);
-    }
+    }*/
 
     private List<SearchListAdapter.ItemWrapper> collectSearchResults(List<?> historyModels) {
         Observable.from(historyModels)
