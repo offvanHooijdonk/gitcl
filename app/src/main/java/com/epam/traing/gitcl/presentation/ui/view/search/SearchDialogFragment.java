@@ -126,7 +126,11 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
         rootView = view;
         setupLayout();
 
-        adapter.setHistoryPickListener(text -> inputSearch.setText(text));
+        adapter.setHistoryPickListener(text -> {
+                    inputSearch.setText(text);
+                    inputSearch.setSelection(text.length());
+                }
+        );
         adapter.setItemClickListener(this);
 
         return view;
