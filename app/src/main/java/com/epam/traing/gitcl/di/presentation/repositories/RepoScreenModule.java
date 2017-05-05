@@ -5,8 +5,8 @@ import com.epam.traing.gitcl.data.interactor.repositories.IRepositoriesInteracto
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.presentation.presenter.IRepoListPresenter;
 import com.epam.traing.gitcl.presentation.presenter.RepoListPresenter;
-import com.epam.traing.gitcl.presentation.ui.IRepoInfoPresenter;
-import com.epam.traing.gitcl.presentation.ui.RepoInfoPresenter;
+import com.epam.traing.gitcl.presentation.presenter.IRepoInfoPresenter;
+import com.epam.traing.gitcl.presentation.presenter.RepoInfoPresenter;
 
 import dagger.Module;
 import dagger.Provides;

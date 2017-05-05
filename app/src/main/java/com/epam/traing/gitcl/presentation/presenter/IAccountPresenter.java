@@ -9,4 +9,6 @@ import com.epam.traing.gitcl.presentation.ui.IAccountView;
 public interface IAccountPresenter {
 
     void attachView(IAccountView accountView);
+
+    void detachView();
 }

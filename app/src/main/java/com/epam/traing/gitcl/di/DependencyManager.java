@@ -87,6 +87,10 @@ public class DependencyManager {
         return repoScreenComponent;
     }
 
+    public static void releaseRepoScreenComponent() {
+        repoScreenComponent = null;
+    }
+
     public static SearchScreenComponent getSearchScreenComponent() {
         if (searchScreenComponent == null) {
             searchScreenComponent = getAppComponent()

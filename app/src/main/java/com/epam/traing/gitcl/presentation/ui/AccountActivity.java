@@ -73,6 +73,14 @@ public class AccountActivity extends AppCompatActivity implements IAccountView {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        presenter.detachView();
+        // do not release Main Screen in here. When replaced with own specific component - release it.
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             this.finish();

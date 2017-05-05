@@ -34,6 +34,7 @@ import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.helper.SessionHelper;
+import com.epam.traing.gitcl.presentation.presenter.IRepoInfoPresenter;
 import com.epam.traing.gitcl.presentation.ui.animation.InfoTransition;
 import com.epam.traing.gitcl.presentation.ui.helper.ColorsHelper;
 import com.epam.traing.gitcl.presentation.ui.helper.DateHelper;
@@ -204,6 +205,14 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         } else {
             revealNonTransitionViews(false);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        presenter.detachView();
+        // do not release the component here as the fragment is a child of Repo List
     }
 
     @Override

@@ -123,6 +123,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
                 }
             }
         });
+
         fab.setOnClickListener(fabView -> {
             if (viewRevealPlaceholder == null) {
                 startActivity(new Intent(ctx, CreateRepoActivity.class));
@@ -145,7 +146,14 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
         });
 
         presenter.onViewShows();
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        presenter.detachView();
+        DependencyManager.releaseRepoScreenComponent();
     }
 
     @Override

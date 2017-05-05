@@ -14,7 +14,7 @@ import javax.inject.Inject;
  * Created by Yahor_Fralou on 2/22/2017 11:57 AM.
  */
 
-public class RepoListPresenter implements IRepoListPresenter {
+public class RepoListPresenter extends AbstractSubscribePresenter implements IRepoListPresenter {
 
     private IRepoListView view;
     private IRepositoriesInteractor reposInteractor;
@@ -48,19 +48,32 @@ public class RepoListPresenter implements IRepoListPresenter {
         loadRepositoriesList();
     }
 
+    @Override
+    public void detachView() {
+        unsubscribeAll();
+
+        view = null;
+    }
+
     private void loadRepositoriesList() {
         view.showRefreshProgress(true);
 
-        reposInteractor.loadRepositories()
-                .subscribe(repoModels -> {
-                    view.showRefreshProgress(false);
-                    prefHelper.setReposLastUpdateTime(new Date().getTime());
-                }, this::onError);
+        getCompositeSubscription().add(
+
+                reposInteractor.loadRepositories()
+                        .subscribe(repoModels -> {
+                            view.showRefreshProgress(false);
+                            prefHelper.setReposLastUpdateTime(new Date().getTime());
+                        }, this::onError)
+        );
     }
 
     private void getReposFromDB() {
-        reposInteractor.getRepositories()
-                .subscribe(this::onReposUpdated, this::onError);
+        getCompositeSubscription().add(
+
+                reposInteractor.getRepositories()
+                        .subscribe(this::onReposUpdated, this::onError)
+        );
     }
 
     private void onReposUpdated(List<RepoModel> repoModels) {

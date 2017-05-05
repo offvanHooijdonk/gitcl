@@ -1,10 +1,11 @@
-package com.epam.traing.gitcl.presentation.ui;
+package com.epam.traing.gitcl.presentation.presenter;
 
 import com.epam.traing.gitcl.data.interactor.account.IAccountInteractor;
 import com.epam.traing.gitcl.data.interactor.repositories.IRepositoriesInteractor;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
+import com.epam.traing.gitcl.presentation.ui.IRepoInfoView;
 
 import java.util.Date;
 
@@ -14,7 +15,7 @@ import javax.inject.Inject;
  * Created by Yahor_Fralou on 2/27/2017 7:17 PM.
  */
 
-public class RepoInfoPresenter implements IRepoInfoPresenter {
+public class RepoInfoPresenter extends AbstractSubscribePresenter implements IRepoInfoPresenter {
 
     private IRepoInfoView view;
     private IRepositoriesInteractor repoInteractor;
@@ -54,6 +55,13 @@ public class RepoInfoPresenter implements IRepoInfoPresenter {
     public void onRefreshTriggered() {
         loadAccountInfo();
         loadRepoInfo();
+    }
+
+    @Override
+    public void detachView() {
+        unsubscribeAll();
+
+        view = null;
     }
 
     private void getRepoInfoFromDB() {
