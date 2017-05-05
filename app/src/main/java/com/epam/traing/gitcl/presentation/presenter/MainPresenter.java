@@ -16,7 +16,7 @@ import javax.inject.Inject;
  * Created by Yahor_Fralou on 2/7/2017 12:24 PM.
  */
 
-public class MainPresenter implements IMainPresenter {
+public class MainPresenter extends AbstractSubscribePresenter implements IMainPresenter {
     private IMainView view;
     private IAccountInteractor accountInteractor;
     private PrefHelper prefHelper;
@@ -45,17 +45,27 @@ public class MainPresenter implements IMainPresenter {
 
     @Override
     public void onLogoutConfirmed() {
-        accountInteractor.logOutAccount().subscribe(o -> {
-        }, this::handleError, () -> {
-            prefHelper.setShowLogin(true);
-            view.showLogoutDialog(false);
-            view.startLoginActivity();
-        });
+        getCompositeSubscription().add(
+
+                accountInteractor.logOutAccount().subscribe(o -> {
+                }, this::handleError, () -> {
+                    prefHelper.setShowLogin(true);
+                    view.showLogoutDialog(false);
+                    view.startLoginActivity();
+                })
+        );
     }
 
     @Override
     public void onLogoutCanceled() {
         view.showLogoutDialog(false);
+    }
+
+    @Override
+    public void detachView() {
+        unsubscribeAll();
+
+        view = null;
     }
 
     private void updateAccountInfo() {
@@ -65,8 +75,11 @@ public class MainPresenter implements IMainPresenter {
     }
 
     private void requestAccountInfo() {
-        accountInteractor.reloadCurrentAccount()
-                .subscribe(accountModel -> view.updateAccountInfo(), this::handleError);
+        getCompositeSubscription().add(
+
+                accountInteractor.reloadCurrentAccount()
+                        .subscribe(accountModel -> view.updateAccountInfo(), this::handleError)
+        );
     }
 
     private boolean hasTimePassed(long timeFrom, int timePass) {

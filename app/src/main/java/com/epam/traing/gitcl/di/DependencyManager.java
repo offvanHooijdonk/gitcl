@@ -73,6 +73,10 @@ public class DependencyManager {
         return mainScreenComponent;
     }
 
+    public static void releaseMainScreenComponent() {
+        mainScreenComponent = null;
+    }
+
     public static RepoScreenComponent getRepoScreenComponent() {
         if (repoScreenComponent == null) {
             repoScreenComponent = getAppComponent()

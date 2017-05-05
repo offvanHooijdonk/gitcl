@@ -17,4 +17,6 @@ public interface IMainPresenter {
 
     void onLogoutCanceled();
 
+    void detachView();
+
 }
