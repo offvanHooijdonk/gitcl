@@ -6,6 +6,7 @@ import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.di.util.AccountComponent;
 import com.epam.traing.gitcl.di.util.AccountInteractorModule;
 import com.epam.traing.gitcl.di.util.AccountModule;
+import com.epam.traing.gitcl.di.util.AuthInteractorModule;
 import com.epam.traing.gitcl.di.util.AuthModule;
 import com.epam.traing.gitcl.di.util.AuthenticateComponent;
 import com.epam.traing.gitcl.di.util.HistoryModule;
@@ -49,7 +50,8 @@ public interface AppComponent {
 
     ModelConverter getModelConverter();
 
-    AuthenticateComponent plusAuthenticateComponent(AuthModule authModule, AccountModule accountModule);
+    AuthenticateComponent plusAuthenticateComponent(AuthModule authModule, AccountModule accountModule,
+                                                    AuthInteractorModule authInteractorModule);
 
     AccountComponent plusAccountComponent(AccountModule accountModule, AccountInteractorModule accountInteractorModule);
 

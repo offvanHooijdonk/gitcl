@@ -7,7 +7,6 @@ import com.epam.traing.gitcl.di.application.AppModule;
 import com.epam.traing.gitcl.di.application.DBModule;
 import com.epam.traing.gitcl.di.application.DaggerAppComponent;
 import com.epam.traing.gitcl.di.application.NetworkModule;
-import com.epam.traing.gitcl.di.presentation.login.AuthenticatorModule;
 import com.epam.traing.gitcl.di.presentation.login.LoginScreenComponent;
 import com.epam.traing.gitcl.di.presentation.login.LoginScreenModule;
 import com.epam.traing.gitcl.di.presentation.main.MainScreenComponent;
@@ -18,6 +17,7 @@ import com.epam.traing.gitcl.di.presentation.search.SearchScreenComponent;
 import com.epam.traing.gitcl.di.presentation.search.SearchScreenModule;
 import com.epam.traing.gitcl.di.util.AccountInteractorModule;
 import com.epam.traing.gitcl.di.util.AccountModule;
+import com.epam.traing.gitcl.di.util.AuthInteractorModule;
 import com.epam.traing.gitcl.di.util.AuthModule;
 import com.epam.traing.gitcl.di.util.HistoryModule;
 import com.epam.traing.gitcl.di.util.RepoInteractorModule;
@@ -56,11 +56,15 @@ public class DependencyManager {
     public static LoginScreenComponent getLoginScreenComponent() {
         if (loginScreenComponent == null) {
             loginScreenComponent = getAppComponent()
-                    .plusAuthenticateComponent(new AuthModule(), new AccountModule())
-                    .plusLoginScreenComponent(new LoginScreenModule(), new AuthenticatorModule());
+                    .plusAuthenticateComponent(new AuthModule(), new AccountModule(),  new AuthInteractorModule())
+                    .plusLoginScreenComponent(new LoginScreenModule());
         }
 
         return loginScreenComponent;
+    }
+
+    public static void releaseLoginScreenComponent() {
+        loginScreenComponent = null;
     }
 
     public static MainScreenComponent getMainScreenComponent() {

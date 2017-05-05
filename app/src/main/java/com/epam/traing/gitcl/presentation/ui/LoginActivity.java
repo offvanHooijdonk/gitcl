@@ -66,6 +66,14 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         loginPresenter.onActivityResume(getIntent());
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        loginPresenter.detachView();
+        DependencyManager.releaseLoginScreenComponent();
+    }
+
     @OnClick(R.id.btnLogin)
     void onLoginClick() {
         loginPresenter.onLoginSelected();

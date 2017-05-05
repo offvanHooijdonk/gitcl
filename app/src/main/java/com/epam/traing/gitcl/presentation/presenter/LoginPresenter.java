@@ -21,7 +21,7 @@ import javax.inject.Inject;
  * Created by Yahor_Fralou on 1/25/2017 5:12 PM.
  */
 
-public class LoginPresenter implements ILoginPresenter {
+public class LoginPresenter extends AbstractSubscribePresenter implements ILoginPresenter {
     private ILoginView loginView;
 
     private IAuthenticator authenticator;
@@ -40,6 +40,8 @@ public class LoginPresenter implements ILoginPresenter {
 
     @Override
     public void detachView() {
+        unsubscribeAll();
+
         this.loginView = null;
     }
 
@@ -76,17 +78,23 @@ public class LoginPresenter implements ILoginPresenter {
     private void onOAuthCallback(String url) {
         loginView.showLoginProgress(true);
 
-        authenticator.authorizeFromCallback(url)
-                .first()
-                .doOnNext(accountModel -> prefHelper.setAccountLastUpdateTime(new Date().getTime()))
-                .subscribe(this::onLoginSuccess, this::onLoginFail);
+        getCompositeSubscription().add(
+
+                authenticator.authorizeFromCallback(url)
+                        .first()
+                        .doOnNext(accountModel -> prefHelper.setAccountLastUpdateTime(new Date().getTime()))
+                        .subscribe(this::onLoginSuccess, this::onLoginFail)
+        );
     }
 
     private void doLoginWithCurrentAccount() {
-        authenticator.prepareOnLoginData()
-                .first()
-                .subscribe(this::onLoginSuccess,
-                        this::onLoginFail);
+        getCompositeSubscription().add(
+
+                authenticator.prepareOnLoginData()
+                        .first()
+                        .subscribe(this::onLoginSuccess,
+                                this::onLoginFail)
+        );
     }
 
     private void proceedLogin() {
