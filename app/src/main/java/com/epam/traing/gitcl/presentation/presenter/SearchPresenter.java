@@ -82,7 +82,6 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
 
     @Override
     public void detachView() {
-        // TODO stop subscriptions
         unsubscribeAll();
 
         this.searchView = null;
