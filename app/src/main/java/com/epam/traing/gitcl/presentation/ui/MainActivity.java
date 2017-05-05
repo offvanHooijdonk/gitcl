@@ -31,9 +31,6 @@ import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.presenter.IMainPresenter;
 import com.epam.traing.gitcl.presentation.ui.view.search.SearchDialogFragment;
-import com.epam.traing.gitcl.presentation.ui.view.search.SearchListAdapter;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -43,6 +40,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity
         implements IMainView, NavigationView.OnNavigationItemSelectedListener {
     private static final String FRAG_REPO_LIST = "repo_list";
+    private static final String FRAG_SEARCH_DIALOG = "search_dialog";
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -54,7 +52,6 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     private DrawerArrowDrawable arrowDrawable;
     private AlertDialog logoutDialog;
-    private SearchDialogFragment searchFragment;
 
     private int prevBackStackCount = 0;
 
@@ -133,16 +130,12 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, PreferenceActivity.class));
-        } if (id == R.id.action_search) {
-            View itemView  = findViewById(R.id.action_search);
+        } else if (id == R.id.action_search) {
+            View itemView = findViewById(R.id.action_search);
             Log.i("LOG", String.valueOf(itemView != null));
-            searchFragment = SearchDialogFragment.newInstance(itemView, session.getCurrentAccount());
+            SearchDialogFragment searchFragment = SearchDialogFragment.newInstance(itemView, session.getCurrentAccount());
 
-            presenter.subscribeFullQuery(searchFragment.observeFullQuery());
-            presenter.subscribeLiveQuery(searchFragment.observeLiveQuery());
-
-            searchFragment.setMinCharsForFullSearch(SearchDialogFragment.DEFAULT_MIN_CHARS_FOR_FULL_SEARCH);
-            searchFragment.show(getFragmentManager(), "searchDialog");
+            searchFragment.show(getFragmentManager(), FRAG_SEARCH_DIALOG);
         }
 
         return super.onOptionsItemSelected(item);
@@ -210,13 +203,6 @@ public class MainActivity extends AppCompatActivity
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         overridePendingTransition(R.anim.activity_slide_lr_enter, R.anim.activity_slide_lr_leave);
-    }
-
-    @Override
-    public void updateSearchResults(List<SearchListAdapter.ItemWrapper> historyModels) {
-        if (searchFragment != null) {
-            searchFragment.updateResults(historyModels);
-        }
     }
 
     @Override

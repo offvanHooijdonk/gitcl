@@ -93,4 +93,8 @@ public class DependencyManager {
         return searchScreenComponent;
     }
 
+    public static void releaseSearchScreenComponent() {
+        searchScreenComponent = null;
+    }
+
 }

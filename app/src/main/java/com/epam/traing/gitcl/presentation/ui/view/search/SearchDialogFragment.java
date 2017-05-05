@@ -50,7 +50,6 @@ import rx.subjects.PublishSubject;
  */
 
 public class SearchDialogFragment extends DialogFragment implements ISearchView, ViewTreeObserver.OnPreDrawListener, SearchListAdapter.ItemClickListener {
-    public static final int HISTORY_SHOW_MAX = 5;
     public static final int DEFAULT_MIN_CHARS_FOR_FULL_SEARCH = 3;
 
     private static final String EXTRA_ANIM_X = "extra_anim_x";
@@ -107,6 +106,9 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
         super.onCreate(savedInstanceState);
 
         DependencyManager.getSearchScreenComponent().inject(this);
+        searchPresenter.attachView(this);
+        searchPresenter.subscribeLiveQuery(prepareLiveQuery());
+        searchPresenter.subscribeFullQuery(prepareFullQuery());
 
         setStyle(android.support.v4.app.DialogFragment.STYLE_NO_FRAME, R.style.AppBaseTheme_SearchDialog);
         ctx = getActivity();
@@ -137,26 +139,12 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
         setupDialog();
     }
 
-    public Observable<String> observeLiveQuery() {
+    private Observable<String> prepareLiveQuery() {
         return obsLiveQuery.throttleLast(LIVE_SEARCH_THROTTLE, TimeUnit.MILLISECONDS);
     }
 
-    public Observable<String> observeFullQuery() {
+    private Observable<String> prepareFullQuery() {
         return obsFullQuery;
-    }
-
-    public void updateResults(List<SearchListAdapter.ItemWrapper> results) {
-        searchResults.clear();
-        searchResults.addAll(results);
-        if (searchResults.isEmpty()) {
-            listView.setVisibility(View.GONE);
-        } else {
-            listView.setVisibility(View.VISIBLE);
-        }
-        adapter.setSearchText(inputSearch.getText().toString());
-        adapter.notifyDataSetChanged();
-
-        showSearchProgress(false);
     }
 
     @Override
@@ -193,6 +181,18 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
     }
 
     @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+
+        obsLiveQuery.onCompleted();
+        obsFullQuery.onCompleted();
+
+        searchPresenter.detachView();
+
+        DependencyManager.releaseSearchScreenComponent();
+    }
+
+    @Override
     public void onSearchItemClick(SearchListAdapter.ItemWrapper itemWrapper) {
         if (itemWrapper.getType() == SearchListAdapter.ItemWrapper.HISTORY) {
             HistoryModel historyModel = (HistoryModel) itemWrapper.getItem();
@@ -207,13 +207,23 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
+    public void updateSearchResults(List<SearchListAdapter.ItemWrapper> results) {
+        searchResults.clear();
+        searchResults.addAll(results);
+        if (searchResults.isEmpty()) {
+            listView.setVisibility(View.GONE);
+        } else {
+            listView.setVisibility(View.VISIBLE);
+        }
+        adapter.setSearchText(inputSearch.getText().toString());
+        adapter.notifyDataSetChanged();
 
-        obsLiveQuery.onCompleted();
-        obsFullQuery.onCompleted();
+        showSearchProgress(false);
+    }
 
-        searchPresenter.detachView();
+    @Override
+    public void showError(Throwable th) {
+        Toast.makeText(ctx, "Error during search." + th.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     public void setMinCharsForFullSearch(int minCharsForFullSearch) {
@@ -247,10 +257,10 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
 
         imgBack.setOnClickListener(v -> closeSearchDialog());
         imgClear.setOnClickListener(v -> clearSearch());
-        enableClearControls(false);
+        enableImageControl(imgClear, false);
         imgSearch.getViewTreeObserver().addOnPreDrawListener(this);
         imgSearch.setOnClickListener(v -> searchByClick());
-        enableFullSearchControls(false);
+        enableImageControl(imgSearch, false);
         viewBackOverlay.setOnClickListener(v -> closeSearchDialog());
 
         listView.setLayoutManager(new LinearLayoutManager(ctx));
@@ -270,9 +280,9 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
 
             @Override
             public void afterTextChanged(Editable s) {
-                enableFullSearchControls(inputSearch.getText().length() >= minCharsForFullSearch);
+                enableImageControl(imgSearch, inputSearch.getText().length() >= minCharsForFullSearch);
                 if (isLiveSearchEnabled) search(false);
-                enableClearControls(inputSearch.getText().length() > 0);
+                enableImageControl(imgClear, inputSearch.getText().length() > 0);
             }
         });
 
@@ -334,14 +344,9 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
         showKeyBoard(true);
     }
 
-    private void enableFullSearchControls(boolean isEnable) {
-        imgSearch.setEnabled(isEnable);
-        DrawableCompat.setTint(imgSearch.getDrawable(), ctx.getResources().getColor(isEnable ? R.color.dialog_controls : R.color.dialog_controls_disabled));
-    }
-
-    private void enableClearControls(boolean isEnable) {
-        imgClear.setEnabled(isEnable);
-        DrawableCompat.setTint(imgClear.getDrawable(), ctx.getResources().getColor(isEnable ? R.color.dialog_controls : R.color.dialog_controls_disabled));
+    private void enableImageControl(ImageView view, boolean isEnable) {
+        view.setEnabled(isEnable);
+        DrawableCompat.setTint(view.getDrawable(), ctx.getResources().getColor(isEnable ? R.color.dialog_controls : R.color.dialog_controls_disabled));
     }
 
     private void performCloseActions() {
@@ -361,6 +366,5 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
             imm.hideSoftInputFromWindow(inputSearch.getWindowToken(), 0);
         }
     }
-
 
 }
