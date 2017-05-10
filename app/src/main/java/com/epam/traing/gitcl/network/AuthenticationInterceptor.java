@@ -1,5 +1,8 @@
 package com.epam.traing.gitcl.network;
 
+import android.util.Log;
+
+import com.epam.traing.gitcl.app.Application;
 import com.epam.traing.gitcl.helper.PrefHelper;
 
 import java.io.IOException;
@@ -32,6 +35,12 @@ public class AuthenticationInterceptor implements Interceptor {
             request = request.newBuilder().addHeader(Constants.Api.OAUTH_AUTH_HEADER, tokenType + " " + accessToken).build();
         }
 
-        return chain.proceed(request);
+        Response response = chain.proceed(request);
+
+        if (!response.isSuccessful()) {
+            Log.i(Application.LOG, "Response code " + response.code() + " for request " + request.url().toString() + " : '" + response.message() + "'");
+        }
+
+        return response;
     }
 }
