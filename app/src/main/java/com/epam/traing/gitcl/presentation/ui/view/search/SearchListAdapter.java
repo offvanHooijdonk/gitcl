@@ -122,7 +122,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         vh.itemRepoView.setVisibility(View.GONE);
 
         if (model.getAvatar() != null) {
-            Glide.with(ctx).load(model.getAvatar()).into(vh.imgAccount);
+            Glide.with(ctx).load(model.getAvatar()).placeholder(R.drawable.ic_account_default_72).into(vh.imgAccount);
         } else {
             vh.imgAccount.setImageResource(R.drawable.ic_account_default_72);
         }

@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity
             txtDrawerAccountUserName.setText(accountModel.getPersonName());
             txtDrawerAccountName.setText(accountModel.getAccountName());
             if (accountModel.getAvatar() != null) {
-                Glide.with(this).load(accountModel.getAvatar()).into(imgAvatar);
+                Glide.with(this).load(accountModel.getAvatar()).placeholder(R.drawable.ic_account_default_72).into(imgAvatar);
             }
 
             imgAvatar.setOnClickListener(v -> {

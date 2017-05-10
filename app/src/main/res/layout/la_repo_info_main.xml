@@ -52,6 +52,7 @@
             android:layout_marginEnd="@dimen/list_item_padding_hor"
             android:layout_marginStart="12dp"
             android:src="@drawable/ic_account_default_72"
+            android:tint="@color/md_white_1000"
             app:civ_border="false"/>
         <!-- Add android:layout_gravity="center_vertical" to image? -->
         <LinearLayout

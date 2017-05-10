@@ -225,7 +225,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             txtOwnerFullName.setVisibility(View.GONE);
         }
         if (accountModel.getAvatar() != null) {
-            Glide.with(this).load(accountModel.getAvatar()).into(imgOwnerPhoto);
+            Glide.with(this).load(accountModel.getAvatar()).placeholder(R.drawable.ic_account_default_72).into(imgOwnerPhoto);
         }
     }
 
