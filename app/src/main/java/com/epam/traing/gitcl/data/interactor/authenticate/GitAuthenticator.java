@@ -98,10 +98,8 @@ public class GitAuthenticator implements IAuthenticator {
 
     @Override
     public Observable<AccountModel> prepareOnLoginData() {
-        final String[] accountName = new String[1];
         return Observable.fromCallable(prefHelper::getLoggedAccountName)
                 .flatMap(loggedAccountName -> {
-                    accountName[0] = loggedAccountName;
                     if (loggedAccountName == null) {
                         return Observable.just(null);
                     } else {
