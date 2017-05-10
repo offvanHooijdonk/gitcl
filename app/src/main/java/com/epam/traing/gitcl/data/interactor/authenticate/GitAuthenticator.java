@@ -71,12 +71,9 @@ public class GitAuthenticator implements IAuthenticator {
                     prefHelper.setTokenType(tokenJson.getTokenType());
                     prefHelper.setAccessToken(tokenJson.getAccessToken());
                 })
-                .flatMap(tokenJson -> {
-                    Log.d(Application.LOG, "Call Api '/user'");
-                    return userClient.getCurrentUserInfo()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread());
-                })
+                .flatMap(tokenJson -> userClient.getCurrentUserInfo()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread()))
                 .map(modelConverter::toAccountModel)
                 .doOnNext(accountModel -> {
                     accountModel.setAccessToken(prefHelper.getAccessToken());
