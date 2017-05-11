@@ -79,6 +79,7 @@ public class AccountInteractor implements IAccountInteractor {
     }
 
     private void storeCurrentAccount(AccountModel accountModel) {
+        accountModel.setAccessToken(sessionHelper.getCurrentAccount().getAccessToken());
         accountDao.saveAccount(accountModel);
         sessionHelper.setCurrentAccount(accountModel);
     }
