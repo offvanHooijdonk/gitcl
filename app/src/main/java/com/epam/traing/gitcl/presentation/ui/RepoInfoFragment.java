@@ -193,8 +193,6 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             accountModel = new AccountModel();
             accountModel.setAccountName(repoModel.getOwnerName());
             txtOwnerFullName.setVisibility(View.GONE);
-        } else {
-            updateOwnerInfo(accountModel);
         }
         displayRepoInfoMain();
 
@@ -205,6 +203,13 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
         } else {
             revealNonTransitionViews(false);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        updateOwnerInfo(accountModel);
     }
 
     @Override
