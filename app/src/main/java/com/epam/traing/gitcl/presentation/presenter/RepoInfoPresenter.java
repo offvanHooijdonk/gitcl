@@ -70,7 +70,8 @@ public class RepoInfoPresenter extends AbstractSubscribePresenter implements IRe
     }
 
     private void loadAccountInfo() {
-        accountInteractor.loadAccount(repoModel.getOwnerName())
+        accountInteractor.loadAccountInfo(repoModel.getOwnerName())
+                .filter(accountModel -> accountModel != null) // if current account not loaded - do not process
                 .subscribe(this::onAccountLoaded, this::onError);
     }
 

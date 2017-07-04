@@ -1,5 +1,7 @@
 package com.epam.traing.gitcl.data.interactor.account;
 
+import android.support.annotation.NonNull;
+
 import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.db.dao.IAccountDao;
 import com.epam.traing.gitcl.db.model.AccountModel;
@@ -37,19 +39,15 @@ public class AccountInteractor implements IAccountInteractor {
         this.prefHelper = prefHelper;
         this.modelConverter = modelConverter;
     }
-    
+
     @Override
-    public Observable<AccountModel> loadAccount(String accountName) {
+    public Observable<AccountModel> loadAccountInfo(String accountName) {
         return accountDao.findAccountByName(accountName)
+                .flatMap(accountModel ->
+                        accountModel == null ?
+                                loadAccountInfoRemote(accountName) : Observable.just(accountModel))
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(accountModel -> {
-                    if (accountModel == null) {
-                        return onNoAccountLocal(accountName);
-                    } else {
-                        return Observable.just(accountModel);
-                    }
-                }).filter(accountModel -> accountModel != null);
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -69,10 +67,12 @@ public class AccountInteractor implements IAccountInteractor {
         return Observable.empty();
     }
 
-    private Observable<AccountModel> onNoAccountLocal(String accountName) {
+    /**
+     * Does not run in a separate thread
+     */
+    @NonNull
+    private Observable<AccountModel> loadAccountInfoRemote(String accountName) {
         return userClient.getUserInfo(accountName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map(modelConverter::toAccountModel)
                 .doOnNext(accountDao::saveAccount);
     }
