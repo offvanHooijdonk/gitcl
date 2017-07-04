@@ -52,12 +52,9 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
                 observableFullQuery
                         .doOnNext(this::saveHistoryEntry)
                         .doOnNext(s -> searchResults.clear())
-                        .flatMap(s -> searchInteractor.searchRepositoriesOnApi(s, 1))
-                        .map(this::collectSearchResults)
-                        .mergeWith(observableFullQuery
-                                .flatMap(s -> searchInteractor.searchAccountsOnApi(s, 1))
-                                .map(this::collectSearchResults))
-                        .subscribe(itemWrappers -> onFullSearchFinished(), this::handleError)
+                        .doOnNext(this::searchFull)
+                .subscribe()
+
         );
     }
 
@@ -76,6 +73,7 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
                         .mergeWith(observableLiveQuery
                                 .flatMap(s -> searchInteractor.findAccountsLocal(s))
                                 .map(this::collectSearchResults))
+                        .toList()
                         .subscribe(itemWrappers -> onLiveSearchFinished(), this::handleError)
         );
     }
@@ -85,6 +83,16 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
         unsubscribeAll();
 
         this.searchView = null;
+    }
+
+    private void searchFull(String text) {
+        Observable<String> queryObservable = Observable.just(text);
+        queryObservable.flatMap(s -> searchInteractor.searchRepositoriesOnApi(s, 1))
+                .map(this::collectSearchResults)
+                .mergeWith(queryObservable
+                        .flatMap(s -> searchInteractor.searchAccountsOnApi(s, 1))
+                        .map(this::collectSearchResults))
+                .subscribe(itemWrappers -> onFullSearchFinished(), this::handleError);
     }
 
     private void saveHistoryEntry(String s) {

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -55,6 +56,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
     private static final String EXTRA_ANIM_X = "extra_anim_x";
     private static final String EXTRA_ANIM_Y = "extra_anim_y";
     private static final int LIVE_SEARCH_THROTTLE = 250;
+    private static final int ANIM_DURATION_RESULTS_LIST = 200;
 
     private Context ctx;
     private InputMethodManager imm;
@@ -214,11 +216,13 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
     public void updateSearchResults(List<SearchListAdapter.ItemWrapper> results) {
         searchResults.clear();
         searchResults.addAll(results);
-        if (searchResults.isEmpty()) {
-            listView.setVisibility(View.GONE);
-        } else {
-            listView.setVisibility(View.VISIBLE);
+
+        if (searchResults.isEmpty() && listView.getVisibility() == View.VISIBLE) {
+            showResultsList(false);
+        } else if (!searchResults.isEmpty() && listView.getVisibility() != View.VISIBLE) {
+            showResultsList(true);
         }
+
         adapter.setSearchText(inputSearch.getText().toString());
         adapter.notifyDataSetChanged();
 
@@ -304,7 +308,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
 
     private void closeSearchDialog() {
         if (!searchResults.isEmpty()) {
-            Animator a = ObjectAnimator.ofFloat(listView, View.ALPHA, 1, 0).setDuration(200);
+            Animator a = createResultsListAnimator(false);
             a.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -315,6 +319,30 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
         } else {
             revealAnim.animate(false);
         }
+    }
+
+    private void showResultsList(boolean isShow) {
+        if (isShow) {
+            listView.setVisibility(View.VISIBLE);
+            createResultsListAnimator(true).start();
+        } else {
+            Animator a = createResultsListAnimator(false);
+            a.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    listView.setVisibility(View.GONE);
+                }
+            });
+            a.start();
+        }
+    }
+
+    @NonNull
+    private Animator createResultsListAnimator(boolean isShow) {
+        int alphaStart = isShow ? 0 : 1;
+        int alphaEnd = isShow ? 1 : 0;
+
+        return ObjectAnimator.ofFloat(listView, View.ALPHA, alphaStart, alphaEnd).setDuration(ANIM_DURATION_RESULTS_LIST);
     }
 
     private void searchByClick() {
@@ -328,7 +356,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
         }
     }
 
-    private void search(boolean isFull) {
+    private void search(boolean isFull) { // TODO refactor into two methods
         String queryText = inputSearch.getText().toString();
         Log.i("LOG", "Query text: " + queryText);
         if (isFull) {
