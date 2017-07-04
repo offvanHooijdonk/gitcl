@@ -50,7 +50,6 @@ public class RepoInfoPresenter extends AbstractSubscribePresenter implements IRe
     }
 
 
-
     @Override
     public void onRefreshTriggered() {
         loadAccountInfo();
@@ -65,20 +64,30 @@ public class RepoInfoPresenter extends AbstractSubscribePresenter implements IRe
     }
 
     private void getRepoInfoFromDB() {
-        repoInteractor.getRepoInfo(repoModel.getId())
-                .subscribe(this::onRepoLoaded, this::onError);
+        collectSubscription(
+
+                repoInteractor.getRepoInfo(repoModel.getId())
+                        .subscribe(this::onRepoLoaded, this::onError)
+        );
     }
 
     private void loadAccountInfo() {
-        accountInteractor.loadAccountInfo(repoModel.getOwnerName())
-                .filter(accountModel -> accountModel != null) // if current account not loaded - do not process
-                .subscribe(this::onAccountLoaded, this::onError);
+        collectSubscription(
+
+                accountInteractor.loadAccountInfo(repoModel.getOwnerName())
+                        .filter(accountModel -> accountModel != null) // if current account not loaded - do not process
+                        .subscribe(this::onAccountLoaded, this::onError)
+        );
     }
 
     private void loadRepoInfo() {
         view.showRefreshingProcess(true);
-        repoInteractor.loadVerbose(repoModel)
-                .subscribe(this::onRepoLoaded, this::onError);
+
+        collectSubscription(
+
+                repoInteractor.loadVerbose(repoModel)
+                        .subscribe(this::onRepoLoaded, this::onError)
+        );
     }
 
     private void onAccountLoaded(AccountModel accountModel) {

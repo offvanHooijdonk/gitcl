@@ -47,7 +47,7 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
         // Such approach shows a page of Repos and a page of accounts, regardless the score difference between Repos and Accounts
         // Search API does not let set page size, or limit score vales. Therefore, for omni-search should consider search cache.
         // Or search Accounts and Repos separately
-        getCompositeSubscription().add(
+        collectSubscription(
 
                 observableFullQuery
                         .doOnNext(this::saveHistoryEntry)
@@ -63,7 +63,7 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
 
     @Override
     public void subscribeLiveQuery(Observable<String> observableLiveQuery) {
-        getCompositeSubscription().add(
+        collectSubscription(
 
                 observableLiveQuery
                         .doOnNext(s -> searchResults.clear())

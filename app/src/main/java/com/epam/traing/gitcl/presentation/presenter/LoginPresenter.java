@@ -78,7 +78,7 @@ public class LoginPresenter extends AbstractSubscribePresenter implements ILogin
     private void onOAuthCallback(String url) {
         loginView.showLoginProgress(true);
 
-        getCompositeSubscription().add(
+        collectSubscription(
 
                 authenticator.authorizeFromCallback(url)
                         .first()
@@ -88,7 +88,7 @@ public class LoginPresenter extends AbstractSubscribePresenter implements ILogin
     }
 
     private void doLoginWithCurrentAccount() {
-        getCompositeSubscription().add(
+        collectSubscription(
 
                 authenticator.prepareOnLoginData()
                         .first()

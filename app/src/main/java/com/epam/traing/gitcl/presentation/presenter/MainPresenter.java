@@ -45,7 +45,7 @@ public class MainPresenter extends AbstractSubscribePresenter implements IMainPr
 
     @Override
     public void onLogoutConfirmed() {
-        getCompositeSubscription().add(
+        collectSubscription(
 
                 accountInteractor.logOutAccount().subscribe(o -> {
                 }, this::handleError, () -> {
@@ -75,7 +75,7 @@ public class MainPresenter extends AbstractSubscribePresenter implements IMainPr
     }
 
     private void requestAccountInfo() {
-        getCompositeSubscription().add(
+        collectSubscription(
 
                 accountInteractor.reloadCurrentAccount()
                         .subscribe(accountModel -> view.updateAccountInfo(), this::handleError)

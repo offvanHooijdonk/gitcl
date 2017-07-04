@@ -58,7 +58,7 @@ public class RepoListPresenter extends AbstractSubscribePresenter implements IRe
     private void loadRepositoriesList() {
         view.showRefreshProgress(true);
 
-        getCompositeSubscription().add(
+        collectSubscription(
 
                 reposInteractor.loadRepositories()
                         .subscribe(repoModels -> {
@@ -69,7 +69,7 @@ public class RepoListPresenter extends AbstractSubscribePresenter implements IRe
     }
 
     private void getReposFromDB() {
-        getCompositeSubscription().add(
+        collectSubscription(
 
                 reposInteractor.getRepositories()
                         .subscribe(this::onReposUpdated, this::onError)
