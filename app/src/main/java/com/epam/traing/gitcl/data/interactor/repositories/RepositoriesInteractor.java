@@ -1,5 +1,7 @@
 package com.epam.traing.gitcl.data.interactor.repositories;
 
+import android.support.annotation.NonNull;
+
 import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.db.dao.IRepoDao;
 import com.epam.traing.gitcl.db.model.RepoModel;
@@ -44,10 +46,10 @@ public class RepositoriesInteractor implements IRepositoriesInteractor {
     public Observable<List<RepoModel>> loadRepositories() {
         // TODO implement pagination ?
         return repoClient.getAccountRepositories()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map(this::convertToModels)
-                .doOnNext(repoDao::saveAll);
+                .doOnNext(repoDao::saveAll)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -60,21 +62,18 @@ public class RepositoriesInteractor implements IRepositoriesInteractor {
     @Override
     public Observable<RepoModel> loadVerbose(RepoModel repoModel) {
         return repoClient.loadRepoInfo(repoModel.getOwnerName(), repoModel.getName())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map(modelConverter::toRepoModel)
                 .flatMap(this::loadContributorsInfo)
                 .doOnNext(rm -> rm.setVerboseUpdateDate(new Date().getTime()))
                 .doOnNext(repoDao::save)
-                .flatMap(rm -> repoDao.getById(rm.getId())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()));
+                .flatMap(rm -> repoDao.getById(rm.getId()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
+    @NonNull
     private Observable<RepoModel> loadContributorsInfo(RepoModel repoModel) {
         return repoClient.getContributors(repoModel.getOwnerName(), repoModel.getName())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(accountModels -> repoModel.setContributorsCount(accountModels.size()))
                 .map(accountModels -> repoModel);
     }

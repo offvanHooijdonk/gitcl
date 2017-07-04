@@ -53,10 +53,10 @@ public class AccountInteractor implements IAccountInteractor {
     @Override
     public Observable<AccountModel> reloadCurrentAccount() {
         return userClient.getCurrentUserInfo()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map(modelConverter::toAccountModel)
-                .doOnNext(this::storeCurrentAccount);
+                .doOnNext(this::storeCurrentAccount)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override

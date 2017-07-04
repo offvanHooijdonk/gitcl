@@ -61,9 +61,7 @@ public class GitAuthenticator implements IAuthenticator {
                         throw Exceptions.propagate(new AuthenticationException(errorMsg != null ? errorMsg : ""));
                     } else {
                         Log.d(GitClientApplication.LOG, "Request Access token");
-                        return tokenClient.requestAccessToken(Constants.Api.OAUTH_KEY, Constants.Api.OAUTH_SECRET, code)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread());
+                        return tokenClient.requestAccessToken(Constants.Api.OAUTH_KEY, Constants.Api.OAUTH_SECRET, code);
                     }
                 })
                 .doOnNext(tokenJson -> {
@@ -71,14 +69,12 @@ public class GitAuthenticator implements IAuthenticator {
                     prefHelper.setTokenType(tokenJson.getTokenType());
                     prefHelper.setAccessToken(tokenJson.getAccessToken());
                 })
-                .flatMap(tokenJson -> userClient.getCurrentUserInfo()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()))
+                .flatMap(tokenJson -> userClient.getCurrentUserInfo())
                 .map(modelConverter::toAccountModel)
-                .doOnNext(accountModel -> {
-                    accountModel.setAccessToken(prefHelper.getAccessToken());
-                    onAccountLoaded(accountModel);
-                });
+                .doOnNext(accountModel -> accountModel.setAccessToken(prefHelper.getAccessToken()))
+                .doOnNext(this::onAccountLoaded)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     private void onAccountLoaded(AccountModel accountModel) {
