@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.app.GitClientApplication;
 
 /**
  * Created by off on 22.01.2017.
@@ -98,7 +98,7 @@ public class PrefHelper {
         try {
             result = Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            Log.e(Application.LOG, "Error getting int value of " + value, e);
+            Log.e(GitClientApplication.LOG, "Error getting int value of " + value, e);
             result = defaultValue;
         }
 

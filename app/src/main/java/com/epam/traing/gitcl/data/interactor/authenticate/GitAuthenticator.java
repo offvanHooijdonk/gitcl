@@ -3,7 +3,7 @@ package com.epam.traing.gitcl.data.interactor.authenticate;
 import android.net.Uri;
 import android.util.Log;
 
-import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.app.GitClientApplication;
 import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.db.dao.IAccountDao;
 import com.epam.traing.gitcl.db.model.AccountModel;
@@ -60,14 +60,14 @@ public class GitAuthenticator implements IAuthenticator {
                         String errorMsg = uri.getQueryParameter(QPARAM_ERROR);
                         throw Exceptions.propagate(new AuthenticationException(errorMsg != null ? errorMsg : ""));
                     } else {
-                        Log.d(Application.LOG, "Request Access token");
+                        Log.d(GitClientApplication.LOG, "Request Access token");
                         return tokenClient.requestAccessToken(Constants.Api.OAUTH_KEY, Constants.Api.OAUTH_SECRET, code)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread());
                     }
                 })
                 .doOnNext(tokenJson -> {
-                    Log.d(Application.LOG, "Token received: " + tokenJson.getTokenType() + " " + tokenJson.getAccessToken());
+                    Log.d(GitClientApplication.LOG, "Token received: " + tokenJson.getTokenType() + " " + tokenJson.getAccessToken());
                     prefHelper.setTokenType(tokenJson.getTokenType());
                     prefHelper.setAccessToken(tokenJson.getAccessToken());
                 })
@@ -90,7 +90,7 @@ public class GitAuthenticator implements IAuthenticator {
         session.setCurrentAccount(accountModel);
         prefHelper.setLoggedAccountName(accountModel.getAccountName());
 
-        Log.d(Application.LOG, "Account passing to presenter");
+        Log.d(GitClientApplication.LOG, "Account passing to presenter");
     }
 
     @Override

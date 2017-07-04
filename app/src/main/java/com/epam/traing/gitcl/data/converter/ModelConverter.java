@@ -2,7 +2,7 @@ package com.epam.traing.gitcl.data.converter;
 
 import android.util.Log;
 
-import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.app.GitClientApplication;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.network.json.AccountJson;
@@ -78,7 +78,7 @@ public class ModelConverter {
         try {
             timeMillis = sdf.parse(dateString).getTime();
         } catch (ParseException e) {
-            Log.w(Application.LOG, "Error parsing feed date", e);
+            Log.w(GitClientApplication.LOG, "Error parsing feed date", e);
             timeMillis = 0;
         }
 

@@ -2,7 +2,7 @@ package com.epam.traing.gitcl.presentation.presenter;
 
 import android.util.Log;
 
-import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.app.GitClientApplication;
 import com.epam.traing.gitcl.data.interactor.search.ISearchInteractor;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.HistoryModel;
@@ -129,7 +129,7 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
     }
 
     private void handleError(Throwable th) {
-        Log.e(Application.LOG, "Error.", th);
+        Log.e(GitClientApplication.LOG, "Error.", th);
         searchView.showError(th);
     }
 }

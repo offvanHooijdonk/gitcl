@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.app.GitClientApplication;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.di.DependencyManager;
@@ -117,7 +117,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     SwipeRefreshLayout srlRepoInfo;
 
     public static RepoInfoFragment getInstance(RepoModel repoModel) {
-        Log.i(Application.LOG, "Constructor");
+        Log.i(GitClientApplication.LOG, "Constructor");
         RepoInfoFragment fragment = new RepoInfoFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_REPO_MODEL, repoModel);
@@ -187,7 +187,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-        Log.i(Application.LOG, "onViewCreated");
+        Log.i(GitClientApplication.LOG, "onViewCreated");
 
         if (accountModel == null) {
             accountModel = new AccountModel();
@@ -259,7 +259,7 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.i(Application.LOG, "onConfigurationChanged");
+        Log.i(GitClientApplication.LOG, "onConfigurationChanged");
         if (recentOrientation != newConfig.orientation) {
             recentOrientation = newConfig.orientation;
             layoutRevealRequired = true;

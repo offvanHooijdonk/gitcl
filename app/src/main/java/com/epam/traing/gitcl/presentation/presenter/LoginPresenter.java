@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.app.GitClientApplication;
 import com.epam.traing.gitcl.data.interactor.authenticate.AccountNotFoundException;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
@@ -64,10 +64,10 @@ public class LoginPresenter extends AbstractSubscribePresenter implements ILogin
     public void onActivityResume(Intent intent) {
         Uri uri = intent.getData();
 
-        Log.d(Application.LOG, "onResume data: " + (uri != null ? uri.toString() : "null"));
+        Log.d(GitClientApplication.LOG, "onResume data: " + (uri != null ? uri.toString() : "null"));
         // TODO handle reopen App after auth process, which causes excessive auth attempt
         if (uri != null && isCallbackUrl(uri.toString())) {
-            Log.d(Application.LOG, "Uri received: " + uri.toString());
+            Log.d(GitClientApplication.LOG, "Uri received: " + uri.toString());
 
             onOAuthCallback(uri.toString());
         } else {
@@ -110,8 +110,8 @@ public class LoginPresenter extends AbstractSubscribePresenter implements ILogin
     }
 
     private void onLoginSuccess(AccountModel accountModel) {
-        Log.d(Application.LOG, "Login Success");
-        Log.d(Application.LOG, accountModel != null ? new Gson().toJson(accountModel) : "empty");
+        Log.d(GitClientApplication.LOG, "Login Success");
+        Log.d(GitClientApplication.LOG, accountModel != null ? new Gson().toJson(accountModel) : "empty");
         prefHelper.setShowLogin(false);
         loginView.showLoginProgress(false);
         loginView.startMainView();

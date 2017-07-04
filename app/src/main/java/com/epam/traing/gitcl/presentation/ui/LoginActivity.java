@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.app.GitClientApplication;
 import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.presentation.presenter.ILoginPresenter;
 
@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(Application.LOG, "onResume");
+        Log.d(GitClientApplication.LOG, "onResume");
 
         loginPresenter.onActivityResume(getIntent());
     }
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void showLoginProgress(boolean show) {
-        Log.d(Application.LOG, "Progress: " + show);
+        Log.d(GitClientApplication.LOG, "Progress: " + show);
         if (show) {
             if (progressDialog == null) {
                 progressDialog = new ProgressDialog(LoginActivity.this);
@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void showAuthErrorMessage(Throwable th) {
-        Log.e(Application.LOG, "Error handled.", th);
+        Log.e(GitClientApplication.LOG, "Error handled.", th);
         showLoginScreen();
         Toast.makeText(this, th.toString(), Toast.LENGTH_LONG).show();
     }
@@ -117,14 +117,14 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
     @Override
     public void startMainView() {
-        Log.d(Application.LOG, "Starting Main Activity");
+        Log.d(GitClientApplication.LOG, "Starting Main Activity");
         startMain();
     }
 
     @Override
     public void showLoginScreen() {
         if (!isNextScreenStarted) {
-            Log.d(Application.LOG, "Animation reveal started.");
+            Log.d(GitClientApplication.LOG, "Animation reveal started.");
             animateRevealLogin();
             isNextScreenStarted = true;
         }

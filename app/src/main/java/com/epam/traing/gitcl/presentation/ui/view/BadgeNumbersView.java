@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.app.GitClientApplication;
 
 /**
  * Created by Yahor_Fralou on 3/3/2017 1:42 PM.
@@ -57,11 +57,11 @@ public class BadgeNumbersView extends FrameLayout {
                     numberValue = DEFAULT_NUMBER;
                 }
             } catch (NumberFormatException e) {
-                Log.e(Application.LOG, "Error parsing numberValue = " + numString, e);
+                Log.e(GitClientApplication.LOG, "Error parsing numberValue = " + numString, e);
                 numberValue = DEFAULT_NUMBER;
             }
         } catch (Exception e) {
-            Log.e(Application.LOG, "Error getting badge attrs.", e);
+            Log.e(GitClientApplication.LOG, "Error getting badge attrs.", e);
         } finally {
             ta.recycle();
         }

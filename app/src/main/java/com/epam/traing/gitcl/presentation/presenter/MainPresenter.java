@@ -2,7 +2,7 @@ package com.epam.traing.gitcl.presentation.presenter;
 
 import android.util.Log;
 
-import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.app.GitClientApplication;
 import com.epam.traing.gitcl.data.interactor.account.IAccountInteractor;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.network.Constants;
@@ -87,7 +87,7 @@ public class MainPresenter extends AbstractSubscribePresenter implements IMainPr
     }
 
     private void handleError(Throwable th) {
-        Log.e(Application.LOG, "Error.", th);
+        Log.e(GitClientApplication.LOG, "Error.", th);
         view.showError(th);
     }
 }

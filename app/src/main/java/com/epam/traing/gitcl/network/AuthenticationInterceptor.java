@@ -2,7 +2,7 @@ package com.epam.traing.gitcl.network;
 
 import android.util.Log;
 
-import com.epam.traing.gitcl.app.Application;
+import com.epam.traing.gitcl.app.GitClientApplication;
 import com.epam.traing.gitcl.helper.PrefHelper;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class AuthenticationInterceptor implements Interceptor {
         Response response = chain.proceed(request);
 
         if (!response.isSuccessful()) {
-            Log.i(Application.LOG, "Response code " + response.code() + " for request " + request.url().toString() + " : '" + response.message() + "'");
+            Log.i(GitClientApplication.LOG, "Response code " + response.code() + " for request " + request.url().toString() + " : '" + response.message() + "'");
         }
 
         return response;

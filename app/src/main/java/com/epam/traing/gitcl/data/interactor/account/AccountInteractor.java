@@ -37,8 +37,7 @@ public class AccountInteractor implements IAccountInteractor {
         this.prefHelper = prefHelper;
         this.modelConverter = modelConverter;
     }
-
-    @Deprecated
+    
     @Override
     public Observable<AccountModel> loadAccount(String accountName) {
         return accountDao.findAccountByName(accountName)

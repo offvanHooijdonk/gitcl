@@ -9,7 +9,7 @@ import com.epam.traing.gitcl.di.DependencyManager;
  * Created by off on 22.01.2017.
  */
 
-public class Application extends android.app.Application {
+public class GitClientApplication extends android.app.Application {
     public static final String LOG = "githubcl";
 
     @Override
