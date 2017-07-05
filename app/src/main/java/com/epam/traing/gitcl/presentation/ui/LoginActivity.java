@@ -89,9 +89,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         Log.d(GitClientApplication.LOG, "Progress: " + show);
         if (show) {
             if (progressDialog == null) {
-                progressDialog = new ProgressDialog(LoginActivity.this);
+                progressDialog = new ProgressDialog(this);
                 progressDialog.setIndeterminate(true);
-                progressDialog.setMessage(LoginActivity.this.getString(R.string.authentication_progress));
+                progressDialog.setMessage(getString(R.string.authentication_progress));
             }
 
             progressDialog.show();
