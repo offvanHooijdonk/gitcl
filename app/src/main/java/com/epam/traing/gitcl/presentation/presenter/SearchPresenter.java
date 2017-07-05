@@ -15,8 +15,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscription;
 
@@ -34,7 +32,6 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
     private Subscription subscrFullEntry;
     private Subscription subscrLiveEntry;
 
-    @Inject
     public SearchPresenter(ISearchInteractor searchInteractor) {
         this.searchInteractor = searchInteractor;
     }

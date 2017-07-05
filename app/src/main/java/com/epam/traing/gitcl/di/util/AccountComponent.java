@@ -1,7 +1,6 @@
 package com.epam.traing.gitcl.di.util;
 
 import com.epam.traing.gitcl.di.presentation.main.MainScreenComponent;
-import com.epam.traing.gitcl.di.presentation.main.MainScreenModule;
 
 import dagger.Subcomponent;
 
@@ -13,5 +12,5 @@ import dagger.Subcomponent;
 @UtilsScope
 public interface AccountComponent {
 
-    MainScreenComponent plusMainScreenComponent(MainScreenModule mainScreenModule);
+    MainScreenComponent plusMainScreenComponent();
 }

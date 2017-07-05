@@ -4,25 +4,14 @@ import android.content.Context;
 
 import com.epam.traing.gitcl.di.application.AppComponent;
 import com.epam.traing.gitcl.di.application.AppModule;
-import com.epam.traing.gitcl.di.application.DBModule;
 import com.epam.traing.gitcl.di.application.DaggerAppComponent;
-import com.epam.traing.gitcl.di.application.NetworkModule;
 import com.epam.traing.gitcl.di.presentation.login.LoginScreenComponent;
 import com.epam.traing.gitcl.di.presentation.login.LoginScreenModule;
 import com.epam.traing.gitcl.di.presentation.main.MainScreenComponent;
-import com.epam.traing.gitcl.di.presentation.main.MainScreenModule;
 import com.epam.traing.gitcl.di.presentation.repositories.RepoScreenComponent;
 import com.epam.traing.gitcl.di.presentation.repositories.RepoScreenModule;
 import com.epam.traing.gitcl.di.presentation.search.SearchScreenComponent;
 import com.epam.traing.gitcl.di.presentation.search.SearchScreenModule;
-import com.epam.traing.gitcl.di.util.AccountInteractorModule;
-import com.epam.traing.gitcl.di.util.AccountModule;
-import com.epam.traing.gitcl.di.util.AuthInteractorModule;
-import com.epam.traing.gitcl.di.util.AuthModule;
-import com.epam.traing.gitcl.di.util.HistoryModule;
-import com.epam.traing.gitcl.di.util.RepoInteractorModule;
-import com.epam.traing.gitcl.di.util.RepoModule;
-import com.epam.traing.gitcl.di.util.SearchInteractorModule;
 
 /**
  * Created by Yahor_Fralou on 4/20/2017 12:42 PM.
@@ -39,8 +28,6 @@ public class DependencyManager {
         if (appComponent == null) {
             appComponent = DaggerAppComponent.builder()
                     .appModule(new AppModule(ctx))
-                    .networkModule(new NetworkModule())
-                    .dBModule(new DBModule())
                     .build();
         }
     }
@@ -56,7 +43,7 @@ public class DependencyManager {
     public static LoginScreenComponent getLoginScreenComponent() {
         if (loginScreenComponent == null) {
             loginScreenComponent = getAppComponent()
-                    .plusAuthenticateComponent(new AuthModule(), new AccountModule(),  new AuthInteractorModule())
+                    .plusAuthenticateComponent()
                     .plusLoginScreenComponent(new LoginScreenModule());
         }
 
@@ -70,8 +57,8 @@ public class DependencyManager {
     public static MainScreenComponent getMainScreenComponent() {
         if (mainScreenComponent == null) {
             mainScreenComponent = getAppComponent()
-                    .plusAccountComponent(new AccountModule(), new AccountInteractorModule())
-                    .plusMainScreenComponent(new MainScreenModule());
+                    .plusAccountComponent()
+                    .plusMainScreenComponent();
         }
 
         return mainScreenComponent;
@@ -84,7 +71,7 @@ public class DependencyManager {
     public static RepoScreenComponent getRepoScreenComponent() {
         if (repoScreenComponent == null) {
             repoScreenComponent = getAppComponent()
-                    .plusRepoComponent(new RepoModule(), new RepoInteractorModule(), new AccountModule(), new AccountInteractorModule())
+                    .plusRepoComponent()
                     .plusRepoScreenComponent(new RepoScreenModule());
         }
 
@@ -98,7 +85,7 @@ public class DependencyManager {
     public static SearchScreenComponent getSearchScreenComponent() {
         if (searchScreenComponent == null) {
             searchScreenComponent = getAppComponent()
-                    .plusSearchComponent(new HistoryModule(), new RepoModule(), new AccountModule(), new SearchInteractorModule())
+                    .plusSearchComponent()
                     .plusSearchScreenComponent(new SearchScreenModule());
         }
 

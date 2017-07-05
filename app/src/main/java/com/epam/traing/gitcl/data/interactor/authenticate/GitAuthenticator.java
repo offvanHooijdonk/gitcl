@@ -88,7 +88,7 @@ public class GitAuthenticator implements IAuthenticator {
 
     @Override
     public Observable<AccountModel> prepareOnLoginData() {
-        return Observable.fromCallable(prefHelper::getLoggedAccountName)
+        return Observable.just(prefHelper.getLoggedAccountName())
                 .flatMap(loggedAccountName -> {
                     if (loggedAccountName == null) {
                         return Observable.just(null);
