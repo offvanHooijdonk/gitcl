@@ -15,7 +15,6 @@ import com.epam.traing.gitcl.network.GitHubUserClient;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.exceptions.Exceptions;
 import rx.schedulers.Schedulers;
 
 /**
@@ -55,7 +54,8 @@ public class GitAuthenticator implements IAuthenticator {
                 .flatMap(code -> {
                     if (code == null) {
                         String errorMsg = uri.getQueryParameter(QPARAM_ERROR);
-                        throw Exceptions.propagate(new AuthenticationException(errorMsg != null ? errorMsg : ""));
+                        return Observable.error(
+                                new Exception(errorMsg != null ? errorMsg : "Unspecified error when authenticating the user.")); // TODO add custom Exception?
                     } else {
                         Log.d(GitClientApplication.LOG, "Request Access token");
                         return tokenClient.requestAccessToken(Constants.Api.OAUTH_KEY, Constants.Api.OAUTH_SECRET, code);
