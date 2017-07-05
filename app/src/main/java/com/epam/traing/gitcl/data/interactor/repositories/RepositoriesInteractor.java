@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -28,7 +26,6 @@ public class RepositoriesInteractor implements IRepositoriesInteractor {
     private IRepoDao repoDao;
     private ModelConverter modelConverter;
 
-    @Inject
     public RepositoriesInteractor(GitHubRepoClient repoClient, IRepoDao repoDao, ModelConverter modelConverter) {
         this.repoClient = repoClient;
         this.repoDao = repoDao;

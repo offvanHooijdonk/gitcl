@@ -9,8 +9,6 @@ import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -27,7 +25,6 @@ public class AccountInteractor implements IAccountInteractor {
     private PrefHelper prefHelper;
     private IAccountDao accountDao;
 
-    @Inject
     public AccountInteractor(GitHubUserClient userClient,
                              IAccountDao accountDao,
                              SessionHelper sessionHelper,

@@ -13,8 +13,6 @@ import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.network.GitHubTokenClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.exceptions.Exceptions;
@@ -35,7 +33,6 @@ public class GitAuthenticator implements IAuthenticator {
     private SessionHelper session;
     private ModelConverter modelConverter;
 
-    @Inject
     public GitAuthenticator(PrefHelper prefHelper,
                             GitHubTokenClient tokenClient,
                             GitHubUserClient userClient,
