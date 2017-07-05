@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.Single;
 
 /**
  * Created by Yahor_Fralou on 2/24/2017 3:35 PM.
@@ -34,7 +35,7 @@ public class RepoDao implements IRepoDao {
     }
 
     @Override
-    public Observable<List<RepoModel>> findRepos(String queryText) {
+    public Single<List<RepoModel>> findRepos(String queryText) {
         return sqLite.get()
                 .listOfObjects(RepoModel.class)
                 .withQuery(Query.builder()
@@ -42,7 +43,7 @@ public class RepoDao implements IRepoDao {
                         .where(RepoTable.COLUMN_NAME + " like ?")
                         .whereArgs("%" + queryText + "%")
                         .orderBy(RepoTable.COLUMN_NAME).build())
-                .prepare().asRxObservable();
+                .prepare().asRxSingle();
     }
 
     @Override

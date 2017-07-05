@@ -8,6 +8,7 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 import java.util.List;
 
 import rx.Observable;
+import rx.Single;
 
 /**
  * Created by Yahor_Fralou on 2/17/2017 3:18 PM.
@@ -35,14 +36,14 @@ public class AccountDao implements IAccountDao {
     }
 
     @Override
-    public Observable<List<AccountModel>> findAccounts(String queryText) {
+    public Single<List<AccountModel>> findAccounts(String queryText) {
         return storIOSQLite.get().listOfObjects(AccountModel.class)
                 .withQuery(Query.builder()
                         .table(AccountTable.TABLE)
                         .where(AccountTable.COLUMN_ACCOUNT_NAME + " like ? OR " +
                                 AccountTable.COLUMN_PERSON_NAME + " like ?")
                         .whereArgs("%" + queryText + "%", "%" + queryText + "%").build())
-                .prepare().asRxObservable();
+                .prepare().asRxSingle();
     }
 
 }

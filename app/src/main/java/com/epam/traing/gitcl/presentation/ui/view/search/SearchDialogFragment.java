@@ -219,12 +219,14 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
 
         if (searchResults.isEmpty() && listView.getVisibility() == View.VISIBLE) {
             showResultsList(false);
-        } else if (!searchResults.isEmpty() && listView.getVisibility() != View.VISIBLE) {
-            showResultsList(true);
-        }
+        } else {
+            adapter.setSearchText(inputSearch.getText().toString());
+            adapter.notifyDataSetChanged();
 
-        adapter.setSearchText(inputSearch.getText().toString());
-        adapter.notifyDataSetChanged();
+            if (!searchResults.isEmpty() && listView.getVisibility() != View.VISIBLE) {
+                showResultsList(true);
+            }
+        }
 
         showSearchProgress(false);
     }

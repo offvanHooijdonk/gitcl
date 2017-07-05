@@ -18,9 +18,9 @@ public interface ISearchInteractor {
 
     Single<List<HistoryModel>> findHistoryEntries(String queryText, int limit);
 
-    Observable<List<RepoModel>> findReposLocal(String queryText);
+    Single<List<RepoModel>> findReposLocal(String queryText);
 
-    Observable<List<AccountModel>> findAccountsLocal(String queryText);
+    Single<List<AccountModel>> findAccountsLocal(String queryText);
 
     Observable<List<AccountModel>> searchAccountsOnApi(String queryText, int page);
 

@@ -18,6 +18,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.Subscription;
 
 /**
  * Created by Yahor_Fralou on 5/4/2017 7:07 PM.
@@ -30,6 +31,8 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
     private ISearchInteractor searchInteractor;
 
     private List<SearchListAdapter.ItemWrapper> searchResults = new ArrayList<>();
+    private Subscription subscrFullEntry;
+    private Subscription subscrLiveEntry;
 
     @Inject
     public SearchPresenter(ISearchInteractor searchInteractor) {
@@ -51,9 +54,9 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
 
                 observableFullQuery
                         .doOnNext(this::saveHistoryEntry)
+                        .doOnNext(s -> stopQueriesSubscriptions())
                         .doOnNext(s -> searchResults.clear())
-                        .doOnNext(this::searchFull)
-                .subscribe()
+                        .subscribe(this::searchFull, this::handleError)
 
         );
     }
@@ -63,37 +66,58 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
         collectSubscription(
 
                 observableLiveQuery
+                        .doOnNext(s -> stopQueriesSubscriptions())
                         .doOnNext(s -> searchResults.clear())
-                        .flatMap(s -> searchInteractor.findHistoryEntries(s, HISTORY_SHOW_MAX).flatMapObservable(Observable::just))
-                        .map(this::collectSearchResults)
-                        .mergeWith(observableLiveQuery
-                                .flatMap(s -> searchInteractor.findReposLocal(s))
-                                .map(this::collectSearchResults)
-                        )
-                        .mergeWith(observableLiveQuery
-                                .flatMap(s -> searchInteractor.findAccountsLocal(s))
-                                .map(this::collectSearchResults))
-                        .toList()
-                        .subscribe(itemWrappers -> onLiveSearchFinished(), this::handleError)
+                        .subscribe(this::searchLive, this::handleError)
         );
     }
 
     @Override
     public void detachView() {
         unsubscribeAll();
+        stopQueriesSubscriptions();
 
         this.searchView = null;
     }
 
     private void searchFull(String text) {
-        Observable<String> queryObservable = Observable.just(text);
-        queryObservable.flatMap(s -> searchInteractor.searchRepositoriesOnApi(s, 1))
+        Observable<String> queryObservableFull = Observable.just(text);
+        subscrFullEntry = queryObservableFull.flatMap(s -> searchInteractor.searchRepositoriesOnApi(s, 1))
                 .map(this::collectSearchResults)
-                .mergeWith(queryObservable
+                .mergeWith(queryObservableFull
                         .flatMap(s -> searchInteractor.searchAccountsOnApi(s, 1))
                         .map(this::collectSearchResults))
-                .subscribe(itemWrappers -> onFullSearchFinished(), this::handleError);
+                .subscribe(itemWrappers -> {
+                }, this::handleError, this::onFullSearchFinished);
     }
+
+    private void searchLive(String text) {
+        Observable<String> queryObservableLive = Observable.just(text);
+        subscrLiveEntry = queryObservableLive
+                .flatMap(s -> searchInteractor.findHistoryEntries(s, HISTORY_SHOW_MAX).flatMapObservable(Observable::just))
+                .map(this::collectSearchResults)
+                .mergeWith(queryObservableLive
+                        .flatMap(s -> searchInteractor.findReposLocal(s).flatMapObservable(Observable::just))
+                        .map(this::collectSearchResults)
+                )
+                .mergeWith(queryObservableLive
+                        .flatMap(s -> searchInteractor.findAccountsLocal(s).flatMapObservable(Observable::just))
+                        .map(this::collectSearchResults)
+                )
+                .toList()
+                .subscribe(itemWrappers -> {
+                }, this::handleError, this::onLiveSearchFinished);
+    }
+
+    private void stopQueriesSubscriptions() {
+        if (subscrLiveEntry != null && !subscrLiveEntry.isUnsubscribed()) {
+            subscrLiveEntry.unsubscribe();
+        }
+        if (subscrFullEntry != null && !subscrFullEntry.isUnsubscribed()) {
+            subscrFullEntry.unsubscribe();
+        }
+    }
+
 
     private void saveHistoryEntry(String s) {
         HistoryModel historyModel = new HistoryModel();
@@ -117,13 +141,17 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
                     }
                     return new SearchListAdapter.ItemWrapper(type, model, score);
                 })
-                .doOnNext(searchResults::add).subscribe();
-        Log.i("LOG", "Result items: " + searchResults.size());
+                .doOnNext(searchResults::add)
+                .subscribe(itemWrapper -> {
+                }, throwable -> {
+                }, () -> Log.i("gitcl", "Results collected: " + searchResults.size()));
+
         return searchResults;
     }
 
     private void onLiveSearchFinished() {
         Collections.sort(searchResults);
+        Log.i("gitcl", "Live results: " + searchResults.size());
         searchView.updateSearchResults(searchResults);
     }
 

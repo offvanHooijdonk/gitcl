@@ -10,6 +10,7 @@ import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.network.GitHubRepoClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 
+import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
@@ -54,21 +55,20 @@ public class SearchInteractor implements ISearchInteractor {
     }
 
     @Override
-    public Observable<List<RepoModel>> findReposLocal(String queryText) {
+    public Single<List<RepoModel>> findReposLocal(String queryText) {
         if (queryText == null || queryText.isEmpty()) {
-            return Observable.empty();
+            return Single.just(Collections.emptyList());
         } else {
-            return repoDao.
-                    findRepos(queryText)
+            return repoDao.findRepos(queryText)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
         }
     }
 
     @Override
-    public Observable<List<AccountModel>> findAccountsLocal(String queryText) {
+    public Single<List<AccountModel>> findAccountsLocal(String queryText) {
         if (queryText == null || queryText.isEmpty()) {
-            return Observable.empty();
+            return Single.just(Collections.emptyList());
         } else {
             return accountDao.findAccounts(queryText)
                     .subscribeOn(Schedulers.io())
@@ -79,17 +79,17 @@ public class SearchInteractor implements ISearchInteractor {
     @Override
     public Observable<List<AccountModel>> searchAccountsOnApi(String queryText, int page) {
         return userClient.searchUsers(queryText, page)
+                .map(searchResults -> modelConverter.toAccountModelList(searchResults.getItems()))
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(searchResults -> modelConverter.toAccountModelList(searchResults.getItems()));
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
     public Observable<List<RepoModel>> searchRepositoriesOnApi(String queryText, int page) {
         return repoClient.searchRepositories(queryText, page)
+                .map(searchResults ->  modelConverter.toRepoModelList(searchResults.getItems()))
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(searchResults ->  modelConverter.toRepoModelList(searchResults.getItems()));
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 }
