@@ -10,11 +10,9 @@ import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.network.GitHubRepoClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 
-import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
-import rx.Single;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -47,30 +45,32 @@ public class SearchInteractor implements ISearchInteractor {
     }
 
     @Override
-    public Single<List<HistoryModel>> findHistoryEntries(String queryText, int limit) {
-        return historyDao.
-                findWithText(queryText, limit)
+    public Observable<List<HistoryModel>> findHistoryEntries(String queryText, int limit) {
+        return historyDao.findWithText(queryText, limit)
+                .toObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Single<List<RepoModel>> findReposLocal(String queryText) {
+    public Observable<List<RepoModel>> findReposLocal(String queryText) {
         if (queryText == null || queryText.isEmpty()) {
-            return Single.just(Collections.emptyList());
+            return Observable.empty();
         } else {
             return repoDao.findRepos(queryText)
+                    .toObservable()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
         }
     }
 
     @Override
-    public Single<List<AccountModel>> findAccountsLocal(String queryText) {
+    public Observable<List<AccountModel>> findAccountsLocal(String queryText) {
         if (queryText == null || queryText.isEmpty()) {
-            return Single.just(Collections.emptyList());
+            return Observable.empty();
         } else {
             return accountDao.findAccounts(queryText)
+                    .toObservable()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
         }

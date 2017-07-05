@@ -91,17 +91,16 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
     private void searchLive(String text) {
         Observable<String> queryObservableLive = Observable.just(text);
         subscrLiveEntry = queryObservableLive
-                .flatMap(s -> searchInteractor.findHistoryEntries(s, HISTORY_SHOW_MAX).flatMapObservable(Observable::just))
+                .flatMap(s -> searchInteractor.findHistoryEntries(s, HISTORY_SHOW_MAX))
                 .map(this::collectSearchResults)
                 .mergeWith(queryObservableLive
-                        .flatMap(s -> searchInteractor.findReposLocal(s).flatMapObservable(Observable::just))
+                        .flatMap(s -> searchInteractor.findReposLocal(s))
                         .map(this::collectSearchResults)
                 )
                 .mergeWith(queryObservableLive
-                        .flatMap(s -> searchInteractor.findAccountsLocal(s).flatMapObservable(Observable::just))
+                        .flatMap(s -> searchInteractor.findAccountsLocal(s))
                         .map(this::collectSearchResults)
                 )
-                .toList()
                 .subscribe(itemWrappers -> {
                 }, this::handleError, this::onLiveSearchFinished);
     }

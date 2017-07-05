@@ -389,7 +389,9 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
         obsFullQuery.onCompleted();
         obsLiveQuery.onCompleted();
 
-        this.dismiss();
+        if (this.isVisible()) {
+            this.dismiss();
+        }
     }
 
     private void showKeyBoard(boolean isShow) {
