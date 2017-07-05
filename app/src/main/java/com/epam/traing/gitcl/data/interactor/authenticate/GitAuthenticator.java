@@ -55,14 +55,14 @@ public class GitAuthenticator implements IAuthenticator {
                     if (code == null) {
                         String errorMsg = uri.getQueryParameter(QPARAM_ERROR);
                         return Observable.error(
-                                new Exception(errorMsg != null ? errorMsg : "Unspecified error when authenticating the user.")); // TODO add custom Exception?
+                                new AuthenticationException(errorMsg != null ? errorMsg : "Unspecified error when authenticating the user."));
                     } else {
                         Log.d(GitClientApplication.LOG, "Request Access token");
                         return tokenClient.requestAccessToken(Constants.Api.OAUTH_KEY, Constants.Api.OAUTH_SECRET, code);
                     }
                 })
+                .doOnNext(tokenJson -> Log.d(GitClientApplication.LOG, "Token received: " + tokenJson.getTokenType() + " " + tokenJson.getAccessToken()))
                 .doOnNext(tokenJson -> {
-                    Log.d(GitClientApplication.LOG, "Token received: " + tokenJson.getTokenType() + " " + tokenJson.getAccessToken());
                     prefHelper.setTokenType(tokenJson.getTokenType());
                     prefHelper.setAccessToken(tokenJson.getAccessToken());
                 })
