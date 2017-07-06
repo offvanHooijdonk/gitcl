@@ -3,6 +3,7 @@ package com.epam.traing.gitcl.data.interactor.repositories;
 import android.support.annotation.NonNull;
 
 import com.epam.traing.gitcl.data.converter.ModelConverter;
+import com.epam.traing.gitcl.data.interactor.Interactors;
 import com.epam.traing.gitcl.db.dao.IRepoDao;
 import com.epam.traing.gitcl.db.model.RepoModel;
 import com.epam.traing.gitcl.network.GitHubRepoClient;
@@ -13,8 +14,6 @@ import java.util.Date;
 import java.util.List;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Yahor_Fralou on 2/22/2017 12:31 PM.
@@ -35,8 +34,7 @@ public class RepositoriesInteractor implements IRepositoriesInteractor {
     @Override
     public Observable<List<RepoModel>> getRepositories() {
         return repoDao.getRepositories()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(Interactors.applySchedulersIO());
     }
 
     @Override
@@ -45,15 +43,13 @@ public class RepositoriesInteractor implements IRepositoriesInteractor {
         return repoClient.getAccountRepositories()
                 .map(this::convertToModels)
                 .doOnNext(repoDao::saveAll)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(Interactors.applySchedulersIO());
     }
 
     @Override
     public Observable<RepoModel> getRepoInfo(long id) {
         return repoDao.getById(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(Interactors.applySchedulersIO());
     }
 
     @Override
@@ -64,8 +60,7 @@ public class RepositoriesInteractor implements IRepositoriesInteractor {
                 .doOnNext(rm -> rm.setVerboseUpdateDate(new Date().getTime()))
                 .doOnNext(repoDao::save)
                 .flatMap(rm -> repoDao.getById(rm.getId()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(Interactors.applySchedulersIO());
     }
 
     @NonNull

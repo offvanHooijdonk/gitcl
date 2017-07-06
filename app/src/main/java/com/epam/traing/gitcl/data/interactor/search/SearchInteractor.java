@@ -1,6 +1,7 @@
 package com.epam.traing.gitcl.data.interactor.search;
 
 import com.epam.traing.gitcl.data.converter.ModelConverter;
+import com.epam.traing.gitcl.data.interactor.Interactors;
 import com.epam.traing.gitcl.db.dao.IAccountDao;
 import com.epam.traing.gitcl.db.dao.IHistoryDao;
 import com.epam.traing.gitcl.db.dao.IRepoDao;
@@ -13,8 +14,6 @@ import com.epam.traing.gitcl.network.GitHubUserClient;
 import java.util.List;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Yahor_Fralou on 3/20/2017 7:07 PM.
@@ -48,8 +47,7 @@ public class SearchInteractor implements ISearchInteractor {
     public Observable<List<HistoryModel>> findHistoryEntries(String queryText, int limit) {
         return historyDao.findWithText(queryText, limit)
                 .toObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(Interactors.applySchedulersIO());
     }
 
     @Override
@@ -59,8 +57,7 @@ public class SearchInteractor implements ISearchInteractor {
         } else {
             return repoDao.findRepos(queryText)
                     .toObservable()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+                    .compose(Interactors.applySchedulersIO());
         }
     }
 
@@ -72,8 +69,7 @@ public class SearchInteractor implements ISearchInteractor {
         } else {
             return accountDao.findAccounts(queryText)
                     .toObservable()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+                    .compose(Interactors.applySchedulersIO());
         }
     }
 
@@ -81,16 +77,14 @@ public class SearchInteractor implements ISearchInteractor {
     public Observable<List<AccountModel>> searchAccountsOnApi(String queryText, int page) {
         return userClient.searchUsers(queryText, page)
                 .map(searchResults -> modelConverter.toAccountModelList(searchResults.getItems()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(Interactors.applySchedulersIO());
     }
 
     @Override
     public Observable<List<RepoModel>> searchRepositoriesOnApi(String queryText, int page) {
         return repoClient.searchRepositories(queryText, page)
                 .map(searchResults ->  modelConverter.toRepoModelList(searchResults.getItems()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(Interactors.applySchedulersIO());
     }
 
 }

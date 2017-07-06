@@ -3,6 +3,7 @@ package com.epam.traing.gitcl.data.interactor.account;
 import android.support.annotation.NonNull;
 
 import com.epam.traing.gitcl.data.converter.ModelConverter;
+import com.epam.traing.gitcl.data.interactor.Interactors;
 import com.epam.traing.gitcl.db.dao.IAccountDao;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
@@ -10,8 +11,6 @@ import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by off on 19.02.2017.
@@ -43,8 +42,7 @@ public class AccountInteractor implements IAccountInteractor {
                 .flatMap(accountModel ->
                         accountModel == null ?
                                 loadAccountInfoRemote(accountName) : Observable.just(accountModel))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(Interactors.applySchedulersIO());
     }
 
     @Override
@@ -52,8 +50,7 @@ public class AccountInteractor implements IAccountInteractor {
         return userClient.getCurrentUserInfo()
                 .map(modelConverter::toAccountModel)
                 .doOnNext(this::storeCurrentAccount)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(Interactors.applySchedulersIO());
     }
 
     @Override
