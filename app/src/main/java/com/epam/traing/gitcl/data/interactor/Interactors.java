@@ -8,8 +8,8 @@ import rx.schedulers.Schedulers;
  * Created by Yahor_Fralou on 7/6/2017 4:23 PM.
  */
 
-public interface Interactors {
-    static <T> Observable.Transformer<T, T> applySchedulersIO() {
+public class Interactors {
+    public static <T> Observable.Transformer<T, T> applySchedulersIO() {
         return observable -> observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
