@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.presentation.ui.helper.AnimationHelper;
+import com.epam.traing.gitcl.presentation.ui.helper.ActivityAnimationHelper;
 
 /**
  * Created by Yahor_Fralou on 3/24/2017 2:07 PM.
@@ -41,7 +41,7 @@ public class CreateRepoActivity extends AppCompatActivity {
 
         if (!isCollapseCalled) {
             viewCollapsePlaceholder.setVisibility(View.VISIBLE);
-            AnimationHelper.Activities.revealToToolbar(this, viewCollapsePlaceholder, mainLayout);
+            ActivityAnimationHelper.Activities.revealToToolbar(this, viewCollapsePlaceholder, mainLayout);
             isCollapseCalled = true;
         }
     }

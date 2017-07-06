@@ -30,7 +30,7 @@ import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.presentation.presenter.IRepoListPresenter;
 import com.epam.traing.gitcl.presentation.ui.adapter.RepoListAdapter;
-import com.epam.traing.gitcl.presentation.ui.helper.AnimationHelper;
+import com.epam.traing.gitcl.presentation.ui.helper.ActivityAnimationHelper;
 import com.epam.traing.gitcl.presentation.ui.helper.ColorsHelper;
 
 import java.util.ArrayList;
@@ -129,7 +129,7 @@ public class RepoListFragment extends Fragment implements IRepoListView, RepoLis
                 startActivity(new Intent(ctx, CreateRepoActivity.class));
                 return;
             }
-            AnimationHelper.Circle.revealViewWithFAB(viewRevealPlaceholder, fab, null, new AnimatorListenerAdapter() {
+            ActivityAnimationHelper.Circle.revealViewWithFAB(viewRevealPlaceholder, fab, null, new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);

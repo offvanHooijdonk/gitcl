@@ -18,7 +18,7 @@ import android.view.animation.ScaleAnimation;
  * Created by Yahor_Fralou on 3/24/2017 1:53 PM.
  */
 
-public class AnimationHelper {
+public class ActivityAnimationHelper {
     private static final int DURATION_IN = 225;
     private static final int DURATION_IN_LONG = 325;
 
