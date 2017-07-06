@@ -205,6 +205,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
 
             isLiveSearchEnabled = false;
             inputSearch.setText(historyModel.getText());
+            inputSearch.setSelection(historyModel.getText().length());
             listView.setVisibility(View.GONE);
             isLiveSearchEnabled = true;
 
