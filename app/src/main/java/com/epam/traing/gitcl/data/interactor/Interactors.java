@@ -9,8 +9,12 @@ import rx.schedulers.Schedulers;
  */
 
 public class Interactors {
+    private static Observable.Transformer transformer = observable -> observable
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread());
+
+    @SuppressWarnings("unchecked")
     public static <T> Observable.Transformer<T, T> applySchedulersIO() {
-        return observable -> observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return (Observable.Transformer<T, T>) transformer;
     }
 }

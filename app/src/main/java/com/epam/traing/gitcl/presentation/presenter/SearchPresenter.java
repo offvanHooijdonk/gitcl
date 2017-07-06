@@ -31,6 +31,8 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
     private List<SearchListAdapter.ItemWrapper> searchResults = new ArrayList<>();
     private Subscription subscrFullEntry;
     private Subscription subscrLiveEntry;
+    private Observable.Transformer<List<?>, List<SearchListAdapter.ItemWrapper>> resultsTransformer =
+            observable -> observable.map(this::collectSearchResults);
 
     public SearchPresenter(ISearchInteractor searchInteractor) {
         this.searchInteractor = searchInteractor;
@@ -117,7 +119,7 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
     }
 
     private <T> Observable.Transformer<List<?>, List<SearchListAdapter.ItemWrapper>> handleSearchResults() {
-        return observable -> observable.map(this::collectSearchResults);
+        return resultsTransformer;
     }
 
     private List<SearchListAdapter.ItemWrapper> collectSearchResults(List<?> historyModels) {
