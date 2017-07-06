@@ -79,9 +79,9 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
 
     private void searchFull(String text) {
         subscrFullEntry = searchInteractor.searchRepositoriesOnApi(text, 1)
-                .map(this::collectSearchResults)
+                .compose(handleSearchResults())
                 .mergeWith(searchInteractor.searchAccountsOnApi(text, 1)
-                        .map(this::collectSearchResults))
+                        .compose(handleSearchResults()))
                 .subscribe(itemWrappers -> {
                 }, this::handleError, this::onFullSearchFinished);
     }
@@ -89,10 +89,11 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
     private void searchLive(String text) {
 
         subscrLiveEntry = searchInteractor.findHistoryEntries(text, HISTORY_SHOW_MAX)
-                .map(this::collectSearchResults)
-                .mergeWith(searchInteractor.findReposLocal(text).map(this::collectSearchResults))
+                .compose(handleSearchResults())
+                .mergeWith(searchInteractor.findReposLocal(text)
+                        .compose(handleSearchResults()))
                 .mergeWith(searchInteractor.findAccountsLocal(text)
-                        .map(this::collectSearchResults))
+                        .compose(handleSearchResults()))
 
                 .subscribe(itemWrappers -> {
                 }, this::handleError, this::onLiveSearchFinished);
@@ -107,13 +108,16 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
         }
     }
 
-
     private void saveHistoryEntry(String s) {
         HistoryModel historyModel = new HistoryModel();
         historyModel.setText(s);
         historyModel.setSearchDate(new Date().getTime());
 
         searchInteractor.saveHistoryEntry(historyModel);
+    }
+
+    private <T> Observable.Transformer<List<?>, List<SearchListAdapter.ItemWrapper>> handleSearchResults() {
+        return observable -> observable.map(this::collectSearchResults);
     }
 
     private List<SearchListAdapter.ItemWrapper> collectSearchResults(List<?> historyModels) {
