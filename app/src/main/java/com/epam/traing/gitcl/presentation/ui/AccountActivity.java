@@ -1,5 +1,6 @@
 package com.epam.traing.gitcl.presentation.ui;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.db.model.AccountModel;
@@ -20,6 +22,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * Created by Yahor_Fralou on 3/7/2017 3:32 PM.
@@ -66,7 +69,14 @@ public class AccountActivity extends AppCompatActivity implements IAccountView {
             collapsingToolbar.setTitle(account.getAccountName());
         }
         if (account.getAvatar() != null) {
-            Glide.with(this).load(account.getAvatar()).into(imgAccountAvatar);
+            DrawableRequestBuilder requestBuilder = Glide.with(this)
+                    .load(account.getAvatar());
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                requestBuilder = requestBuilder.placeholder(R.drawable.ic_github_96).bitmapTransform(new CropCircleTransformation(this));
+            } else {
+                requestBuilder = requestBuilder.placeholder(R.drawable.ic_github_256);
+            }
+            requestBuilder.into(imgAccountAvatar);
         }
 
         displayAccountInfo();

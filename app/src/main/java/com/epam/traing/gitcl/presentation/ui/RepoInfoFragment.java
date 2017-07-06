@@ -48,6 +48,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static android.view.View.ALPHA;
 import static com.epam.traing.gitcl.presentation.ui.view.RepoIconView.TYPE_FORK;
@@ -230,7 +231,11 @@ public class RepoInfoFragment extends Fragment implements IRepoInfoView {
             txtOwnerFullName.setVisibility(View.GONE);
         }
         if (accountModel.getAvatar() != null) {
-            Glide.with(this).load(accountModel.getAvatar()).placeholder(R.drawable.ic_account_default_72).into(imgOwnerPhoto);
+            Glide.with(this)
+                    .load(accountModel.getAvatar())
+                    .placeholder(R.drawable.ic_account_default_72)
+                    .bitmapTransform(new CropCircleTransformation(ctx))
+                    .into(imgOwnerPhoto);
         }
     }
 

@@ -26,6 +26,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.epam.traing.gitcl.presentation.ui.view.RepoIconView.TYPE_FORK;
 import static com.epam.traing.gitcl.presentation.ui.view.RepoIconView.TYPE_REPO;
@@ -122,7 +123,11 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         vh.itemRepoView.setVisibility(View.GONE);
 
         if (model.getAvatar() != null) {
-            Glide.with(ctx).load(model.getAvatar()).placeholder(R.drawable.ic_account_default_72).into(vh.imgAccount);
+            Glide.with(ctx)
+                    .load(model.getAvatar())
+                    .placeholder(R.drawable.ic_account_default_72)
+                    .bitmapTransform(new CropCircleTransformation(ctx))
+                    .into(vh.imgAccount);
         } else {
             vh.imgAccount.setImageResource(R.drawable.ic_account_default_72);
         }

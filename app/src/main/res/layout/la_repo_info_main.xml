@@ -44,15 +44,14 @@
         android:paddingBottom="8dp"
         android:paddingTop="8dp">
 
-        <com.mikhaellopez.circularimageview.CircularImageView
+        <ImageView
             android:id="@+id/imgOwnerPhoto"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/list_item_padding_hor"
             android:layout_marginStart="12dp"
-            android:tint="@color/md_white_1000"
-            app:civ_border="false"/>
+            android:tint="@color/md_white_1000"/>
         <!-- Add android:layout_gravity="center_vertical" to image? -->
         <LinearLayout
             android:layout_width="match_parent"

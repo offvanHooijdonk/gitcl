@@ -36,6 +36,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class MainActivity extends AppCompatActivity
         implements IMainView, NavigationView.OnNavigationItemSelectedListener {
@@ -182,7 +183,11 @@ public class MainActivity extends AppCompatActivity
             txtDrawerAccountUserName.setText(accountModel.getPersonName());
             txtDrawerAccountName.setText(accountModel.getAccountName());
             if (accountModel.getAvatar() != null) {
-                Glide.with(this).load(accountModel.getAvatar()).placeholder(R.drawable.ic_account_default_72).into(imgAvatar);
+                Glide.with(this)
+                        .load(accountModel.getAvatar())
+                        .placeholder(R.drawable.ic_account_default_72)
+                        .bitmapTransform(new CropCircleTransformation(this))
+                        .into(imgAvatar);
             }
 
             imgAvatar.setOnClickListener(v -> {
