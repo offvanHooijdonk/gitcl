@@ -78,29 +78,22 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
     }
 
     private void searchFull(String text) {
-        Observable<String> queryObservableFull = Observable.just(text);
-        subscrFullEntry = queryObservableFull.flatMap(s -> searchInteractor.searchRepositoriesOnApi(s, 1))
+        subscrFullEntry = searchInteractor.searchRepositoriesOnApi(text, 1)
                 .map(this::collectSearchResults)
-                .mergeWith(queryObservableFull
-                        .flatMap(s -> searchInteractor.searchAccountsOnApi(s, 1))
+                .mergeWith(searchInteractor.searchAccountsOnApi(text, 1)
                         .map(this::collectSearchResults))
                 .subscribe(itemWrappers -> {
                 }, this::handleError, this::onFullSearchFinished);
     }
 
     private void searchLive(String text) {
-        Observable<String> queryObservableLive = Observable.just(text);
-        subscrLiveEntry = queryObservableLive
-                .flatMap(s -> searchInteractor.findHistoryEntries(s, HISTORY_SHOW_MAX))
+
+        subscrLiveEntry = searchInteractor.findHistoryEntries(text, HISTORY_SHOW_MAX)
                 .map(this::collectSearchResults)
-                .mergeWith(queryObservableLive
-                        .flatMap(s -> searchInteractor.findReposLocal(s))
-                        .map(this::collectSearchResults)
-                )
-                .mergeWith(queryObservableLive
-                        .flatMap(s -> searchInteractor.findAccountsLocal(s))
-                        .map(this::collectSearchResults)
-                )
+                .mergeWith(searchInteractor.findReposLocal(text).map(this::collectSearchResults))
+                .mergeWith(searchInteractor.findAccountsLocal(text)
+                        .map(this::collectSearchResults))
+
                 .subscribe(itemWrappers -> {
                 }, this::handleError, this::onLiveSearchFinished);
     }

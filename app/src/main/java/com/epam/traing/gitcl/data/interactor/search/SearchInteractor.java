@@ -64,6 +64,7 @@ public class SearchInteractor implements ISearchInteractor {
         }
     }
 
+    // TODO conseder switch to Single
     @Override
     public Observable<List<AccountModel>> findAccountsLocal(String queryText) {
         if (queryText == null || queryText.isEmpty()) {
