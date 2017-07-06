@@ -28,8 +28,8 @@ public class ActivityAnimationHelper {
             int[] location = new int[2];
             viewCircleOn.getLocationInWindow(location);
 
-            int cx = location[0] + viewCircleOn.getWidth()/2;
-            int cy = location[1] + viewCircleOn.getHeight()/2;
+            int cx = location[0] + viewCircleOn.getWidth() / 2;
+            int cy = location[1] + viewCircleOn.getHeight() / 2;
 
             v.setVisibility(View.INVISIBLE);
             int finalRadius = radius != null ? radius : getAnimRadius(v);
@@ -63,11 +63,11 @@ public class ActivityAnimationHelper {
         /**
          * Place in onResume() method
          *
-         * @param ctx Context
+         * @param ctx          Context
          * @param collapseView The view to be collapsed to the toolbar size
-         * @param mainLayout Layout that will be shown on collapse animation complete
+         * @param mainLayout   Layout that will be shown on collapse animation complete
          */
-        public static void revealToToolbar(@NonNull Context ctx, @NonNull final View collapseView, @NonNull final View mainLayout) {
+        public static void revealToToolbar(@NonNull Context ctx, @NonNull final View collapseView, @NonNull final View mainLayout, @Nullable AnimatorListenerAdapter listener) {
             prepareRevealToToolbar(collapseView, mainLayout);
 
             TypedValue tv = new TypedValue();
@@ -89,7 +89,7 @@ public class ActivityAnimationHelper {
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    finishRevealToToolBar(collapseView, mainLayout);
+                    finishRevealToToolBar(collapseView, mainLayout, listener);
                 }
 
                 @Override
@@ -105,15 +105,23 @@ public class ActivityAnimationHelper {
             collapseView.setVisibility(View.VISIBLE);
         }
 
-        private static void finishRevealToToolBar(@NonNull View collapseView, @NonNull View mainLayout) {
+        private static void finishRevealToToolBar(@NonNull View collapseView, @NonNull View mainLayout, @Nullable AnimatorListenerAdapter listener) {
 
             ObjectAnimator.ofFloat(collapseView, View.ALPHA, 1.0f, 0.0f).setDuration(DURATION_IN).start();
             Animator animMainLayout = ObjectAnimator.ofFloat(mainLayout, View.ALPHA, 0.0f, 1.0f).setDuration(DURATION_IN);
             animMainLayout.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    super.onAnimationEnd(animation);
+                    super.onAnimationStart(animation);
                     mainLayout.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    if (listener != null) {
+                        listener.onAnimationEnd(animation);
+                    }
                 }
             });
             animMainLayout.start();

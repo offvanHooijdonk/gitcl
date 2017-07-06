@@ -1,7 +1,10 @@
 package com.epam.traing.gitcl.presentation.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -19,6 +22,7 @@ public class CreateRepoActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private View viewCollapsePlaceholder;
     private View mainLayout;
+    private FloatingActionButton fabSave;
 
     private boolean isCollapseCalled = false;
 
@@ -33,6 +37,9 @@ public class CreateRepoActivity extends AppCompatActivity {
 
         mainLayout = findViewById(R.id.mainLayout);
         viewCollapsePlaceholder = findViewById(R.id.collapsePlaceholder);
+        fabSave = (FloatingActionButton) findViewById(R.id.fabSaveRepo);
+
+        fabSave.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -41,7 +48,15 @@ public class CreateRepoActivity extends AppCompatActivity {
 
         if (!isCollapseCalled) {
             viewCollapsePlaceholder.setVisibility(View.VISIBLE);
-            ActivityAnimationHelper.Activities.revealToToolbar(this, viewCollapsePlaceholder, mainLayout);
+
+            ActivityAnimationHelper.Activities.revealToToolbar(this, viewCollapsePlaceholder, mainLayout, new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    fabSave.show();
+                }
+            });
+
             isCollapseCalled = true;
         }
     }
