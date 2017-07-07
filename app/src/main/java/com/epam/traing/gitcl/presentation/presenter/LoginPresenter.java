@@ -2,13 +2,15 @@ package com.epam.traing.gitcl.presentation.presenter;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 import com.epam.traing.gitcl.app.GitClientApplication;
 import com.epam.traing.gitcl.data.interactor.authenticate.AccountNotFoundException;
-import com.epam.traing.gitcl.model.AccountModel;
-import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.data.interactor.authenticate.IAuthenticator;
+import com.epam.traing.gitcl.helper.PrefHelper;
+import com.epam.traing.gitcl.helper.ShortcutHelper;
+import com.epam.traing.gitcl.model.AccountModel;
 import com.epam.traing.gitcl.network.Constants;
 import com.epam.traing.gitcl.presentation.ui.ILoginView;
 import com.google.gson.Gson;
@@ -26,11 +28,13 @@ public class LoginPresenter extends AbstractSubscribePresenter implements ILogin
 
     private IAuthenticator authenticator;
     private PrefHelper prefHelper;
+    private ShortcutHelper shortcutHelper;
 
     @Inject
-    public LoginPresenter(IAuthenticator authenticator, PrefHelper prefHelper) {
+    public LoginPresenter(IAuthenticator authenticator, PrefHelper prefHelper, ShortcutHelper shortcutHelper) {
         this.authenticator = authenticator;
         this.prefHelper = prefHelper;
+        this.shortcutHelper = shortcutHelper;
     }
 
     @Override
@@ -113,6 +117,11 @@ public class LoginPresenter extends AbstractSubscribePresenter implements ILogin
         Log.d(GitClientApplication.LOG, "Login Success");
         Log.d(GitClientApplication.LOG, accountModel != null ? new Gson().toJson(accountModel) : "empty");
         prefHelper.setShowLogin(false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && accountModel != null) {
+            shortcutHelper.setupCurrentAccountShortcut(accountModel);
+        }
+
         loginView.showLoginProgress(false);
         loginView.startMainView();
     }

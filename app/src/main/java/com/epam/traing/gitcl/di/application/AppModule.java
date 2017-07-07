@@ -5,6 +5,7 @@ import android.content.Context;
 import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
+import com.epam.traing.gitcl.helper.ShortcutHelper;
 
 import javax.inject.Singleton;
 
@@ -34,6 +35,10 @@ public class AppModule {
     PrefHelper providePreferenceHelper() {
         return new PrefHelper(app);
     }
+
+    @Provides
+    @Singleton
+    ShortcutHelper provideShortcutHelper() {return new ShortcutHelper(app);}
 
     @Provides
     @Singleton

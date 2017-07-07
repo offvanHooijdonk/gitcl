@@ -2,6 +2,7 @@ package com.epam.traing.gitcl.di.presentation.login;
 
 import com.epam.traing.gitcl.data.interactor.authenticate.IAuthenticator;
 import com.epam.traing.gitcl.helper.PrefHelper;
+import com.epam.traing.gitcl.helper.ShortcutHelper;
 import com.epam.traing.gitcl.presentation.presenter.ILoginPresenter;
 import com.epam.traing.gitcl.presentation.presenter.LoginPresenter;
 
@@ -17,7 +18,7 @@ public class LoginScreenModule {
 
     @Provides
     @LoginScreenScope
-    ILoginPresenter provideLoginPresenter(IAuthenticator authenticator, PrefHelper prefHelper) {
-        return new LoginPresenter(authenticator, prefHelper);
+    ILoginPresenter provideLoginPresenter(IAuthenticator authenticator, PrefHelper prefHelper, ShortcutHelper shortcutHelper) {
+        return new LoginPresenter(authenticator, prefHelper, shortcutHelper);
     }
 }

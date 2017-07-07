@@ -43,4 +43,8 @@
     <string name="repo_name_divider">/</string>
     <string name="search_input_hint">Search repos &amp; users</string>
     <string name="search_input_less_than">Please, input at least %s characters</string>
+
+    <string name="shortcut_create_repo_title">Create</string>
+    <string name="shortcut_create_repo_long_title">Create a Repository</string>
+    <string name="shortcut_create_repo_disabled_title">Just disabled</string>
 </resources>

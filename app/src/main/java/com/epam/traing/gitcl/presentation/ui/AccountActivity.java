@@ -30,6 +30,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class AccountActivity extends AppCompatActivity implements IAccountView {
     public static final String EXTRA_ACCOUNT = "extra_account";
+    // TODO add static method that returns intent within the account
 
     private AccountModel account;
 
