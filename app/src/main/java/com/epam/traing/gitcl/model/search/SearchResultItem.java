@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.db.model.search;
+package com.epam.traing.gitcl.model.search;
 
 import android.support.annotation.NonNull;
 

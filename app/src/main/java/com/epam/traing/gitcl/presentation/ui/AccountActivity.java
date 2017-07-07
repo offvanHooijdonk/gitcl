@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.model.AccountModel;
 import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.presentation.presenter.IAccountPresenter;
 

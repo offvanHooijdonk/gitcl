@@ -3,8 +3,8 @@ package com.epam.traing.gitcl.data.converter;
 import android.util.Log;
 
 import com.epam.traing.gitcl.app.GitClientApplication;
-import com.epam.traing.gitcl.db.model.AccountModel;
-import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.model.AccountModel;
+import com.epam.traing.gitcl.model.RepoModel;
 import com.epam.traing.gitcl.network.json.AccountJson;
 import com.epam.traing.gitcl.network.json.RepoJson;
 

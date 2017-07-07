@@ -32,9 +32,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.db.model.AccountModel;
-import com.epam.traing.gitcl.db.model.HistoryModel;
-import com.epam.traing.gitcl.db.model.search.SearchResultItem;
+import com.epam.traing.gitcl.model.AccountModel;
+import com.epam.traing.gitcl.model.HistoryModel;
+import com.epam.traing.gitcl.model.search.SearchResultItem;
 import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.presentation.presenter.ISearchPresenter;
 

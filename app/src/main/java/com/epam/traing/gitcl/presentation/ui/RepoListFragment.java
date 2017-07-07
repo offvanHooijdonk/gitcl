@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.app.GitClientApplication;
-import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.model.RepoModel;
 import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.presentation.presenter.IRepoListPresenter;

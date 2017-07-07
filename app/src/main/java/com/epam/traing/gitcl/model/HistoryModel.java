@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.db.model;
+package com.epam.traing.gitcl.model;
 
 import com.epam.traing.gitcl.db.tables.HistoryTable;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;

@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.epam.traing.gitcl.app.GitClientApplication;
 import com.epam.traing.gitcl.data.interactor.authenticate.AccountNotFoundException;
-import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.model.AccountModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.data.interactor.authenticate.IAuthenticator;
 import com.epam.traing.gitcl.network.Constants;

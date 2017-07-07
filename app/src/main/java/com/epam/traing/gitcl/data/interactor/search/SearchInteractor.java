@@ -7,10 +7,10 @@ import com.epam.traing.gitcl.data.interactor.Interactors;
 import com.epam.traing.gitcl.db.dao.IAccountDao;
 import com.epam.traing.gitcl.db.dao.IHistoryDao;
 import com.epam.traing.gitcl.db.dao.IRepoDao;
-import com.epam.traing.gitcl.db.model.AccountModel;
-import com.epam.traing.gitcl.db.model.HistoryModel;
-import com.epam.traing.gitcl.db.model.RepoModel;
-import com.epam.traing.gitcl.db.model.search.SearchResultItem;
+import com.epam.traing.gitcl.model.AccountModel;
+import com.epam.traing.gitcl.model.HistoryModel;
+import com.epam.traing.gitcl.model.RepoModel;
+import com.epam.traing.gitcl.model.search.SearchResultItem;
 import com.epam.traing.gitcl.network.GitHubRepoClient;
 import com.epam.traing.gitcl.network.GitHubUserClient;
 

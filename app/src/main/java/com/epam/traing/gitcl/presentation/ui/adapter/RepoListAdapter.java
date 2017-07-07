@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.epam.traing.gitcl.R;
-import com.epam.traing.gitcl.db.model.AccountModel;
-import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.model.AccountModel;
+import com.epam.traing.gitcl.model.RepoModel;
 import com.epam.traing.gitcl.presentation.ui.helper.DateHelper;
 import com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView;
 import com.epam.traing.gitcl.presentation.ui.view.RepoIconView;

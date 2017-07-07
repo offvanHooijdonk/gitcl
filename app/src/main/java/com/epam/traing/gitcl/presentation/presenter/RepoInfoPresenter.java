@@ -2,8 +2,8 @@ package com.epam.traing.gitcl.presentation.presenter;
 
 import com.epam.traing.gitcl.data.interactor.account.IAccountInteractor;
 import com.epam.traing.gitcl.data.interactor.repositories.IRepositoriesInteractor;
-import com.epam.traing.gitcl.db.model.AccountModel;
-import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.model.AccountModel;
+import com.epam.traing.gitcl.model.RepoModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.presentation.ui.IRepoInfoView;
 

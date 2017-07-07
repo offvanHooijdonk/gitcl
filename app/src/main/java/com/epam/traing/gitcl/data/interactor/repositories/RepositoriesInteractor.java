@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.data.interactor.Interactors;
 import com.epam.traing.gitcl.db.dao.IRepoDao;
-import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.model.RepoModel;
 import com.epam.traing.gitcl.network.GitHubRepoClient;
 import com.epam.traing.gitcl.network.json.RepoJson;
 

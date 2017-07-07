@@ -1,6 +1,6 @@
 package com.epam.traing.gitcl.presentation.ui.view.search;
 
-import com.epam.traing.gitcl.db.model.search.SearchResultItem;
+import com.epam.traing.gitcl.model.search.SearchResultItem;
 
 import java.util.List;
 

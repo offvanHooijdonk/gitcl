@@ -1,6 +1,6 @@
 package com.epam.traing.gitcl.db.dao;
 
-import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.model.AccountModel;
 
 import java.util.List;
 

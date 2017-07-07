@@ -1,6 +1,6 @@
 package com.epam.traing.gitcl.presentation.ui;
 
-import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.model.RepoModel;
 
 import java.util.List;
 

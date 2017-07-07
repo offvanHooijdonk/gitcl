@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.epam.traing.gitcl.app.GitClientApplication;
 import com.epam.traing.gitcl.data.interactor.search.ISearchInteractor;
-import com.epam.traing.gitcl.db.model.search.SearchResultItem;
+import com.epam.traing.gitcl.model.search.SearchResultItem;
 import com.epam.traing.gitcl.presentation.ui.view.search.ISearchView;
 
 import java.util.List;

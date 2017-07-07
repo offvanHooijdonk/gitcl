@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.epam.traing.gitcl.data.converter.ModelConverter;
 import com.epam.traing.gitcl.data.interactor.Interactors;
 import com.epam.traing.gitcl.db.dao.IAccountDao;
-import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.model.AccountModel;
 import com.epam.traing.gitcl.helper.PrefHelper;
 import com.epam.traing.gitcl.helper.SessionHelper;
 import com.epam.traing.gitcl.network.GitHubUserClient;

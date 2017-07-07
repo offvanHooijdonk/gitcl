@@ -1,4 +1,4 @@
-package com.epam.traing.gitcl.db.model;
+package com.epam.traing.gitcl.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,6 +1,6 @@
 package com.epam.traing.gitcl.db.dao;
 
-import com.epam.traing.gitcl.db.model.HistoryModel;
+import com.epam.traing.gitcl.model.HistoryModel;
 import com.epam.traing.gitcl.db.tables.HistoryTable;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;

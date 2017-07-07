@@ -1,6 +1,6 @@
 package com.epam.traing.gitcl.data.interactor.authenticate;
 
-import com.epam.traing.gitcl.db.model.AccountModel;
+import com.epam.traing.gitcl.model.AccountModel;
 
 import rx.Observable;
 

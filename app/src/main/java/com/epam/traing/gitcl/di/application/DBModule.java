@@ -4,12 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.epam.traing.gitcl.db.DBOpenHelper;
-import com.epam.traing.gitcl.db.model.AccountModel;
-import com.epam.traing.gitcl.db.model.AccountModelSQLiteTypeMapping;
-import com.epam.traing.gitcl.db.model.HistoryModel;
-import com.epam.traing.gitcl.db.model.HistoryModelSQLiteTypeMapping;
-import com.epam.traing.gitcl.db.model.RepoModel;
-import com.epam.traing.gitcl.db.model.RepoModelSQLiteTypeMapping;
+import com.epam.traing.gitcl.model.AccountModel;
+import com.epam.traing.gitcl.model.AccountModelSQLiteTypeMapping;
+import com.epam.traing.gitcl.model.HistoryModel;
+import com.epam.traing.gitcl.model.HistoryModelSQLiteTypeMapping;
+import com.epam.traing.gitcl.model.RepoModel;
+import com.epam.traing.gitcl.model.RepoModelSQLiteTypeMapping;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
 
