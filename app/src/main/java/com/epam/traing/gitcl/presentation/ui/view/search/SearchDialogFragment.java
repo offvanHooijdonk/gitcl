@@ -164,7 +164,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
         revealAnim.setListener(new SearchRevealAnim.AnimationListener() {
             @Override
             public void onShowAnimationEnd() {
-                search(false);
+                searchLive();
                 showKeyBoard(true);
             }
 
@@ -211,7 +211,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
             listView.setVisibility(View.GONE);
             isLiveSearchEnabled = true;
 
-            searchByClick();
+            searchFull();
         }
     }
 
@@ -272,7 +272,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
         imgClear.setOnClickListener(v -> clearSearch());
         enableImageControl(imgClear, false);
         imgSearch.getViewTreeObserver().addOnPreDrawListener(this);
-        imgSearch.setOnClickListener(v -> searchByClick());
+        imgSearch.setOnClickListener(v -> searchFull());
         enableImageControl(imgSearch, false);
         viewBackOverlay.setOnClickListener(v -> closeSearchDialog());
 
@@ -294,7 +294,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
             @Override
             public void afterTextChanged(Editable s) {
                 enableImageControl(imgSearch, inputSearch.getText().length() >= minCharsForFullSearch);
-                if (isLiveSearchEnabled) search(false);
+                if (isLiveSearchEnabled) searchLive();
                 enableImageControl(imgClear, inputSearch.getText().length() > 0);
             }
         });
@@ -304,7 +304,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
                 closeSearchDialog();
                 return true;
             } else if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                searchByClick();
+                searchFull();
                 return true;
             }
             return false;
@@ -353,25 +353,23 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
         return ObjectAnimator.ofFloat(listView, View.ALPHA, alphaStart, alphaEnd).setDuration(ANIM_DURATION_RESULTS_LIST);
     }
 
-    private void searchByClick() {
+    private void searchFull() {
         if (inputSearch.getText().length() >= minCharsForFullSearch) {
             showKeyBoard(false);
             showSearchProgress(true);
 
-            search(true);
+            String queryText = inputSearch.getText().toString();
+            Log.i("LOG", "Full query text: " + queryText);
+            obsFullQuery.onNext(queryText);
         } else {
             Toast.makeText(ctx, ctx.getString(R.string.search_input_less_than, String.valueOf(minCharsForFullSearch)), Toast.LENGTH_LONG).show();
         }
     }
 
-    private void search(boolean isFull) { // TODO refactor into two methods
+    private void searchLive() {
         String queryText = inputSearch.getText().toString();
-        Log.i("LOG", "Query text: " + queryText);
-        if (isFull) {
-            obsFullQuery.onNext(queryText);
-        } else {
-            obsLiveQuery.onNext(queryText);
-        }
+        Log.i("LOG", "Live query text: " + queryText);
+        obsLiveQuery.onNext(queryText);
     }
 
     private void showSearchProgress(boolean isShowProgress) {
