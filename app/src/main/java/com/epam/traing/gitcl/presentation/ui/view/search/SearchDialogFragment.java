@@ -83,6 +83,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
     private AccountModel user;
     private int minCharsForFullSearch = DEFAULT_MIN_CHARS_FOR_FULL_SEARCH;
     private boolean isLiveSearchEnabled = true;
+    private boolean isClosing = false;
 
     public static SearchDialogFragment newInstance(View animateOverView, AccountModel user) {
         int[] centerLocation = SearchRevealAnim.getViewCenterLocation(animateOverView);
@@ -300,7 +301,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
 
         getDialog().setOnKeyListener((dialog, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                closeSearchDialog(); // TODO check if the dialog close in progress
+                closeSearchDialog();
                 return true;
             } else if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                 searchByClick();
@@ -311,6 +312,9 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
     }
 
     private void closeSearchDialog() {
+        if (isClosing) return;
+
+        isClosing = true;
         if (!searchResults.isEmpty()) {
             Animator a = createResultsListAnimator(false);
             a.addListener(new AnimatorListenerAdapter() {
