@@ -2,7 +2,6 @@ package com.epam.traing.gitcl.presentation.ui.view.search;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -18,6 +17,7 @@ import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.HistoryModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.db.model.search.SearchResultItem;
 import com.epam.traing.gitcl.presentation.ui.helper.DateHelper;
 import com.epam.traing.gitcl.presentation.ui.view.BadgeNumbersView;
 import com.epam.traing.gitcl.presentation.ui.view.RepoIconView;
@@ -41,13 +41,13 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     private HistoryPickListener historyPickListener;
     private ItemClickListener itemClickListener;
 
-    private List<ItemWrapper> items;
+    private List<SearchResultItem> items;
     private String searchText;
     private AccountModel accountModel;
     private DateHelper dateHelper = new DateHelper();
     private int orientation = Configuration.ORIENTATION_UNDEFINED;
 
-    public SearchListAdapter(Context ctx, List<ItemWrapper> items, AccountModel accountModel) {
+    public SearchListAdapter(Context ctx, List<SearchResultItem> items, AccountModel accountModel) {
         this.ctx = ctx;
         this.items = items;
         this.accountModel = accountModel;
@@ -62,18 +62,18 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ItemWrapper wrapper = items.get(position);
-        if (wrapper.getType() == ItemWrapper.HISTORY) {
-            showHistory((HistoryModel) wrapper.getItem(), holder);
-        } else if (wrapper.getType() == ItemWrapper.REPOSITORY) {
-            showRepository((RepoModel) wrapper.getItem(), holder);
-        } else if (wrapper.getType() == ItemWrapper.ACCOUNT) {
-            showAccount((AccountModel) wrapper.getItem(), holder);
+        SearchResultItem resultItem = items.get(position);
+        if (resultItem.getType() == SearchResultItem.HISTORY) {
+            showHistory((HistoryModel) resultItem.getItem(), holder);
+        } else if (resultItem.getType() == SearchResultItem.REPOSITORY) {
+            showRepository((RepoModel) resultItem.getItem(), holder);
+        } else if (resultItem.getType() == SearchResultItem.ACCOUNT) {
+            showAccount((AccountModel) resultItem.getItem(), holder);
         }
 
         holder.itemRoot.setOnClickListener(v -> {
             if (itemClickListener != null) {
-                itemClickListener.onSearchItemClick(wrapper);
+                itemClickListener.onSearchItemClick(resultItem);
             }
         });
     }
@@ -237,56 +237,11 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         }
     }
 
-    public static class ItemWrapper implements Comparable<ItemWrapper> {
-        public static final int HISTORY = 0;
-        public static final int ACCOUNT = 1;
-        public static final int REPOSITORY = 2;
-
-        private Integer type;
-        private Object item;
-        private Float searchScore = 0.0f;
-
-        public ItemWrapper(int type, Object item, float searchScore) {
-            this.type = type;
-            this.item = item;
-            this.searchScore = searchScore;
-        }
-
-        public Object getItem() {
-            return item;
-        }
-
-        public void setItem(Object item) {
-            this.item = item;
-        }
-
-        public Integer getType() {
-            return type;
-        }
-
-        public void setType(Integer type) {
-            this.type = type;
-        }
-
-        public Float getSearchScore() {
-            return searchScore;
-        }
-
-        public void setSearchScore(Float searchScore) {
-            this.searchScore = searchScore;
-        }
-
-        @Override
-        public int compareTo(@NonNull ItemWrapper iw) {
-            return getType().compareTo(iw.getType());
-        }
-    }
-
     interface HistoryPickListener {
         void onHistoryPicked(String text);
     }
 
     interface ItemClickListener {
-        void onSearchItemClick(ItemWrapper itemWrapper);
+        void onSearchItemClick(SearchResultItem searchResultItem);
     }
 }

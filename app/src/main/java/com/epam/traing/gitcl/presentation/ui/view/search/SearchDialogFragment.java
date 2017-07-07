@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.epam.traing.gitcl.R;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.HistoryModel;
+import com.epam.traing.gitcl.db.model.search.SearchResultItem;
 import com.epam.traing.gitcl.di.DependencyManager;
 import com.epam.traing.gitcl.presentation.presenter.ISearchPresenter;
 
@@ -62,7 +63,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
     private InputMethodManager imm;
     private SearchRevealAnim revealAnim;
     private SearchListAdapter adapter;
-    private List<SearchListAdapter.ItemWrapper> searchResults;
+    private List<SearchResultItem> searchResults;
     private PublishSubject<String> obsLiveQuery;
     private PublishSubject<String> obsFullQuery;
 
@@ -199,8 +200,8 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
     }
 
     @Override
-    public void onSearchItemClick(SearchListAdapter.ItemWrapper itemWrapper) {
-        if (itemWrapper.getType() == SearchListAdapter.ItemWrapper.HISTORY) {
+    public void onSearchItemClick(SearchResultItem itemWrapper) {
+        if (itemWrapper.getType() == SearchResultItem.HISTORY) {
             HistoryModel historyModel = (HistoryModel) itemWrapper.getItem();
 
             isLiveSearchEnabled = false;
@@ -214,7 +215,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
     }
 
     @Override
-    public void updateSearchResults(List<SearchListAdapter.ItemWrapper> results) {
+    public void updateSearchResults(List<SearchResultItem> results) {
         searchResults.clear();
         searchResults.addAll(results);
 
@@ -299,7 +300,7 @@ public class SearchDialogFragment extends DialogFragment implements ISearchView,
 
         getDialog().setOnKeyListener((dialog, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                closeSearchDialog();
+                closeSearchDialog(); // TODO check if the dialog close in progress
                 return true;
             } else if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                 searchByClick();

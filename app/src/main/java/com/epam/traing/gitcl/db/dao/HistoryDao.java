@@ -21,8 +21,8 @@ public class HistoryDao implements IHistoryDao {
     }
 
     @Override
-    public void save(HistoryModel model) {
-        storIOSQLite.put().object(model).prepare().executeAsBlocking();
+    public Single<?> save(HistoryModel model) {
+        return storIOSQLite.put().object(model).prepare().asRxSingle();
     }
 
     @Override

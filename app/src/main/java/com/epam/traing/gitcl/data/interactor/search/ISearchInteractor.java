@@ -3,6 +3,7 @@ package com.epam.traing.gitcl.data.interactor.search;
 import com.epam.traing.gitcl.db.model.AccountModel;
 import com.epam.traing.gitcl.db.model.HistoryModel;
 import com.epam.traing.gitcl.db.model.RepoModel;
+import com.epam.traing.gitcl.db.model.search.SearchResultItem;
 
 import java.util.List;
 
@@ -13,7 +14,12 @@ import rx.Observable;
  */
 
 public interface ISearchInteractor {
-    void saveHistoryEntry(HistoryModel model);
+
+    Observable<List<SearchResultItem>> searchLive(String text, int maxHistory);
+
+    Observable<List<SearchResultItem>> searchRemote(String text);
+
+    Observable<?> saveSearchText(String searchText);
 
     Observable<List<HistoryModel>> findHistoryEntries(String queryText, int limit);
 

@@ -9,7 +9,7 @@ import rx.schedulers.Schedulers;
  */
 
 public class Interactors {
-    private static Observable.Transformer transformer = observable -> observable
+    private static Observable.Transformer<?, ?> transformer = observable -> observable
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread());
 

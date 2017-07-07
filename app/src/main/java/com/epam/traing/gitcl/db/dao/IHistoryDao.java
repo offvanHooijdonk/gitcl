@@ -13,7 +13,7 @@ import rx.Single;
 public interface IHistoryDao {
     int LIMIT_NONE = -1;
 
-    void save(HistoryModel model);
+    Single<?> save(HistoryModel model);
 
     Single<List<HistoryModel>> findWithText(String text, int limit);
 }
