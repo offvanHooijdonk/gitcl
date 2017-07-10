@@ -20,7 +20,6 @@ public class MainPresenter extends AbstractSubscribePresenter implements IMainPr
     private IMainView view;
     private IAccountInteractor accountInteractor;
     private PrefHelper prefHelper;
-    // TODO CompositeSubscription
 
     @Inject
     public MainPresenter(IAccountInteractor accountInteractor, PrefHelper prefHelper/*, ISearchInteractor searchIntercator*/) {

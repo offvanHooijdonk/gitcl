@@ -13,5 +13,4 @@ import dagger.Subcomponent;
 public interface SearchScreenComponent {
 
     void inject(SearchDialogFragment searchDialogFragment);
-    // TODO inject
 }

@@ -20,7 +20,7 @@ import rx.Observable;
  * Created by Yahor_Fralou on 3/20/2017 7:07 PM.
  */
 
-public class SearchInteractor implements ISearchInteractor { // TODO split the class and interface into simple search and its 'Composite' Adapter
+public class SearchInteractor implements ISearchInteractor {
 
     private IHistoryDao historyDao;
     private IRepoDao repoDao;
@@ -68,7 +68,6 @@ public class SearchInteractor implements ISearchInteractor { // TODO split the c
         }
     }
 
-    // TODO conseder switch to Single
     @Override
     public Observable<List<AccountModel>> findAccountsLocal(String queryText) {
         if (queryText == null || queryText.isEmpty()) {
