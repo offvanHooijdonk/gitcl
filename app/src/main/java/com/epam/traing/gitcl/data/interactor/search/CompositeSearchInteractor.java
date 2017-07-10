@@ -115,6 +115,9 @@ public class CompositeSearchInteractor implements ICompositeSearchInteractor {
     private void onRemoteSearchComplete() {
         Log.i("gitcl", "Remote search complete");
         Collections.sort(searchResults, (o1, o2) -> {
+            if (o1.getSearchScore() == null) return 1;
+            if (o2.getSearchScore() == null) return -1;
+
             int result = o1.getSearchScore().compareTo(o2.getSearchScore());
             result = -result; // We need bigger score go first
             return result != 0 ? result : o1.compareTo(o2);
