@@ -1,6 +1,8 @@
 package com.epam.traing.gitcl.di.util;
 
 import com.epam.traing.gitcl.data.converter.ModelConverter;
+import com.epam.traing.gitcl.data.interactor.search.CompositeSearchInteractor;
+import com.epam.traing.gitcl.data.interactor.search.ICompositeSearchInteractor;
 import com.epam.traing.gitcl.data.interactor.search.ISearchInteractor;
 import com.epam.traing.gitcl.data.interactor.search.SearchInteractor;
 import com.epam.traing.gitcl.db.dao.IAccountDao;
@@ -23,5 +25,11 @@ public class SearchInteractorModule {
     public ISearchInteractor provideSearchInteractor(IHistoryDao historyDao, IRepoDao repoDao, IAccountDao accountDao,
                                                      GitHubRepoClient repoClient, GitHubUserClient userClient, ModelConverter modelConverter) {
         return new SearchInteractor(historyDao, repoDao, accountDao, repoClient, userClient, modelConverter);
+    }
+
+    @Provides
+    @UtilsScope
+    public ICompositeSearchInteractor provideCompositeSearchInteractor(ISearchInteractor searchInteractor) {
+        return new CompositeSearchInteractor(searchInteractor);
     }
 }

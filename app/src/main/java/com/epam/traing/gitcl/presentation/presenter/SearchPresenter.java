@@ -3,7 +3,7 @@ package com.epam.traing.gitcl.presentation.presenter;
 import android.util.Log;
 
 import com.epam.traing.gitcl.app.GitClientApplication;
-import com.epam.traing.gitcl.data.interactor.search.ISearchInteractor;
+import com.epam.traing.gitcl.data.interactor.search.ICompositeSearchInteractor;
 import com.epam.traing.gitcl.model.search.SearchResultItem;
 import com.epam.traing.gitcl.presentation.ui.view.search.ISearchView;
 
@@ -19,9 +19,9 @@ public class SearchPresenter extends AbstractSubscribePresenter implements ISear
     private static final int HISTORY_SHOW_MAX = 5;
 
     private ISearchView searchView;
-    private ISearchInteractor searchInteractor;
+    private ICompositeSearchInteractor searchInteractor;
 
-    public SearchPresenter(ISearchInteractor searchInteractor) {
+    public SearchPresenter(ICompositeSearchInteractor searchInteractor) {
         this.searchInteractor = searchInteractor;
     }
 

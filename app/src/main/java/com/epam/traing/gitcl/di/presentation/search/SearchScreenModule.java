@@ -1,6 +1,6 @@
 package com.epam.traing.gitcl.di.presentation.search;
 
-import com.epam.traing.gitcl.data.interactor.search.ISearchInteractor;
+import com.epam.traing.gitcl.data.interactor.search.ICompositeSearchInteractor;
 import com.epam.traing.gitcl.presentation.presenter.ISearchPresenter;
 import com.epam.traing.gitcl.presentation.presenter.SearchPresenter;
 
@@ -16,7 +16,7 @@ public class SearchScreenModule {
 
     @Provides
     @SearchScreenScope
-    ISearchPresenter provideSearchPresenter(ISearchInteractor searchInteractor) {
+    ISearchPresenter provideSearchPresenter(ICompositeSearchInteractor searchInteractor) {
         return new SearchPresenter(searchInteractor);
     }
 

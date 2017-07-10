@@ -3,7 +3,6 @@ package com.epam.traing.gitcl.data.interactor.search;
 import com.epam.traing.gitcl.model.AccountModel;
 import com.epam.traing.gitcl.model.HistoryModel;
 import com.epam.traing.gitcl.model.RepoModel;
-import com.epam.traing.gitcl.model.search.SearchResultItem;
 
 import java.util.List;
 
@@ -15,9 +14,9 @@ import rx.Observable;
 
 public interface ISearchInteractor {
 
-    Observable<List<SearchResultItem>> searchLive(String text, int maxHistory);
+    /*Observable<List<SearchResultItem>> searchLive(String text, int maxHistory);
 
-    Observable<List<SearchResultItem>> searchRemote(String text);
+    Observable<List<SearchResultItem>> searchRemote(String text);*/
 
     Observable<?> saveSearchText(String searchText);
 
